@@ -80,8 +80,8 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../img/power-rangers/purple.png" alt="" class="navbar-logo">
+    <a href="#" class="navbar-brand navbar-brand-logo">
+    <img src="../img/power-rangers/purple.png" alt="Power Rangers Team" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -156,7 +156,6 @@ ul.task-list li input[type="checkbox"] {
 
 
 </main> <!-- /main -->
-
 <style>
   :root {
     --figurina-size: 50px;
@@ -258,9 +257,66 @@ ul.task-list li input[type="checkbox"] {
   .figurina-wrap + .figurina-wrap {
     margin-left: 15px;
   }
+
+  /* Modal overlay styles */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-overlay.show {
+    display: flex;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 60px 80px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: modalPop 0.3s ease;
+  }
+  
+  @keyframes modalPop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 40px;
+    cursor: pointer;
+    color: #999;
+    font-weight: 300;
+    line-height: 1;
+  }
+  
+  .modal-close:hover {
+    color: #333;
+  }
+
+  /* Larger size for modal */
+  .modal-overlay .figurina-wrap {
+    --figurina-size: 120px;
+    --glow-radius: 20px;
+  }
+
+  .modal-overlay .figurina-wrap + .figurina-wrap {
+    margin-left: 30px;
+  }
 </style>
 
-
+<!-- Regular footer display -->
 <div style="
   display: flex;
   justify-content: center;
@@ -270,28 +326,117 @@ ul.task-list li input[type="checkbox"] {
   padding: 20px;
 ">
 
-  <a href="https://filippogambarota.github.io/" target="_blank"></a><div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/black.png');
-              --glow-color: rgba(0, 0, 0, 0.95);" data-bubble="Filippo Gambarota"><a href="https://filippogambarota.github.io/" target="_blank">
-    <div class="figurina"></div></a>
-  </div>
+  <a href="https://filippogambarota.github.io/" target="_blank">
+    <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/black.png');
+                --glow-color: rgba(0, 0, 0, 0.95);" data-bubble="Filippo Gambarota">
+      <div class="figurina"></div>
+    </div>
+  </a>
 
-  <a href="https://mar-cald.github.io/" target="_blank"></a><div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/purple.png');
-              --glow-color: rgba(200, 0, 255, 0.95);" data-bubble="Margherita Calderan"><a href="https://mar-cald.github.io/" target="_blank">
-    <div class="figurina"></div></a>
-  </div>
+  <a href="https://mar-cald.github.io/" target="_blank">
+    <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/purple.png');
+                --glow-color: rgba(200, 0, 255, 0.95);" data-bubble="Margherita Calderan">
+      <div class="figurina"></div>
+    </div>
+  </a>
 
-  <a href="https://enricotoffalini.github.io/" target="_blank"></a><div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/red.png');
-              --glow-color: rgba(220, 0, 0, 0.95);" data-bubble="Enrico Toffalini"><a href="https://enricotoffalini.github.io/" target="_blank">
-    <div class="figurina"></div></a>
-  </div>
+  <a href="https://enricotoffalini.github.io/" target="_blank">
+    <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/red.png');
+                --glow-color: rgba(220, 0, 0, 0.95);" data-bubble="Enrico Toffalini">
+      <div class="figurina"></div>
+    </div>
+  </a>
 
-  <a href="https://feracotommaso.github.io/" target="_blank"></a><div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/green.png');
-              --glow-color: rgba(100, 150, 50, 0.95);" data-bubble="Tommaso Feraco"><a href="https://feracotommaso.github.io/" target="_blank">
-    <div class="figurina"></div></a>
-  </div>
+  <a href="https://feracotommaso.github.io/" target="_blank">
+    <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/green.png');
+                --glow-color: rgba(100, 150, 50, 0.95);" data-bubble="Tommaso Feraco">
+      <div class="figurina"></div>
+    </div>
+  </a>
 
 </div>
 
+<!-- Modal overlay -->
+<div id="rangers-modal" class="modal-overlay">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeRangersModal()">×</span>
+    
+    <!-- Add title -->
+    <h2 style="text-align: center; margin-bottom: 50px; font-size: 28px; color: #000000; font-weight: 600;">
+    Power Rangers Team
+    </h2>
+    
+    <div style="display: flex; justify-content: center; align-items: center; gap: 30px; text-align: center;">
+      
+      <a href="https://filippogambarota.github.io/" target="_blank">
+        <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/black.png');
+                    --glow-color: rgba(0, 0, 0, 0.95);" data-bubble="Filippo Gambarota">
+          <div class="figurina"></div>
+        </div>
+      </a>
+
+      <a href="https://mar-cald.github.io/" target="_blank">
+        <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/purple.png');
+                    --glow-color: rgba(200, 0, 255, 0.95);" data-bubble="Margherita Calderan">
+          <div class="figurina"></div>
+        </div>
+      </a>
+
+      <a href="https://enricotoffalini.github.io/" target="_blank">
+        <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/red.png');
+                    --glow-color: rgba(220, 0, 0, 0.95);" data-bubble="Enrico Toffalini">
+          <div class="figurina"></div>
+        </div>
+      </a>
+
+      <a href="https://feracotommaso.github.io/" target="_blank">
+        <div class="figurina-wrap" style="--figurina-img: url('img/power-rangers/green.png');
+                    --glow-color: rgba(100, 150, 50, 0.95);" data-bubble="Tommaso Feraco">
+          <div class="figurina"></div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to open modal
+  function openRangersModal() {
+    document.getElementById('rangers-modal').classList.add('show');
+  }
+  
+  // Function to close modal
+  function closeRangersModal() {
+    document.getElementById('rangers-modal').classList.remove('show');
+  }
+  
+  // Close modal when clicking outside
+  document.getElementById('rangers-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeRangersModal();
+    }
+  });
+  
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeRangersModal();
+    }
+  });
+  
+  // Make navbar logo clickable
+  document.addEventListener('DOMContentLoaded', function() {
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.style.cursor = 'pointer';
+      navbarBrand.addEventListener('click', function(e) {
+        e.preventDefault();
+        openRangersModal();
+      });
+    }
+  });
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
