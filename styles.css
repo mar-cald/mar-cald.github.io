@@ -48,6 +48,25 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
+
+.navbar-brand {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-brand img {
+  width: 30px !important;
+  height: 30px !important;
+  max-height: none !important;
+  object-fit: contain;
+  display: block;
+  transform: translateX(2px);  /* Shift right by 2px to center visually */
+}
+
 /* ---------- Base Styling ---------- */
 body {
   background-color: #fff;
@@ -139,5 +158,8 @@ body {
     padding: 0 0.5rem;
   }
 }
+
+
+
 
 

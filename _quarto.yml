@@ -9,6 +9,9 @@ website:
     location: navbar
     type: overlay
   navbar:
+    logo: img/power-rangers/purple.png
+    logo-href: "#"
+    logo-alt: "Power Rangers Team"
     left:
       - text: "home"
         href: index.qmd
@@ -23,7 +26,7 @@ format:
     include-after-body: footer.html
     include-in-header:
        text: |
-         <link rel="shortcut icon" href="img/power-rangers/purple.png"/>
+         <link rel="shortcut icon" href="img/power-rangers/purple-fav.png"/>
     theme:
       light: yeti
     fontsize: 1.2em
