@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - img/**
 
 website:
   search: 
@@ -18,6 +20,10 @@ website:
         href: contact.qmd
 format:
   html: 
+    include-after-body: footer.html
+    include-in-header:
+       text: |
+         <link rel="shortcut icon" href="img/power-rangers/purple.png"/>
     theme:
       light: yeti
     fontsize: 1.2em

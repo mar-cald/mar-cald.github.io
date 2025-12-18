@@ -29,5 +29,3 @@ I am a postdoctoral researcher at the Department of General Psychology, Universi
 
 My research interests include computational models of cognition, Bayesian statistics, and metascience. I am a member of the [Psicostat](https://psicostat.dpss.psy.unipd.it/){target="_blank"} research group.
 :::
-
-<div class="last-updated">Last updated: `r format(Sys.Date(), "%Y-%m-%d")`</div>
