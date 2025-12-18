@@ -25,7 +25,7 @@ engine: knitr
 ---
 
 ::: {#hero-heading}
-I am a postdoctoral researcher at the Department of General Psychology, University of Padova, Italy. 
+I am a **postdoc**toral researcher at the Department of General Psychology, University of **Padova**, Italy. 
 
-My research interests include computational models of cognition, Bayesian statistics, and metascience. I am a member of the [Psicostat](https://psicostat.dpss.psy.unipd.it/){target="_blank"} research group.
+My research interests include computational models of **cognition**, **Bayesian** statistics, and **metascience**. I am a member of the [Psicostat](https://psicostat.dpss.psy.unipd.it/){target="_blank"} research group.
 :::
