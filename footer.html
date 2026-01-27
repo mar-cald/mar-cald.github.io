@@ -1,7 +1,13 @@
+
+<!-------------------------------------------------------------->
+<!-------------------------------------------------------------->
+
+<!-- CSS STYLE -->
+
 <style>
   :root {
-    --figurina-size: 50px;
     --glow-radius: 10px;
+    --figurina-size: 50px;
   }
 
   /* Contenitore esterno: alone + fumetto */
@@ -49,7 +55,7 @@
 
   /* Zoom solo sulla figurina */
   .figurina-wrap:hover .figurina {
-    transform: scale(1.05);
+    transform: scale(1.25) !important;
   }
 
   /* Fumetto (testo preso da data-bubble) */
@@ -99,7 +105,7 @@
   .figurina-wrap + .figurina-wrap {
     margin-left: 15px;
   }
-
+  
   /* Modal overlay styles */
   .modal-overlay {
     display: none;
@@ -147,18 +153,79 @@
     color: #333;
   }
 
+/* Overlay should scroll if content is taller than the viewport */
+.modal-overlay {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  padding: 20px;                    /* keeps content away from edges */
+}
+
+/* Modal box should never exceed screen height */
+.modal-content {
+  max-height: calc(100vh - 40px); /* viewport minus overlay padding */
+  overflow-y: auto;
+  max-width: 900px;
+  width: min(900px, 100%);
+  box-sizing: border-box;
+}
+
+/* Lock background scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
   /* Larger size for modal */
   .modal-overlay .figurina-wrap {
-    --figurina-size: 120px;
+    --figurina-size: 100px;
     --glow-radius: 20px;
   }
-
+  
   .modal-overlay .figurina-wrap + .figurina-wrap {
-    margin-left: 30px;
+    margin-left: 0 !important;
   }
+  
+  .modal-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;  /* default desktop gap */
+  text-align: center;
+}
+
+/* Adapt figure size for modal when on phone */
+@media (max-width: 650px) {
+  .modal-row {
+    gap: clamp(6px, 1vw, 16px);
+    flex-wrap: wrap;
+  }
+  .modal-overlay .figurina-wrap {
+    --figurina-size: clamp(
+      18px,          /* hard minimum */
+      15.4vw,        /* ≈ 100px at 650px */
+      100px          /* same size as desktop */
+    );
+    --glow-radius: calc(var(--figurina-size) * 0.18);
+  }
+  .modal-content {
+    padding: 50px 15px;
+    border-radius: 15px;
+  }
+}
+
+/* hide bubble when is data-no-bubble */
+.figurina-wrap[data-no-bubble]::after,
+.figurina-wrap[data-no-bubble]::before {
+  content: none !important;
+  display: none !important;
+}
 </style>
 
-<!-- Regular footer display -->
+
+<!-------------------------------------------------------------->
+<!-------------------------------------------------------------->
+
+<!-- REGULAR FOOTER -->
+
 <div style="
   display: flex;
   justify-content: center;
@@ -168,106 +235,93 @@
   padding: 20px;
 ">
 
-  <a href="https://filippogambarota.github.io/" target="_blank">
-    <div class="figurina-wrap"
-         style="--figurina-img: url('img/power-rangers/black.png');
-                --glow-color: rgba(0, 0, 0, 0.95);"
-         data-bubble="Filippo Gambarota">
-      <div class="figurina"></div>
-    </div>
-  </a>
+  <a href="https://filippogambarota.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/black.png');
+              --glow-color: rgba(0, 0, 0, 0.95);"
+       data-bubble="Filippo Gambarota">
+    <div class="figurina"></div></a>
+  </div>
 
-  <a href="https://mar-cald.github.io/" target="_blank">
-    <div class="figurina-wrap"
-         style="--figurina-img: url('img/power-rangers/purple.png');
-                --glow-color: rgba(200, 0, 255, 0.95);"
-         data-bubble="Margherita Calderan">
-      <div class="figurina"></div>
-    </div>
-  </a>
+  <a href="https://mar-cald.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/purple.png');
+              --glow-color: rgba(200, 0, 255, 0.95);"
+       data-bubble="Margherita Calderan">
+    <div class="figurina"></div></a>
+  </div>
 
-  <a href="https://enricotoffalini.github.io/" target="_blank">
-    <div class="figurina-wrap"
-         style="--figurina-img: url('img/power-rangers/red.png');
-                --glow-color: rgba(220, 0, 0, 0.95);"
-         data-bubble="Enrico Toffalini">
-      <div class="figurina"></div>
-    </div>
-  </a>
+  <a href="https://enricotoffalini.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/red.png');
+              --glow-color: rgba(220, 0, 0, 0.95);"
+       data-bubble="Enrico Toffalini">
+    <div class="figurina"></div></a>
+  </div>
 
-  <a href="https://feracotommaso.github.io/" target="_blank">
-    <div class="figurina-wrap"
-         style="--figurina-img: url('img/power-rangers/green.png');
-                --glow-color: rgba(100, 150, 50, 0.95);"
-         data-bubble="Tommaso Feraco">
-      <div class="figurina"></div>
-    </div>
-  </a>
+  <a href="https://feracotommaso.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/green.png');
+              --glow-color: rgba(100, 150, 50, 0.95);"
+       data-bubble="Tommaso Feraco">
+    <div class="figurina"></div></a>
+  </div>
 
 </div>
 
-<!-- Modal overlay -->
+<!-------------------------------------------------------------->
+<!-------------------------------------------------------------->
+
+<!-- MODAL OVERLAY -->
+
 <div id="rangers-modal" class="modal-overlay">
   <div class="modal-content">
     <span class="modal-close" onclick="closeRangersModal()">&times;</span>
     
     <!-- Power Rangers -->
-    <div style="display: flex; justify-content: center; align-items: center; gap: 30px; text-align: center;">
+    <div class="modal-row">
       
-      <a href="https://filippogambarota.github.io/" target="_blank">
-        <div class="figurina-wrap"
-             style="--figurina-img: url('img/power-rangers/black.png');
-                    --glow-color: rgba(0, 0, 0, 0.95);"
-             data-bubble="Filippo Gambarota">
-          <div class="figurina"></div>
-        </div>
-      </a>
+<a href="https://filippogambarota.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/black.png');
+              --glow-color: rgba(0, 0, 0, 0.95);"
+       data-bubble="Filippo Gambarota">
+    <div class="figurina"></div></a>
+  </div>
 
-      <a href="https://mar-cald.github.io/" target="_blank">
-        <div class="figurina-wrap"
-             style="--figurina-img: url('img/power-rangers/purple.png');
-                    --glow-color: rgba(200, 0, 255, 0.95);"
-             data-bubble="Margherita Calderan">
-          <div class="figurina"></div>
-        </div>
-      </a>
+  <a href="https://mar-cald.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/purple.png');
+              --glow-color: rgba(200, 0, 255, 0.95);"
+       data-bubble="Margherita Calderan">
+    <div class="figurina"></div></a>
+  </div>
 
-      <a href="https://enricotoffalini.github.io/" target="_blank">
-        <div class="figurina-wrap"
-             style="--figurina-img: url('img/power-rangers/red.png');
-                    --glow-color: rgba(220, 0, 0, 0.95);"
-             data-bubble="Enrico Toffalini">
-          <div class="figurina"></div>
-        </div>
-      </a>
+  <a href="https://enricotoffalini.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/red.png');
+              --glow-color: rgba(220, 0, 0, 0.95);"
+       data-bubble="Enrico Toffalini">
+    <div class="figurina"></div></a>
+  </div>
 
-      <a href="https://feracotommaso.github.io/" target="_blank">
-        <div class="figurina-wrap"
-             style="--figurina-img: url('img/power-rangers/green.png');
-                    --glow-color: rgba(100, 150, 50, 0.95);"
-             data-bubble="Tommaso Feraco">
-          <div class="figurina"></div>
-        </div>
-      </a>
+  <a href="https://feracotommaso.github.io/" target="_blank"><div class="figurina-wrap"
+       style="--figurina-img: url('img/power-rangers/green.png');
+              --glow-color: rgba(100, 150, 50, 0.95);"
+       data-bubble="Tommaso Feraco">
+    <div class="figurina"></div></a>
 
-    </div>
+    </div></div>
     
 <!-- Subtitle with link -->
-<div style="text-align: center; margin-top: 50px; max-width: 700px; margin-left: auto; margin-right: auto;">
+<div style="text-align: center; margin-top: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">
   <p style="font-size: 18px; color: #000; margin-bottom: 20px;">
-    Part of 
-    <a href="https://psicostat.dpss.psy.unipd.it/pages/people.html" target="_blank" 
-       style="color: #000; text-decoration: none; font-weight: 600;">
-      Psicostat
+    Part of </p>
+    <a href="https://psicostat.dpss.psy.unipd.it/pages/people.html" target="_blank">
+      <div class="figurina-wrap"
+       style="--figurina-img: url('img/psicostat.png');
+              --glow-color: rgba(118, 0, 0, 0.95);
+              --figurina-size: 150px;
+              --glow-radius: 40px;"
+              data-no-bubble>
+    <div class="figurina">
+    </div></div>
     </a>
-  </p>
-  
-  <p style="font-size: 16px; color: #000; line-height: 1.6; margin-top: 15px;">
-    We are an interdisciplinary research group interested in Psychology and Statistics, working in areas related to quantitative psychology, psychometrics, psychological testing and statistics.
-  </p>
-  
-  <p style="font-size: 16px; color: #000; line-height: 1.6; margin-top: 10px;">
-    Our goal is to promote the connection between the two fields in order to benefit the progress of scientific research.
+      <p style="font-size: 16px; color: #000; line-height: 1.6; margin-top: 15px;">
+    We are an interdisciplinary research group interested in Psychology and Statistics, working in areas related to quantitative psychology, psychometrics, psychological testing and statistics. Our mission is to promote the connection between the two fields in order to benefit the progress of scientific research.
   </p>
 </div>
 
@@ -277,31 +331,24 @@
 
 
 <script>
-  // Function to open modal
   function openRangersModal() {
     document.getElementById('rangers-modal').classList.add('show');
+    document.body.classList.add('modal-open');
   }
-  
-  // Function to close modal
+
   function closeRangersModal() {
     document.getElementById('rangers-modal').classList.remove('show');
+    document.body.classList.remove('modal-open');
   }
-  
-  // Close modal when clicking outside
+
   document.getElementById('rangers-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeRangersModal();
-    }
+    if (e.target === this) closeRangersModal();
   });
-  
-  // Close modal with Escape key
+
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      closeRangersModal();
-    }
+    if (e.key === 'Escape') closeRangersModal();
   });
-  
-  // Make navbar logo clickable
+
   document.addEventListener('DOMContentLoaded', function() {
     const navbarBrand = document.querySelector('.navbar-brand');
     if (navbarBrand) {

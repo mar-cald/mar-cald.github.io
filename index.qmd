@@ -19,7 +19,7 @@ about:
       href: https://www.researchgate.net/profile/Margherita-Calderan-2
     - icon: flower2
       text: OSF
-      href: https://osf.io/profile/
+      href: https://osf.io/user/5ca9t?tab=2
 markdown:
   extensions: [link_attributes]
 format: 
