@@ -28,6 +28,7 @@ format:
     include-in-header:
        text: |
          <link rel="shortcut icon" href="img/power-rangers/purple-fav.png"/>
+         <meta name="google-site-verification" content="Iier_KnAUnnOvH-tUDRqSenivLnqlFEG0mH-9FH1jdg" />
 engine: knitr
 
 ---
