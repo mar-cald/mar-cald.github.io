@@ -1,6 +1,7 @@
 ---
 title: "Margherita Calderan"
 image: img/tulip.jpg
+
 about:
   id: hero-heading
   template: jolla
@@ -21,11 +22,17 @@ about:
       href: https://osf.io/profile/
 markdown:
   extensions: [link_attributes]
+format: 
+  html:     
+    include-after-body: footer.html
+    include-in-header:
+       text: |
+         <link rel="shortcut icon" href="img/power-rangers/purple-fav.png"/>
 engine: knitr
 ---
 
 ::: {#hero-heading}
-I am a **postdoc**toral researcher at the Department of General Psychology, University of **Padova**, Italy. 
+I am a **postdoctoral researcher** at the Department of General Psychology, University of **Padova**, Italy. 
 
 My research interests include computational models of **cognition**, **Bayesian** statistics, and **metascience**. I am a member of the [Psicostat](https://psicostat.dpss.psy.unipd.it/){target="_blank"} research group.
 :::

@@ -93,7 +93,7 @@ tibble::tribble(
      "Postgraduate Internship", "Psychophysiology Lab, University of Padova, Italy", "Jan. 2021 - Dec. 2021", c(
         "Investigated the role of sleep characteristics in false memory formation and emotional reactivity.",
         "Supervisors: Prof. Andrea Spoto, Prof. Nicola Cellini"),
-    "M.S. in Cognitive Neuroscience and Clinical Neuropsychology - 110 cum laude", "University of Padova, Italy", "Oct. 2018 - Dec. 2020", 
+    "M.Sc. in Cognitive Neuroscience and Clinical Neuropsychology - 110 cum laude", "University of Padova, Italy", "Oct. 2018 - Dec. 2020", 
       c("Thesis: Sleep characteristics in adults with high functioning autism: a polysomnographic study", "Supervisor: Prof. Nicola Cellini"),
     "Curricular Internship", "Psychophysiology Lab, University of Padova, Italy", "Dec. 2019 - Aug. 2020", c(
         "Analyzed polysomnographic data to examine sleep architecture in young adults with high-functioning autism.",
@@ -143,67 +143,54 @@ tibble::tribble(
 
 ## Publications
 
+### In Press
+
+1. **Calderan, M.**, Visalli, A., Degasperi, G., Toffoli, L., Sellaro,
+    R., & Cellini, N. Predictions under sleep restriction: The effects
+    of partial sleep deprivation on learning and inhibitory control.
+    Accepted for publication in *Royal Society Open Science*, <https://doi.org/10.1098/rsos.252345>. **Preprint:** <https://doi.org/10.31234/osf.io/x7m4z\_v3>.
+
 ### Published
 
 1.  **Calderan, M.**, Jongkees, J.B., Gambarota, F., Pastore, M.,
-    Cellini, N., & Sellaro, R. (2025) Isolating working memory gating
-    processes under stress. *Collabra::Psychology*.
-    <https://doi.org/10.1525/collabra.140750> \[IF: 3.1,Quartile: Q1\],
-    **OSF** repo: <https://osf.io/d43vs/>
+    Cellini, N., & Sellaro, R. (2025) Isolating working memory gating processes
+    under stress. *Collabra::Psychology*. <https://doi.org/10.1525/collabra.140750>; **OSF** repo: <https://osf.io/d43vs/> 
 
 2.  **Calderan, M.**, Toffalini, E., Mirandola, C., & Cellini, N.
     (2025). Sleep does not affect false memory production on a
     script-based test. *Neuropsychologia*.
-    <https://doi.org/10.1016/j.neuropsychologia.2025.109210> \[IF: 2,
-    Quartile: Q3\] **OSF** repo: <https://osf.io/kwycq/>
+    <https://doi.org/10.1016/j.neuropsychologia.2025.109210>; **OSF** repo: <https://osf.io/kwycq/> 
 
 3.  Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
     M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. (2025).
     Can I afford one more candy? How motivational contexts shape
     adaptive cognitive control in children. *Developmental Psychology*.
-    <https://doi.org/10.1037/dev0001976>. \[IF: 3.1, Quartile: Q2\],
-    **OSF** repo: <https://osf.io/shuq2/>
+    <https://doi.org/10.1037/dev0001976>; **OSF** repo: <https://osf.io/shuq2/> 
 
 4.  Sobol, M., Błachnio, A., **Calderan, M.**, Degasperi, G., Mioni, G.,
     Hryhorchuk, I., Plucińska, E., Stasiniewicz, J., Kwapiński, J.,
     Jankowski, K., & Cellini, N. (2025). Balanced time perspective as a
     factor mitigating the negative consequences of sleep disruptions in
     the perinatal period. *Chronobiology International*, 1–12.
-    <https://doi.org/10.1080/07420528.2025.2490499> \[IF: 2.2, Quartile:
-    Q3\]
+    <https://doi.org/10.1080/07420528.2025.2490499> 
 
 5.  **Calderan, M.**, & Visalli, A. (2024). Challenges of meta-learning
     and rational analysis in large worlds. *Behavioral and Brain
     Sciences*, 47, e148.
-    <https://doi.org/10.1017/S0140525X24000128>.Target paper and
-    commentaries:
-    [https://cldlab.org/static/papers/Binz\\\_2024\\\_BBS.pdf](https://cldlab.org/static/papers/Binz_2024_BBS.pdf){.uri}
-    \[IF: 16.6, Quartile: Q1\]
+    <https://doi.org/10.1017/S0140525X24000128>.
+
 
 ### Under Review
 
-1.  **Calderan, M.**, Visalli, A., Degasperi, G., Toffoli, L., Sellaro,
-    R., & Cellini, N. Predictions under sleep restriction: The effects
-    of partial sleep deprivation on learning and inhibitory control.
-    Under Review in *Royal Society Open Science*. **Preprint:**
-    [https://doi.org/10.31234/osf.io/x7m4z\\\_v3](https://doi.org/10.31234/osf.io/x7m4z\_v3){.uri}.
-
-2.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F.,
+1.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F.,
     Zorzi, M., & Ambrosini, E. A computational framework for integrating
     Predictive processes with evidence Accumulation Models (PAM). Under
     Review in *Behavior Research Methods*. **Preprint:**
     <https://doi.org/10.48550/arXiv.2411.13203>.
 
-3.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V. &
-    Sonuga-Barke, E. A Critical Tails or Types? A Critical Systematic
-    Review of Taxometric Studies of Neurodevelopmental Conditions. Under
-    review in *Journal of Child Psychology and Psychiatry*
-    <https://github.com/EnricoToffalini/Taxometrics-Neurodevelopmental-Disorders/tree/main>
+2.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V. & Sonuga-Barke, E. A   Critical Tails or Types? A Critical Systematic Review of Taxometric Studies of  Neurodevelopmental Conditions. Under review in *JCPP Advances* <https://github.com/EnricoToffalini/Taxometrics-Neurodevelopmental-Disorders/tree/main>
 
-4.  Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan,
-    M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., &
-    Carìa, A., Aperiodic and periodic neural activity during sleep in
-    autism spectrum disorders. Under Review in *BMC medicine*.
+3.  Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan, M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., & Carìa, A., Aperiodic and periodic neural activity during sleep in autism spectrum disorders. Under Review in *BMC medicine*.
 
 ### Preregistration
 
@@ -368,8 +355,7 @@ Ad-hoc reviewer (3 reviewed papers) for:
 
 ### Lectures on contract (docenze a contratto)
 
--   **Test per le organizzazioni** (21 hours, 3 CFU). Scheduled for the
-    2nd semester of the 2025/2026 academic year. Lecturer (titolare di
+-   **Test per le organizzazioni** (21 hours, 3 CFU). 2nd semester of the 2025/2026 academic year. Lecturer (titolare di
     modulo) for the Master’s Degree in Psicologia Sociale, del Lavoro e
     della Comunicazione, University of Padova.
 
@@ -387,6 +373,7 @@ Ad-hoc reviewer (3 reviewed papers) for:
     -   December, 2024 (20 hrs.)
     -   April, 2025 (20 hrs.)
     -   November, 2025 (20 hrs.)
+    -  May, 2026 (20 hrs., planned)
 -   **Learning in Dynamic Environments: A Tentative Implementation of
     the Volatile Kalman Filter in STAN.** Presentation (1 hr.) on a
     Bayesian-based implementation of a learning algorithm for the
@@ -431,7 +418,10 @@ Ad-hoc reviewer (3 reviewed papers) for:
     Univeristy of Padova, Padova (Italy). 10 June 2025 (1 hr.).
     Material: <https://mar-cald.github.io/tempi/>.
 
-### Other Academic Roles
+## Academic Roles
+
+-  **Expert (Cultore della Materia) of Psychometrics (PSIC-01/C ex M-PSI/03)**
+Department of Developmental Psychology and Socialization, University of Padova, Italy. January 2026-present.
 
 -   **Representative of Research Fellows** in the Department of General
     Psychology, University of Padova. 02/2024 – Present
