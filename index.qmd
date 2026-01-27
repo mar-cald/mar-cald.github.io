@@ -29,8 +29,6 @@ format:
        text: |
          <link rel="shortcut icon" href="img/power-rangers/purple-fav.png"/>
 engine: knitr
-plugins:
-  - jekyll-sitemap
 
 ---
 
