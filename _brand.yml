@@ -1,0 +1,23 @@
+# _brand.yml
+color:
+  palette:
+    magenta: "#6e0748"
+    magenta-dark: "#5a063d"
+    text: "#333333"
+    white: "#ffffff"
+
+  background: white
+  foreground: text
+  primary: magenta
+
+defaults:
+  bootstrap:
+    defaults:
+      # Use literal colors here (prevents Sass compilation errors)
+      navbar-bg: "#6e0748"
+      navbar-fg: "#ffffff"
+      navbar-hl: "#ffffff"
+
+      link-color: "#6e0748"
+      link-hover-color: "#5a063d"
+      link-decoration: underline

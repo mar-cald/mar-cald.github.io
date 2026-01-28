@@ -4,31 +4,33 @@ image: img/tulip.jpg
 
 about:
   id: hero-heading
-  template: jolla
-  image-shape: round
-  image-width: 12em
+  template: broadside
+  image-shape: rectangle
+  image-width: 10em
   links:
     - icon: github
       text: GitHub
-      href: https://github.com/Mar-Cald
+      href: https://github.com/mar-cald
+      target: _blank
     - icon: gitlab
-      text: Pavlovia GitLab
+      text: GitLab
       href: https://gitlab.pavlovia.org/mar.cald
+      target: _blank
     - icon: file-text
       text: ResearchGate
       href: https://www.researchgate.net/profile/Margherita-Calderan-2
+      target: _blank
     - icon: flower2
       text: OSF
       href: https://osf.io/user/5ca9t?tab=2
+      target: _blank
+    
+    
 markdown:
   extensions: [link_attributes]
 format: 
   html:     
     include-after-body: footer.html
-    include-in-header:
-       text: |
-         <link rel="shortcut icon" href="img/power-rangers/purple-fav.png"/>
-         <meta name="google-site-verification" content="Iier_KnAUnnOvH-tUDRqSenivLnqlFEG0mH-9FH1jdg" />
 engine: knitr
 
 ---
@@ -36,5 +38,7 @@ engine: knitr
 ::: {#hero-heading}
 I am a **postdoctoral researcher** at the Department of General Psychology, University of **Padova**, Italy. 
 
-My research interests include computational models of **cognition**, **Bayesian** statistics, and **metascience**. I am a member of the [Psicostat](https://psicostat.dpss.psy.unipd.it/){target="_blank"} research group.
-:::
+My research interests include computational models of **cognition**, **Bayesian** statistics, and **metascience**. 
+
+I am a member of [Psicostat](https://psicostat.dpss.psy.unipd.it/){target="_blank"}, an interdisciplinary research group working at the intersection of **psychology** and **statistics**. In addition to our research activities, we offer [short courses and workshops](https://psicostat.github.io/psicostat-teaching/){target="_blank"} on quantitative methods.
+::: 

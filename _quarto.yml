@@ -9,9 +9,6 @@ website:
     location: navbar
     type: overlay
   navbar:
-    logo: img/power-rangers/purple.png
-    logo-href: "#"
-    logo-alt: "Power Rangers Team"
     left:
       - text: "home"
         href: index.qmd
@@ -22,12 +19,15 @@ website:
       - text: "contact"
         href: contact.qmd
 format:
-  html: 
-    theme:
-      light: yeti
+  html:
+    theme: [lux, brand]
     fontsize: 1.2em
     linestretch: 1.7
     css: styles.css
     toc: true
     smooth-scroll: true
+    include-in-header:
+       text: |
+         <link rel="shortcut icon" href="img/daisy.png"/>
+         <meta name="google-site-verification" content="Iier_KnAUnnOvH-tUDRqSenivLnqlFEG0mH-9FH1jdg" />
 

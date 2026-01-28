@@ -1,122 +1,139 @@
+/* =========================================================
+   Clean Quarto website CSS (academic, approachable)
+   - Colors live in _brand.yml
+   - This file: layout + component polish only
+   ========================================================= */
 
+/* ---------- Design tokens (non-color) ---------- */
+:root{
+  --radius-sm: 0.35rem;
+  --radius-md: 0.6rem;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
 
-/* ---------- Navbar Styling ---------- */
-.navbar {
-  background-color: #6e0748 !important;
-  padding: 0.4rem 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid #5a063d;
-  font-size: 0.95rem; /* slightly smaller font size */
+  --container-pad-x: 0.75rem;
+
+  /* Hero knobs */
+  --hero-font-size: clamp(1.05rem, 0.6vw + 0.95rem, 1.25rem);
+  --hero-max-width: 60ch;
+  --hero-gap: 0.55rem;
+
+  /* For vertical centering (tune if needed) */
+  --nav-offset: 76px;
 }
 
-/* Navbar link styles */
-.navbar a {
-  color: white !important;
-  text-decoration: none;
-  padding: 0.4rem 0.6rem;
-  display: inline-block;
-  transition: background-color 0.2s ease;
+/* ---------- Base ---------- */
+body{
+  margin: 0;
+  padding: 0 var(--container-pad-x);
+  line-height: 1.6;
 }
 
-.navbar a:hover {
-  background-color: #5a063d;
-  border-radius: 4px;
+a{ text-underline-offset: 3px; }
+
+strong, b{ font-weight: 800; }
+
+/* ---------- Navbar (Lux-friendly, no colors) ---------- */
+.navbar{
+  --bs-navbar-padding-y: 0.35rem;          /* slim navbar */
+  --bs-navbar-nav-link-padding-x: 0.25rem;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  border-bottom: 1px solid rgba(0,0,0,0.18);
 }
 
-/* Improve link spacing and alignment */
-.navbar .nav-link {
-  padding: 0.5rem 0.9rem;
-  font-weight: 500;
+.navbar .navbar-collapse{ justify-content: flex-start; }
+
+.navbar .navbar-nav{
+  gap: 0.2rem;
+  align-items: center;
 }
 
-/* Subtle hover underline with offset for readability */
+.navbar .nav-link{
+  font-size: 1.05rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.55rem;
+
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 600;
+
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
 .navbar .nav-link:hover,
-.navbar .nav-link:focus {
-  text-underline-offset: 3px;
+.navbar .nav-link:focus{
+  background: rgba(255,255,255,0.10);
+  text-decoration: none;
 }
 
-/* Remove Bootstrap active indicator under the current page link */
-.navbar .nav-link.active {
-  box-shadow: none !important;
-  border-bottom: none !important;
-  background: rgba(255,255,255,.08);
-  border-radius: .5rem;
+.navbar .nav-link.active{
+  background: rgba(255,255,255,0.14);
 }
 
-/* Gentle elevation for separation from content */
-.navbar {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+.navbar .nav-link:focus-visible{
+  outline: 2px solid rgba(255,255,255,0.85);
+  outline-offset: 2px;
 }
 
+/* ---------- About (broadside) ---------- */
 
-.navbar-brand {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  padding: 10px;
+/* Center the whole block in the viewport (desktop/tablet) */
+.quarto-about main#quarto-content{
+  min-height: calc(100svh - var(--nav-offset));
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
-.navbar-brand img {
-  width: 30px !important;
-  height: 30px !important;
-  max-height: none !important;
-  object-fit: contain;
-  display: block;
-  transform: translateX(2px);  /* Shift right by 2px to center visually */
-}
+.quarto-about main#quarto-content > *{ width: 100%; }
 
-/* ---------- Base Styling ---------- */
-body {
-  background-color: #fff;
-  color: #333;
+/* Broadside row: clean alignment */
+.quarto-about .about-entity{
+  align-items: flex-start;
+  gap: 2.2rem;
   margin: 0;
-  padding: 0 0.75rem;
+  padding-top: 0;
+  transform: none;
 }
 
-/* ---------- Hero Section Styling ---------- */
-/* Hero container: tighter margins/padding */
-#hero-heading {
-  text-align: center;
-  max-width: 100%;
-  font-size: 1.1rem;
-  margin: 0.5rem 0.5rem;      /* was 1rem */
-  padding: 0.1rem 0.1rem;     /* unchanged; keep minimal */
-  box-sizing: border-box;
+/* Make TEXT take more space than the image (desktop) */
+@media (min-width: 992px){
+  .quarto-about .about-image{
+    flex: 0 0 40%;          /* image column narrower */
+  }
+  .quarto-about .about-contents{
+    flex: 1 1 60%;          /* text column wider */
+    max-width: none;        /* allow it to actually expand */
+  }
 }
 
-/* Reduce top whitespace for the about hero block itself */
-.quarto-about .about-entity {
-  padding-top: 0.7rem;       /* trims space above the title/photo */
+/* Image panel */
+.quarto-about .about-image img{
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 30% 35%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.10);
 }
 
-/* Tighter vertical rhythm under the hero */
-#hero-heading p { 
-  margin-bottom: 0.5rem;     /* was 0.65rem */
+/* Text column */
+.quarto-about .about-contents{
+  max-width: 62ch;          /* used on smaller widths; removed at >=992px */
+  text-align: left;
 }
 
-/* Bring the links row closer to the text */
-.about .about-links {
-  margin-top: 0.2rem;         /* smaller gap before the buttons */
+.quarto-about .about-title{ margin-top: 0; }
+.quarto-about .about-contents p{ margin-bottom: 0.9rem; }
+
+/* Links row: align under the text column */
+.quarto-about .about-links{
+  margin-top: 0.75rem;
+  justify-content: flex-start;
 }
 
-/* Slimmer rule above links (optional) */
-.about hr {
-  margin: 0.5rem 0;
-}
-
-/* Subtle, aligned last-updated line closer to links */
-.last-updated {
-  margin-top: 0.2rem;         /* was 0.8rem */
-  text-align: center;
-  color: var(--bs-secondary-color);
-  font-size: 0.9rem;
-}
-
-
-/* ---------- CV Events Layout (Improved for Mobile) ---------- */
-.cvevent {
+/* ---------- CV events layout ---------- */
+.cvevent{
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -124,42 +141,38 @@ body {
   margin-bottom: 1.5em;
 }
 
-.cvevent-left {
+.cvevent-left{
   flex: 1 1 70%;
   min-width: 200px;
 }
 
-.cvevent-right {
+.cvevent-right{
   flex: 0 0 25%;
   min-width: 120px;
   text-align: right;
-  font-weight: bold;
-  color: #6e0748;
+  font-weight: 700;
 }
 
-/* ---------- Responsive Tweaks for Mobile ---------- */
-@media (max-width: 768px) {
-  .navbar {
-    font-size: 0.85rem;
-    padding: 0.3rem 0.75rem;
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 768px){
+  :root{
+    --container-pad-x: 0.5rem;
+    --nav-offset: 0px;
   }
 
-  .navbar a {
-    padding: 0.3rem 0.5rem;
-    font-size: 0.85rem;
+  /* Disable vertical centering on small screens (avoid overflow) */
+  .quarto-about main#quarto-content{
+    min-height: auto;
+    display: block;
   }
 
-  #hero-heading {
-    font-size: 0.85rem;
-    padding: 0rem 0.5rem;
+  .navbar .nav-link{
+    font-size: 1.0rem;
+    padding: 0.45rem 0.70rem;
   }
 
-  body {
-    padding: 0 0.5rem;
+  .quarto-about .about-image img{
+    max-width: 320px;
+    border-radius: 12px;
   }
 }
-
-
-
-
-
