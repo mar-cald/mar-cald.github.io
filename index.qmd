@@ -6,7 +6,7 @@ about:
   id: hero-heading
   template: broadside
   image-shape: rectangle
-  image-width: 10em
+  image-width: 20em
   links:
     - icon: github
       text: GitHub
