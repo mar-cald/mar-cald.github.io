@@ -30,6 +30,9 @@ markdown:
   extensions: [link_attributes]
 format: 
   html:     
+    include-in-header:
+       text: |
+         <link rel="shortcut icon" href="img/daisy.png"/>
     include-after-body: footer.html
 engine: knitr
 
