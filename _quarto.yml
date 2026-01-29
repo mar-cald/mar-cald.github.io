@@ -28,6 +28,6 @@ format:
     smooth-scroll: true
     include-in-header:
        text: |
-         <link rel="shortcut icon" href="img/daisy.png"/>
+         <link rel="shortcut icon" href="img/daisy.jpg"/>
          <meta name="google-site-verification" content="Iier_KnAUnnOvH-tUDRqSenivLnqlFEG0mH-9FH1jdg" />
 
