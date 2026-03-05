@@ -146,7 +146,9 @@ tibble::tribble(
 1. **Calderan, M.**, Visalli, A., Degasperi, G., Toffoli, L., Sellaro,
     R., & Cellini, N. Predictions under sleep restriction: The effects
     of partial sleep deprivation on learning and inhibitory control.
-    Accepted for publication in *Royal Society Open Science*, <https://doi.org/10.1098/rsos.252345>. **Preprint:** <https://doi.org/10.31234/osf.io/x7m4z\_v3>.
+    Accepted for publication in *Royal Society Open Science*, <https://doi.org/10.1098/rsos.252345>. **Preprint:** <https://doi.org/10.31234/osf.io/x7m4z\_v3>. **OSF** repo: <https://osf.io/6fxmh/> 
+    
+2. Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan, M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., & Carìa, A., Aperiodic and periodic neural activity during sleep in autism spectrum disorders. Accepted for publication in *BMC medicine*.
 
 ### Published
 
@@ -175,9 +177,7 @@ tibble::tribble(
 5.  **Calderan, M.**, & Visalli, A. (2024). Challenges of meta-learning
     and rational analysis in large worlds. *Behavioral and Brain
     Sciences*, 47, e148.
-    <https://doi.org/10.1017/S0140525X24000128>.Target paper and
-    commentaries:
-    [https://cldlab.org/static/papers/Binz\\\_2024\\\_BBS.pdf](https://cldlab.org/static/papers/Binz_2024_BBS.pdf){.uri}
+    <https://doi.org/10.1017/S0140525X24000128>.
 
 
 ### Under Review
@@ -188,9 +188,7 @@ tibble::tribble(
     Review in *Behavior Research Methods*. **Preprint:**
     <https://doi.org/10.48550/arXiv.2411.13203>.
 
-2.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V. & Sonuga-Barke, E. A   Critical Tails or Types? A Critical Systematic Review of Taxometric Studies of  Neurodevelopmental Conditions. Under review in *JCPP Advances* <https://github.com/EnricoToffalini/Taxometrics-Neurodevelopmental-Disorders/tree/main>
-
-3.  Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan, M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., & Carìa, A., Aperiodic and periodic neural activity during sleep in autism spectrum disorders. Under Review in *BMC medicine*.
+2.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V. & Sonuga-Barke, E. A   Critical Tails or Types? A Critical Systematic Review of Taxometric Studies of  Neurodevelopmental Conditions. Under review in *JCPP Advances* **Preprint:** <https://osf.io/ys5ad/files/bem36>. 
 
 
 ### Preregistration
@@ -392,7 +390,7 @@ Ad-hoc reviewer (3 reviewed papers) for:
 
 -   **The 3Rs of Trustworthy Science: Reproducibility, Replicability, and Robustness. Theory and Applications in R**. Pre-conference Workshop - **International Biometric Society**, Seul (South Korea). 12 July 2026. Planned hands-on methodological workshop held with Dr. Filippo Gambarota.
 
--   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop - **Cognitive Science Arena**, Brixen (Italy). 5 February 2026. Planned hands-on methodological workshop held with Dr. Filippo Gambarota.
+-   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop - **Cognitive Science Arena**, Brixen (Italy). 5 February 2026. Hands-on methodological workshop held with Dr. Filippo Gambarota. <https://psicostat.github.io/glm-workshop/>
 
 -  **Bayesian Approaches To Multiplicity**. Psicostat HandZone on Bayesian Approaches To Multiplicity, Univeristy of Padova, Padova (Italy). 27 December 2025 (1.5 hr.). <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
 
