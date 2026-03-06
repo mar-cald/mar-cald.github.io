@@ -20,7 +20,7 @@ website:
         href: contact.qmd
 format:
   html:
-    theme: [lux, brand]
+    theme: [Simplex, brand]
     fontsize: 1.2em
     linestretch: 1.7
     css: styles.css
