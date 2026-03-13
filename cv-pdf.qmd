@@ -184,13 +184,13 @@ tibble::tribble(
 
 ### Under Review
 
-1.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F.,
-    Zorzi, M., & Ambrosini, E. A computational framework for integrating
-    Predictive processes with evidence Accumulation Models (PAM). Under
-    Review in *Behavior Research Methods*. **Preprint:**
-    <https://doi.org/10.48550/arXiv.2411.13203>.
+1.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F., Zorzi, M., & Ambrosini, E. A computational framework for integrating Predictive processes with evidence Accumulation Models (PAM). Under Review in *Behavior Research Methods*. **Preprint:** <https://doi.org/10.48550/arXiv.2411.13203>.
 
 2.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V. & Sonuga-Barke, E. A   Critical Tails or Types? A Critical Systematic Review of Taxometric Studies of  Neurodevelopmental Conditions. Under review in *JCPP Advances* **Preprint:** <https://osf.io/ys5ad/files/bem36>. 
+
+3.  Feraco, T., **Calderan, M.** & Pellegrino, G. (2025). The Living SEB Skills Project: A Living Resource for Review and Meta-Analysis of Social, Emotional, and Behavioral Skills. Under review in *European Journal of Personality*. **Preprint:** <https://doi.org/10.31234/osf.io/ewvuf_v1>. 
+
+4.  Bastianello, T., **Calderan, M.**,  Adriana Grazia-Maria  Loschiavo, A. GM A., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. Domestic Media Exposure Delay Attainment of Babbling in Infants While Adult Input Accelerates Progress. Under review in *JAMA Network Open*.
 
 
 ### Preregistration
@@ -210,17 +210,10 @@ tibble::tribble(
 1.  **Calderan, M.**, Gambarota, F., Toffalini, E., & Altoè, G.,
     Adjusting the Probability of Direction for Multiple Testing.
     
-3.  Barbiero, J., **Calderan, M.**, & Mioni, G., The contribution of
-    cerebellum in time perception: A systematic review and
-    meta-analyses. 
+3.  Barbiero, J., **Calderan, M.**, & Mioni, G., The contribution of cerebellum in time perception: A systematic review and meta-analyses. 
 
-4.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del
-    Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino,
-    V., & Mento, G., I am talking to you! Engagement modulates the
-    effects of digital contents exposure on preschoolers’ adaptive
-    cognitive control.
+4.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino, V., & Mento, G., I am talking to you! Engagement modulates the effects of digital contents exposure on preschoolers’ adaptive cognitive control.
     
-5.  Bastianello, T.,  **Calderan, M.**, Loschiavo, A. GM. A., Nascimben, C., Visibelli, M., Reoyo-Serrano, N., Altoè, G. & Benavides-Varela, S. Domestic Media Exposure Delay Attainment of Babbling in Infants While Adult Input Accelerates Progress.
 
 
 ### Published Abstract
