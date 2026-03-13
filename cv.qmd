@@ -305,6 +305,19 @@ tibble::tribble(
     
 \newpage
 
+
+### Pre-conference workshops
+
+-   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop **Cognitive Science Arena**, Brixen (Italy). 5 February 2026. Hands-on methodological workshop held with Dr. Filippo Gambarota. <https://psicostat.github.io/glm-workshop/>
+
+
+-  **A Practical Introduction to Evidence Accumulation Models in Visual Perception Research**. European Conference on Visual Perception, Mainz (Germany). 24 August 2025 (2.30 hr.). Material:
+    <https://mar-cald.github.io/eam-workshop/eam-home.html>.
+
+-  **Introduction to Reproducible Science**. Pre-School workshop
+    *Replicability Crisis in Science*, Padova (Italy). 6 June 2025 (2 hrs.). Material: <https://github.com/Mar-Cald/repro-pre-school>.
+
+
 ## Invited talks
 
 -  **Bayesian inference and multiple comparisons: From idealization of methods to conscious practice**. **C**ognitive **N**euroscience **S**eminars, Department of General Psychology,  University of Padova, Italy. 4th December 2025.
@@ -313,17 +326,16 @@ tibble::tribble(
 
 -  **Bayesian Multiple Testing**. STAT-Talk Series, Methodology and Statistics Department, Institute of Psychology, Leiden University, Leiden, The Netherlands. 18th September 2025.
 
+\newpage
 
 ## Awards and Grants
 
--  **Travel Grant**: European Conference on Visual Perception, Mainz,
-    (Germany).
+-  **Travel Grant**: Cognitive Science Arena, Brixen, (Italy).
+-  **Travel Grant**: European Conference on Visual Perception, Mainz, (Germany).
 -  **Travel Grant**: qHelp international seminar on Quantitative
     Psychology. Arrifana (Portugal)
-- **Painter Award**: Best Poster, Cognitive Science Arena, Brixen,
-    (Italy).
--  **Erasmus Placement Grant (2 Months)**: Donders Sleep and Memory
-    Lab, Nijmegen (Netherlands).
+- **Painter Award**: Best Poster, Cognitive Science Arena, Brixen, (Italy).
+-  **Erasmus Placement Grant (2 Months)**: Donders Sleep and Memory Lab, Nijmegen (Netherlands).
 -  **Erasmus Placement Grant (5 Months)**: Jaume I University,
     Castellón de la Plana, (Spain).
 
@@ -383,19 +395,8 @@ Ad-hoc reviewer (3 reviewed papers) for:
 
 ### Workshops
 
--   **The 3Rs of Trustworthy Science: Reproducibility, Replicability, and Robustness. Theory and Applications in R**. Pre-conference Workshop - **International Biometric Society**, Seul (South Korea). 12 July 2026. Planned hands-on methodological workshop held with Dr. Filippo Gambarota.
-
--   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop - **Cognitive Science Arena**, Brixen (Italy). 5 February 2026. Hands-on methodological workshop held with Dr. Filippo Gambarota. <https://psicostat.github.io/glm-workshop/>
-
 -  **Bayesian Approaches To Multiplicity**. Psicostat HandZone on Bayesian Approaches To Multiplicity, Univeristy of Padova, Padova (Italy). 27 December 2025 (1.5 hr.). <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
 
--  **A Practical Introduction to Evidence Accumulation Models in Visual Perception Research**. European Conference on Visual Perception,
-    Mainz (Germany). 24 August 2025 (2.30 hr.). Material:
-    <https://mar-cald.github.io/eam-workshop/eam-home.html>.
-
--  **Introduction to Reproducible Science**. Pre-School workshop
-    *Replicability Crisis in Science*, Padova (Italy). 6 June 2025 (2
-    hrs.). Material: <https://github.com/Mar-Cald/repro-pre-school>.
 
 -  **Tempi di risposta**. Workshop on reaction time distributions,
     Univeristy of Padova, Padova (Italy). 10 June 2025 (1 hr.).
