@@ -3,9 +3,8 @@ project:
   output-dir: docs
   resources:
     - img/**
-
 website:
-  search: 
+  search:
     location: navbar
     type: overlay
   navbar:
@@ -30,4 +29,3 @@ format:
        text: |
          <link rel="shortcut icon" href="img/daisy.png"/>
          <meta name="google-site-verification" content="Iier_KnAUnnOvH-tUDRqSenivLnqlFEG0mH-9FH1jdg" />
-

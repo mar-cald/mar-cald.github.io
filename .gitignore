@@ -4,3 +4,8 @@
 .RData
 .Ruserdata
 .DS_Store
+
+# Quarto/knitr render artifacts (regenerable; can be huge — keep out of git)
+*_cache/
+/cv-pdf_files/
+/materials/*_files/

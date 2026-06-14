@@ -1,0 +1,2838 @@
+---
+title: "Modelli lineari"
+subtitle: "Dispensa del corso per il Master in Psicologia Quantitativa"
+author: "Margherita Calderan"
+date: last-modified
+date-format: "D MMMM YYYY"
+number-sections: true
+categories: [teaching]
+---
+
+::: {.callout-tip icon=false title="📌 Come usare questa dispensa"}
+Questo documento raccoglie tutto il materiale della lezione. Parte del materiale didattico è stato adattato dalle slide del Prof. [Massimiliano Pastore](https://dpss.psy.unipd.it/~massimiliano.pastore/index.html) (a.a. 2024/2025).
+
+Lungo il percorso troverete degli **esercizi** (riquadri azzurri ✏️): provate a risolverli da soli prima di aprire la soluzione (riquadri verdi, chiusi di default).
+
+Prima di iniziare:
+
+1. installate i pacchetti necessari:
+   `install.packages(c("ggplot2", "sjPlot", "effects", "performance", "MuMIn"))`
+2. scaricate il file [kidiq.csv](dati/kidiq.csv) e salvatelo in una cartella `dati` dentro la vostra cartella di lavoro ([dati di supporto](https://github.com/masspastore/ADati) al manuale 'Analisi dei dati in Psicologia', Pastore M., *Il Mulino*, 2015).
+:::
+
+# Il modello lineare
+
+Un **modello lineare** è un modello statistico della forma
+
+$$
+Y = X\beta + \epsilon
+$$
+
+dove $Y$ è la **variabile risposta** (o variabile dipendente), $X$ è un insieme di
+**predittori** (o variabili indipendenti) e $\epsilon$ è la **componente d'errore**,
+cioè la parte di $Y$ che il modello non spiega.
+
+Con $\beta$ indichiamo i **coefficienti di regressione**: lo scopo del modello è
+proprio stimare questi parametri a partire dai dati osservati.
+
+Questi modelli si chiamano *lineari* perché la relazione ipotizzata tra i predittori
+e la variabile dipendente è assunta essere lineare: ogni predittore contribuisce alla
+previsione di $Y$ in modo additivo, moltiplicato per il proprio coefficiente.
+
+I predittori possono essere **quantitativi** (es. età, QI) oppure **categoriali** (es. genere, gruppo sperimentale): vedremo che il modello lineare li gestisce entrambi.
+
+## Che cosa stima un modello lineare? {#sec-valore-atteso}
+
+Un modello lineare stima il **valore atteso** (cioè la media) della variabile risposta, dati i valori dei predittori.
+
+> Il [valore atteso](https://it.wikipedia.org/wiki/Valore_atteso) di una variabile
+> casuale è la media ponderata di tutti gli esiti possibili, ciascuno pesato con la propria probabilità.
+
+La retta di regressione (in rosso, qui sotto) è proprio la sequenza dei valori attesi di $Y$ al variare di $x$: i punti osservati le stanno *attorno*. E poiché la relazione è una retta, **a una variazione costante di
+$x$ corrisponde una variazione costante del valore atteso**: nel pannello di
+destra, ogni volta che $x$ aumenta di 0.2 il valore atteso aumenta di 0.04
+(l'incremento moltiplicato per la pendenza, qui 0.2).
+
+```{r}
+#| label: valore-atteso
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(6)
+x_oss <- runif(100, 0, 1)                      # 100 osservazioni simulate
+y_oss <- rnorm(100, 0.1 + 0.2 * x_oss, 0.05)   # vera retta: 0.1 + 0.2x
+xs <- seq(0, 1, 0.2)                           # griglia di valori di x
+mu <- 0.1 + 0.2 * xs                           # valori attesi sulla griglia
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+plot(x_oss, y_oss, pch = 19, col = "grey60", xlab = "x", ylab = "y",
+     main = "La retta dei valori attesi")
+abline(a = 0.1, b = 0.2, col = "red", lwd = 3)
+
+plot(x_oss, y_oss, pch = 19, col = "grey85", xlab = "x", ylab = "y",
+     main = "Variazioni costanti")
+abline(a = 0.1, b = 0.2, col = "red", lwd = 3)
+segments(xs[-6], mu[-6], xs[-1], mu[-6], col = "blue", lwd = 2)
+segments(xs[-1], mu[-6], xs[-1], mu[-1], col = "blue", lwd = 2)
+text(xs[-1] - 0.02, mu[-6] - 0.018, "+0.04", col = "blue", cex = 0.8)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+library(ggplot2); set_theme(theme_classic(base_size = 14))
+```
+
+Il modello però non descrive solo la media: attorno a ciascun valore atteso c'è **variabilità** — i punti si disperdono intorno alla retta. Per descriverla servono le **distribuzioni di probabilità**.
+
+## Le distribuzioni di probabilità {#sec-distribuzioni}
+
+I modelli non riproducono mai esattamente i dati: prevedono **il valore medio**
+della risposta dati i predittori. Le distribuzioni di probabilità servono proprio
+a questo:
+
+- **caratterizzare la variabilità** che resta *dopo* aver previsto la media;
+- **quantificare l'incertezza** nelle stime dei parametri del modello.
+
+Una **distribuzione di probabilità** descrive tutti i valori che una variabile
+casuale $Y$ può assumere, con le probabilità associate, dati certi parametri:
+
+$$
+f(y \mid \boldsymbol{\theta})
+$$
+
+dove:
+
+- $y$ è un valore specifico;
+- $\boldsymbol{\theta}$ è un vettore di parametri (es. $\mu$, $\sigma^2$);
+- $f(\cdot)$ è la funzione di probabilità.
+
+La forma che prende $f$ dipende dal tipo di variabile:
+
+- per le variabili casuali **continue** (tempo, peso, temperatura, ...) $f$ è una
+  **funzione di densità di probabilità** (PDF, *probability density function*):
+  $f(y \mid \boldsymbol{\theta})$ è la *densità* di probabilità in $y$ — non una
+  probabilità! Per un valore specifico, infatti, $P(Y = y) = 0$;
+- per le variabili casuali **discrete** (conteggi, esiti binari, ...) $f$ è una
+  **funzione di massa di probabilità** (PMF, *probability mass function*):
+  $P(Y = y \mid \boldsymbol{\theta})$ è la *probabilità* di osservare esattamente
+  $y$. Ad esempio, $P(Y = 3) = 0.25$ significa che c'è il 25% di probabilità di
+  ottenere proprio 3.
+
+```{r}
+#| label: pdf-pmf
+#| fig-height: 6
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+par(mfrow = c(2, 2), mar = c(4, 4, 3, 1))
+curve(dnorm(x, 0, 1), from = -4, to = 4, lwd = 2,
+      xlab = "y", ylab = "f(y)", main = "Normale (PDF)")
+curve(dgamma(x, shape = 2, rate = 1), from = 0, to = 8, lwd = 2,
+      xlab = "y", ylab = "f(y)", main = "Gamma (PDF)")
+k <- 0:10
+plot(k, dpois(k, lambda = 3), type = "h", lwd = 2,
+     xlab = "y", ylab = "P(Y = y)", main = "Poisson (PMF)")
+points(k, dpois(k, lambda = 3), pch = 19)
+plot(k, dbinom(k, size = 10, prob = 0.4), type = "h", lwd = 2,
+     xlab = "y", ylab = "P(Y = y)", main = "Binomiale (PMF)")
+points(k, dbinom(k, size = 10, prob = 0.4), pch = 19)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+Tre quantità ci accompagneranno per tutto il corso:
+
+- il **valore atteso** (media), $E[Y] = \mu$: la media di lungo periodo di $Y$
+  sotto la sua distribuzione;
+- il **valore atteso condizionato**, $E[Y \mid X] = \mu(X)$: la media della
+  risposta **per un valore fissato del predittore** $X = x$;
+- la **varianza**, $\mathrm{Var}(Y)$ (o, nella regressione, $\mathrm{Var}(Y \mid X)$):
+  quanto i valori variano attorno alla media (in generale, o per un dato $x$).
+
+Nei modelli lineari normali (e nei modelli lineari *generalizzati*) i predittori
+entrano, di norma, **sulla media** della distribuzione.
+
+Le definizioni di valore atteso e varianza sono universali, ma *come si calcolano*
+— e a che cosa sono uguali — dipende dai parametri della distribuzione. Per una
+distribuzione normale $Y \sim \mathcal{N}(\mu, \sigma^2)$ i parametri sono
+esattamente la media e la varianza:
+
+- **valore atteso** (media): $E[Y] = \mu$;
+- **varianza**: $\mathrm{Var}(Y) = \sigma^2$.
+
+## La distribuzione normale {#sec-normale}
+
+La distribuzione normale ha due parametri, $\mu$ (media) e $\sigma^2$ (varianza):
+
+$$
+f(y \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( - \frac{(y - \mu)^2}{2\sigma^2} \right)
+$$
+
+```{r}
+#| label: normale-parametri
+#| fig-height: 4
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+par(mfrow = c(1, 1))
+curve(dnorm(x, 0, 1), from = -8, to = 8, lwd = 2,
+      xlab = "y", ylab = "f(y)", ylim = c(0, 0.42))
+curve(dnorm(x, 0, 2), add = TRUE, lwd = 2, col = "blue")
+curve(dnorm(x, 2, 1), add = TRUE, lwd = 2, col = "red")
+legend("topleft", lwd = 2, col = c("black", "blue", "red"), bty = "n",
+       legend = c(expression(mu == 0 ~ "," ~ sigma == 1),
+                  expression(mu == 0 ~ "," ~ sigma == 2),
+                  expression(mu == 2 ~ "," ~ sigma == 1)))
+```
+
+Le sue proprietà principali:
+
+- **supporto**: $(-\infty, +\infty)$ — qualunque valore reale è possibile;
+- media = moda = mediana;
+- **media** (valore atteso): $\mu$;
+- **varianza**: $\sigma^2$;
+- **indipendenza tra media e varianza**: cambiare la media *non* cambia la
+  varianza.
+
+Le misure del mondo reale non sono automaticamente normali: la **normalità è una scelta di modellazione**. Scegliere la distribuzione per i propri dati significa chiedersi:
+
+- **supporto**: quali valori sono possibili per la mia variabile?
+- **media**: quale valore prevedere, in media?
+- **varianza**: quanta variabilità attorno alla media?
+- **relazione media–varianza**: la varianza cambia al variare della media?
+
+::: {.callout-note collapse="true"}
+
+## GLM
+
+Per la normale la risposta è **no**: media e varianza sono parametri separati
+e indipendenti. Per altre distribuzioni, invece...
+
+| Distribuzione | Supporto | media: $E[Y]$ | varianza: $\mathrm{Var}(Y)$ |
+|------------------|------------------|:----------------:|:-----------------:|
+| **Normale**: $f(y \mid \mu,\sigma^2)$ | $y \in \mathbb{R}$ | $\mu$ | $\sigma^2$ |
+| **Gamma**: $f(y \mid \alpha,\lambda)$ | $y \in (0,\infty)$ | $\alpha/\lambda$ | $\alpha/\lambda^2$ |
+| **Binomiale**: $f(y \mid n,p)$ | $y \in \{0,1,\dots,n\}$ | $np$ | $np(1-p)$ |
+| **Poisson**: $f(y \mid \lambda)$ | $y \in \{0,1,2,\dots\}$ | $\lambda$ | $\lambda$ |
+
+Notate la colonna della varianza: per la Binomiale e la Poisson la varianza *dipende dalla media*, per la Normale no. Per esempio per la Poisson: spostando la media da 2 a 10 la distribuzione *si "allarga" da sola* — media e varianza viaggiano insieme (sono entrambe uguali a $\lambda$).
+
+```{r}
+#| label: media-varianza
+#| fig-height: 3.5
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+kk <- 0:22
+plot(kk, dpois(kk, 2), type = "h", lwd = 2, ylim = c(0, 0.28),
+     xlab = "y", ylab = "P(Y = y)", main = "Poisson, media = 2")
+plot(kk, dpois(kk, 10), type = "h", lwd = 2, ylim = c(0, 0.28),
+     xlab = "y", ylab = "P(Y = y)", main = "Poisson, media = 10")
+```
+:::
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+
+Con la distribuzione normale possiamo allora scrivere il modello di regressione
+in due modi **equivalenti**. Il primo mette i predittori sulla media della
+distribuzione:
+
+$$
+\mu_i = \beta_0 + \beta_1 x_i, \qquad y_i \sim \mathcal{N}(\mu_i, \sigma^2)
+$$
+
+il secondo isola la componente d'errore:
+
+$$
+y_i = \beta_0 + \beta_1 x_i + \epsilon_i, \qquad \epsilon_i \sim \mathcal{N}(0, \sigma^2)
+$$
+
+```{r}
+#| label: due-scritture
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+s <- 0.05                              # ampiezza delle campane normali
+campana <- function(x0, y0) {          # disegna una normale "in piedi" in (x0, y0)
+  yg <- seq(y0 - 3 * s, y0 + 3 * s, length.out = 80)
+  d  <- dnorm(yg, y0, s);  d <- d / max(d) * 0.07
+  polygon(c(x0, x0 + d, x0), c(yg[1], yg, yg[80]),
+          col = adjustcolor("blue", 0.25), border = "blue")
+}
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+plot(x_oss, y_oss, pch = 19, col = "grey60", xlim = c(0, 1.1),
+     ylim = c(-0.06, 0.48), xlab = "x", ylab = "y",
+     main = "Distribuzione della risposta")
+abline(a = 0.1, b = 0.2, col = "red", lwd = 2)
+for (i in seq_along(xs)) campana(xs[i], mu[i])
+points(xs, mu, pch = 19, col = "red")
+
+e_oss <- y_oss - (0.1 + 0.2 * x_oss)
+plot(x_oss, e_oss, pch = 19, col = "grey60", xlim = c(0, 1.1),
+     ylim = c(-0.2, 0.2), xlab = "x", ylab = expression(epsilon == y - hat(y)),
+     main = "Distribuzione degli errori")
+abline(h = 0, col = "red", lwd = 2)
+for (i in seq_along(xs)) campana(xs[i], 0)
+points(xs, rep(0, 6), pch = 19, col = "red")
+```
+
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+A sinistra la normale descrive la risposta attorno alla retta; a destra descrive gli errori attorno allo zero: sono due modi di esprimere **la stessa assunzione di modellazione**. 
+
+## Le assunzioni del modello di regressione {#sec-assunzioni}
+
+Perché le stime e le inferenze del modello siano valide, il modello di
+regressione si fonda su alcune assunzioni. Per capire di che cosa parlano,
+partiamo dal loro oggetto comune: **gli errori**, cioè le distanze verticali tra
+i dati osservati e la retta del modello.
+
+```{r}
+#| label: errori-visivi
+#| fig-height: 4
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(4)
+xe <- 1:12
+ye <- 2 + 0.8 * xe + rnorm(12, 0, 1.6)
+me <- lm(ye ~ xe)
+
+plot(xe, ye, pch = 19, col = "grey30", xlab = "x", ylab = "y")
+abline(me, col = "blue", lwd = 2)
+segments(xe, ye, xe, fitted(me), col = "red")     # gli errori: distanze verticali
+i <- 9                                             # ne evidenziamo uno
+text(xe[i] + 0.2, (ye[i] + fitted(me)[i]) / 2,
+     expression(epsilon[i]), col = "red", pos = 4)
+```
+
+Ogni segmento rosso è un errore $\epsilon_i = y_i - (\beta_0 + \beta_1 x_i)$: di
+quanto il dato osservato si discosta dal valore atteso sulla retta. (A rigore
+l'errore si misura dalla retta *vera*; quando la retta viene *stimata* dai dati,
+quella distanza si chiama **residuo** — è la stessa idea, e la calcoleremo nella
+@sec-scarti.)
+
+Le cinque assunzioni dicono, ciascuna, qualcosa su **come devono comportarsi
+questi segmenti**. Accanto a ognuna trovate un grafico con dati simulati: a
+sinistra l'assunzione rispettata, a destra violata. 
+
+**1. Indipendenza tra $X$ ed errore.** La variabile $X$ e l'errore sono
+indipendenti nella popolazione: i predittori non contengono informazione
+sull'errore.
+
+```{r}
+#| label: ass1-indipendenza-x-errore
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(1)
+x    <- runif(80, 0, 10)
+e_ok <- rnorm(80, 0, 1.5)                    # errore indipendente da X
+e_no <- 0.7 * (x - 5) + rnorm(80, 0, 1.5)    # errore correlato con X
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+plot(x, e_ok, pch = 19, col = "grey40", xlab = "X", ylab = expression(epsilon),
+     main = "Errore indipendente da X")
+abline(h = 0, lty = 2)
+plot(x, e_no, pch = 19, col = "grey40", xlab = "X", ylab = expression(epsilon),
+     main = "Errore correlato con X")
+abline(h = 0, lty = 2)
+abline(lm(e_no ~ x), col = "red", lwd = 2)
+```
+
+A destra gli errori tendono a essere negativi per $X$ piccolo e positivi per $X$ grande (linea rossa).
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+
+**2. Indipendenza degli errori.** Ogni coppia di errori $\epsilon_i$ e
+$\epsilon_j$ è indipendente, per $i \neq j$: l'errore di un'osservazione non dice nulla sull'errore di un'altra.
+
+```{r}
+#| label: ass2-indipendenza-errori
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(2)
+e_ind  <- rnorm(80)                          # errori indipendenti
+e_auto <- numeric(80)                        # errori autocorrelati:
+for (i in 2:80) e_auto[i] <- 0.9 * e_auto[i - 1] + rnorm(1, 0, 0.5)
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+plot(e_ind, type = "b", pch = 19, col = "grey40", cex = 0.8,
+     xlab = "Ordine di osservazione", ylab = expression(epsilon),
+     main = "Errori indipendenti")
+abline(h = 0, lty = 2)
+plot(e_auto, type = "b", pch = 19, col = "grey40", cex = 0.8,
+     xlab = "Ordine di osservazione", ylab = expression(epsilon),
+     main = "Errori autocorrelati")
+abline(h = 0, lty = 2)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+A sinistra ogni errore non dice nulla sui vicini; a destra ogni errore "somiglia" al precedente e i punti restano a lungo sopra o sotto lo zero. 
+
+**3. Linearità.** Il valore atteso dell'errore, dato il valore di $X$, è zero: $E(\epsilon_i) = E(\epsilon\,|\,x_i) = 0$. In altre parole, la relazione tra $X$ e $Y$ è davvero una retta: il modello non sbaglia *sistematicamente* in nessuna zona di $X$.
+
+```{r}
+#| label: ass3-linearita
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(3)
+x    <- runif(80, 0, 10)
+y_ok <- 2 + 0.8 * x + rnorm(80, 0, 1.5)              # relazione lineare
+y_no <- 2 + 0.3 * (x - 5)^2 + rnorm(80, 0, 1.2)      # relazione curvilinea
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+plot(x, y_ok, pch = 19, col = "grey40", xlab = "X", ylab = "Y",
+     main = "Relazione lineare")
+abline(lm(y_ok ~ x), col = "red", lwd = 2)
+plot(x, y_no, pch = 19, col = "grey40", xlab = "X", ylab = "Y",
+     main = "Relazione non lineare")
+abline(lm(y_no ~ x), col = "red", lwd = 2)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+A sinistra la retta è una buona descrizione dei dati: sbaglia un po' ovunque, ma
+senza una direzione precisa. A destra il modello sbaglia *sistematicamente* —
+sovrastima al centro e sottostima agli estremi di $X$: il valore atteso dell'errore
+non è zero in ogni zona di $X$.
+
+**4. Omoschedasticità (varianza costante).** La varianza degli errori è la stessa
+per qualunque valore di $X$: $V(\epsilon\,|\,x_i) = \sigma^2$.
+
+```{r}
+#| label: ass4-omoschedasticita
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(4)
+x       <- runif(80, 0, 10)
+y_omo   <- 2 + 0.8 * x + rnorm(80, 0, 1.5)               # varianza costante
+y_etero <- 2 + 0.8 * x + rnorm(80, 0, 0.2 + 0.35 * x)    # varianza crescente con X
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+plot(x, y_omo, pch = 19, col = "grey40", xlab = "X", ylab = "Y",
+     main = "Varianza costante")
+abline(lm(y_omo ~ x), col = "red", lwd = 2)
+plot(x, y_etero, pch = 19, col = "grey40", xlab = "X", ylab = "Y",
+     main = "Varianza crescente con X")
+abline(lm(y_etero ~ x), col = "red", lwd = 2)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+A sinistra la dispersione dei punti attorno alla retta è la stessa lungo tutto l'asse $X$; a destra cresce al crescere di $X$: è la tipica **forma a imbuto** dell'eteroschedasticità.
+
+**5. Normalità.** Gli errori si distribuiscono normalmente:
+$\epsilon_i \sim \mathcal{N}(0, \sigma^2)$.
+
+```{r}
+#| label: ass5-normalita
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(5)
+e_norm <- rnorm(500)                # errori normali
+e_asim <- rchisq(500, df = 2) - 2   # errori asimmetrici (media 0)
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+hist(e_norm, breaks = 20, freq = FALSE, xlab = expression(epsilon),
+     main = "Errori normali")
+curve(dnorm(x, mean(e_norm), sd(e_norm)), add = TRUE, col = "red", lwd = 2)
+hist(e_asim, breaks = 20, freq = FALSE, xlab = expression(epsilon),
+     main = "Errori asimmetrici")
+curve(dnorm(x, mean(e_asim), sd(e_asim)), add = TRUE, col = "red", lwd = 2)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+In entrambi i pannelli la curva rossa è la normale con la stessa media e deviazione standard dei dati. A sinistra l'istogramma la segue bene; a destra gli errori sono asimmetrici e la curva normale non li descrive.
+
+# La regressione lineare semplice
+
+Un modello con **un solo predittore** $X$ e una variabile dipendente $Y$ si chiama **regressione lineare semplice**.
+
+## Un solo predittore: quantitativo o categoriale
+
+Con un solo predittore, la formulazione del modello cambia a seconda del tipo di
+variabile:
+
+**1. Se $X$ è continua/quantitativa:**
+
+$$
+Y = \beta_0 + \beta_1 X + \epsilon
+$$
+
+dove $\beta_0$ è l'**intercetta** (il valore atteso di $Y$ quando $X = 0$) e
+$\beta_1$ è la **pendenza** (di quanto cambia, in media, $Y$ quando $X$ aumenta di
+una unità).
+
+**2. Se $X$ è categoriale con $k$ categorie:**
+
+$$
+Y = \beta_0 + \sum_{j=1}^{k-1} \beta_j D_j + \epsilon
+$$
+
+dove le $D_j$ sono **variabili dummy**: nuove colonne, costruite dalla variabile
+categoriale, che valgono **1** se l'osservazione appartiene a una certa categoria
+e **0** altrimenti. Una categoria — detta **di riferimento** — non riceve una
+colonna propria: corrisponde a *tutte le dummy uguali a 0*. Ecco perché per $k$
+categorie bastano $k-1$ dummy.
+
+Concretamente, è così che R ricodifica un `factor`:
+
+```{r}
+#| label: dummy-ricodifica
+gruppo <- factor(c("A", "A", "B", "C", "B", "C"))   # una categoriale a 3 livelli
+data.frame(gruppo, model.matrix(~ gruppo))# le due dummy costruite da R
+```
+
+R crea **due** dummy, `gruppoB` e `gruppoC`; la categoria `A` (la prima, in ordine
+alfabetico) è quella di **riferimento** e non ha una sua colonna. Riga per riga:
+un'osservazione del gruppo A ha entrambe le dummy a 0, una del gruppo B ha
+`gruppoB = 1`, una del gruppo C ha `gruppoC = 1`. Le tre categorie restano così
+perfettamente distinte con sole due colonne.
+
+In forma di modello, con $k = 2$ categorie serve quindi una sola dummy,
+$$
+Y = \beta_0 + \beta_1 D_1 + \epsilon,
+$$
+mentre con $k = 3$ categorie ne servono due,
+$$
+Y = \beta_0 + \beta_1 D_1 + \beta_2 D_2 + \epsilon.
+$$
+
+Non dobbiamo occuparci noi della ricodifica: R la fa da sé quando il predittore è
+un `factor`. Quello che conta è capire il *significato* di quei numeri, per
+interpretare correttamente i coefficienti.
+
+### L'interpretazione dei parametri {#sec-codifica}
+
+Vediamo in dettaglio il caso più semplice, $k = 2$, con un esempio: confrontiamo i
+punteggi raccolti in due tipi di esperimento, in **laboratorio** oppure **online**.
+Con la **codifica treatment** (quella di default in R) la categoria di riferimento
+è "lab", quindi la dummy vale $X = 0$ per gli esperimenti in laboratorio e $X = 1$
+per quelli online:
+
+$$
+y_i = \beta_0 + \beta_1 X_i + \epsilon_i
+$$
+
+Sostituendo i due valori della dummy, il modello si "sdoppia" in un'equazione per
+gruppo:
+
+$$
+y_{\text{lab}_i} = 1 \cdot \beta_0 + 0 \cdot \beta_1 + \epsilon_i
+$$
+
+$$
+y_{\text{online}_i} = 1 \cdot \beta_0 + 1 \cdot \beta_1 + \epsilon_i
+$$
+
+L'interpretazione dei parametri segue di conseguenza:
+
+| Parametro           | Significato                                      |
+|---------------------|--------------------------------------------------|
+| $\beta_0$           | valore atteso quando $X = 0$ (laboratorio)       |
+| $\beta_1$           | differenza: online $-$ laboratorio               |
+| $\beta_0 + \beta_1$ | valore atteso per gli esperimenti online         |
+
+
+### Esempio via simulazione
+
+Scegliamo noi i valori veri di $\beta_0$ e $\beta_1$, costruiamo la dummy e generiamo i dati; poi stimiamo il modello e controlliamo di recuperare i parametri.
+
+```{r}
+#| label: sim-codifica
+set.seed(23)
+k  <- 100   # numero di osservazioni
+b0 <- 20    # valore atteso in laboratorio
+b1 <- 5     # differenza: online - laboratorio
+
+tipo <- rep(c("lab", "online"), each = k / 2)
+D    <- ifelse(tipo == "lab", 0, 1)    # codifica treatment
+mu   <- b0 + b1 * D                    # valori attesi dei due gruppi
+
+head(data.frame(tipo, D, mu)) #prime osservazioni
+tail(data.frame(tipo, D, mu)) #ultime
+```
+
+```{r}
+#| label: sim-codifica-fit
+y_sim <- rnorm(k, mean = mu, sd = 4)   # aggiungiamo l'errore
+head(data.frame(tipo, D, mu,y_sim)) #prime osservazioni
+tail(data.frame(tipo, D, mu,y_sim)) #ultime
+
+df <- data.frame(tipo = factor(tipo), y_sim = y_sim)
+m_sim <- lm(y_sim ~ tipo, data = df) # lm = linear model
+coef(m_sim) # coefficienti del modello
+```
+
+Le stime recuperano i valori veri ($\hat\beta_0 \approx 20$,
+$\hat\beta_1 \approx 5$), a meno dell'errore di campionamento.
+
+La media del gruppo lab è $\beta_0$, la differenza fino alla media del gruppo online è $\beta_1$ (freccia blu); la linea tratteggiata è la media generale.
+
+```{r}
+#| label: sim-codifica-plot
+#| fig-height: 4
+#| fig-width: 6
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+medie <- tapply(y_sim, tipo, mean)
+
+plot(jitter(D, amount = 0.06), y_sim, pch = 19, col = "grey60",
+     xlim = c(-0.5, 1.5), xaxt = "n", xlab = "", ylab = "y")
+axis(1, at = c(0, 1), labels = c("lab (X = 0)", "online (X = 1)"))
+segments(c(-0.2, 0.8), medie, c(0.2, 1.2), medie, col = "red", lwd = 3)
+abline(h = mean(medie), lty = 2, col = "grey40")   # media generale
+arrows(1.35, medie[1], 1.35, medie[2], code = 3, length = 0.08,
+       col = "blue", lwd = 2)
+text(1.44, mean(medie), expression(beta[1]), col = "blue")
+text(-0.38, medie[1], expression(beta[0]), col = "red")
+text(0.57, medie[2], expression(beta[0] + beta[1]), col = "red")
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+Dalle stime possiamo ricostruire le medie dei due gruppi con una **matrice di contrasti**, che esprime le medie come combinazioni lineari dei parametri:
+
+$$
+\begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}
+\begin{pmatrix} \beta_0 \\ \beta_1 \end{pmatrix} =
+\begin{pmatrix} \beta_0 \\ \beta_0 + \beta_1 \end{pmatrix} =
+\begin{pmatrix} \mu_{\text{lab}} \\ \mu_{\text{online}} \end{pmatrix}
+$$
+
+```{r}
+#| label: sim-codifica-contrasti
+C <- rbind(c(1, 0), c(1, 1))
+B <- coef(m_sim)
+C %*% B                     # equivale a: B[1] e B[1] + B[2]
+tapply(y_sim, tipo, mean)   # verifica: le medie campionarie dei gruppi
+```
+
+Esiste anche una parametrizzazione alternativa: **togliere l'intercetta** dalla
+formula (con `0 +`), così R stima direttamente una media per ciascun gruppo:
+
+```{r}
+#| label: sim-codifica-plot-2
+#| fig-height: 4
+#| fig-width: 6
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+medie <- tapply(y_sim, tipo, mean)
+
+plot(jitter(D, amount = 0.06), y_sim, pch = 19, col = "grey60",
+     xlim = c(-0.5, 1.5), xaxt = "n", xlab = "", ylab = "y")
+axis(1, at = c(0, 1), labels = c("lab (X = 1)", "online (X = 1)"))
+segments(c(-0.2, 0.8), medie, c(0.2, 1.2), medie, col = "red", lwd = 3)
+abline(h = mean(medie), lty = 2, col = "grey40")   # media generale
+
+text(-0.38, medie[1], expression(beta[0][lab]), col = "red")
+text(0.57, medie[2], expression(beta[0][online]), col = "blue")
+```
+
+```{r}
+#| label: sim-codifica-nointercetta
+coef(lm(y_sim ~ 0 + tipo, data = df))
+```
+
+Stesso modello, parametri diversi: ora i coefficienti *sono* le due medie.
+
+Le due dummy funzionano come **interruttori on/off**: per ogni osservazione una
+sola è accesa (1) e seleziona la media del suo gruppo, l'altra è spenta (0). 
+
+$$
+\begin{aligned}
+\text{lab:}\quad    & y_i = 1\cdot\beta_{\text{lab}} + 0\cdot\beta_{\text{online}} + \varepsilon_i = \beta_{\text{lab}} + \varepsilon_i,\\
+\text{online:}\quad & y_i = 0\cdot\beta_{\text{lab}} + 1\cdot\beta_{\text{online}} + \varepsilon_i = \beta_{\text{online}} + \varepsilon_i,
+\end{aligned}
+$$
+
+
+Si vede nella matrice del modello (le colonne che R passa a `lm()`):
+
+```{r}
+#| label: sim-codifica-switch
+X <- model.matrix(~ 0 + tipo, data = df)
+head(X, 3)   # osservazioni "lab":    acceso l'interruttore lab
+tail(X, 3)   # osservazioni "online": acceso l'interruttore online
+```
+
+e i due coefficienti sono direttamente le medie dei due gruppi.
+
+Un'altra parametrizzazione comune è la codifica **a somma zero**:
+
+
+```{r}
+#| label: sim-codifica-contrsum
+contrasts(df$tipo)
+contrasts(df$tipo) <- contr.sum(2)/2
+contrasts(df$tipo) 
+coef(lm(y_sim ~ tipo, data = df))
+```
+
+Che cosa rappresentano i due coefficienti, secondo voi? 
+
+$$
+\begin{aligned}
+\text{lab:}\quad    & y_i = 1\cdot\beta_{\text{mean}} + 0.5\cdot\beta_{\text{lab-online}} + \varepsilon_i\\
+\text{online:}\quad & y_i = 1\cdot\beta_{\text{mean}} - 0.5\cdot\beta_{\text{lab-online}} + \varepsilon_i
+\end{aligned}
+$$
+
+```{r}
+#| label: sim-codifica-plot-3
+#| fig-height: 4
+#| fig-width: 6
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+medie <- tapply(y_sim, tipo, mean)
+
+plot(jitter(D, amount = 0.06), y_sim, pch = 19, col = "grey60",
+     xlim = c(-0.5, 1.5), xaxt = "n", xlab = "", ylab = "y")
+axis(1, at = c(0, 1), labels = c("lab (X = 0.5)", "online (X = -0.5)"))
+segments(c(-0.2, 0.8), medie, c(0.2, 1.2), medie, col = "red", lwd = 3)
+abline(h = mean(medie), lty = 2, col = "grey40")   # media generale
+arrows(1.35, medie[1], 1.35, medie[2], code = 3, length = 0.08,
+       col = "red", lwd = 2)
+text(1.44, mean(medie), expression(beta[1]), col = "red",cex = 1)
+text(0.5, mean(medie), expression(beta[0]), col = "blue", cex = 1)
+
+```
+
+::: callout-warning
+## Attenzione 
+Stime, significato e test dei parametri dipendono dalla codifica scelta!
+:::
+
+## I dati: `kidiq` {#sec-dati}
+
+In tutta la dispensa useremo un dataset, che contiene le
+seguenti variabili relative a un campione di bambini di 3–4 anni:
+
+- `kid_score`: punteggio del bambino in un test cognitivo;
+- `mom_hs`: istruzione della madre (1 = diplomata, 0 = non diplomata);
+- `mom_iq`: QI della madre;
+- `mom_work`: condizione lavorativa della madre nei primi anni di vita del bambino (4 categorie);
+- `mom_age`: età della madre.
+
+Carichiamo i dati e sistemiamo le variabili categoriali, che nel file sono
+codificate come numeri:
+
+```{r}
+#| label: carica-dati
+kidiq <- read.csv("dati/kidiq.csv")
+kidiq$mom_hs <- factor(kidiq$mom_hs)
+kidiq$mom_work <- factor(kidiq$mom_work)
+
+str(kidiq)
+```
+
+```{r}
+#| label: head-dati
+head(kidiq)
+```
+
+Abbiamo 434 osservazioni e 5 variabili. Notate che `mom_hs` e `mom_work` ora sono
+`factor`: è così che R sa che deve trattarle come categoriali (e costruire le dummy
+al posto nostro).
+
+::: {.callout-note icon=false title="✏️ Esercizio 1 — Esplorare i dati"}
+Prima di stimare qualsiasi modello, è buona pratica guardare i dati. 
+
+a. quante madri sono diplomate e quante no?
+b. calcolate media e deviazione standard di `kid_score`;
+c. disegnate l'istogramma di `kid_score` per il gruppo madri diplomate vs. no: come descrivereste le distribuzioni?
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 1"}
+```{r}
+#| label: sol-es1
+table(kidiq$mom_hs)
+
+mean(kidiq$kid_score)
+sd(kidiq$kid_score)
+
+g0 <- kidiq$kid_score[kidiq$mom_hs == 0]
+hist(g0, main = "", xlab = "Punteggio del bambino, madri non diplomate")
+mean(g0)
+sd(g0)
+
+g1 <- kidiq$kid_score[kidiq$mom_hs == 1]
+hist(g1, main = "", xlab = "Punteggio del bambino, madri diplomate")
+mean(g1)
+sd(g1)
+```
+
+:::
+
+## Un predittore numerico {#sec-numerico}
+
+Vogliamo valutare se il **QI della madre** è predittivo del punteggio del bambino. Stimiamo il modello con la funzione `lm()` (*linear model*), la cui sintassi è `lm(risposta ~ predittore, data = dati)`:
+
+```{r}
+#| label: m1-scatter
+m1 <- lm(kid_score ~ mom_iq, data = kidiq)
+
+plot(kid_score ~ mom_iq, data = kidiq,
+     xlab = "QI della madre", ylab = "Punteggio del bambino")
+abline(m1, col = "red", lwd = 2)
+```
+
+I coefficienti stimati sono:
+
+```{r}
+#| label: m1-coef
+coef(m1)
+```
+
+L'equazione di regressione è dunque
+
+$$
+\hat{Y} = 25.8 + 0.61 X
+$$
+
+dove il "cappello" su $Y$ indica che si tratta dei valori *previsti* dal modello.
+
+
+**Come si leggono i coefficienti?**
+
+
+
+- $\beta_1 = 0.61$: per ogni punto di QI in più della madre, il punteggio atteso
+  del bambino aumenta in media di 0.61 punti;
+- $\beta_0 = 25.8$: è il punteggio atteso di un bambino la cui madre ha QI pari a
+  zero. Un valore privo di senso! L'intercetta serve al modello, ma non sempre ha
+  un'interpretazione sostantiva: per renderla interpretabile si può *centrare* il
+  predittore (es. `mom_iq - 100`), così l'intercetta diventa il punteggio atteso
+  per una madre con QI = 100.
+  
+```{r}
+kidiq$mom_iq_s <- kidiq$mom_iq - 100   # QI centrato sul valore 100
+```
+
+```{r}
+#| label: centratura-hist
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+hist(kidiq$mom_iq, main = "mom_iq", xlab = "QI della madre")
+abline(v = 100, col = "red", lwd = 2, lty = 2)
+hist(kidiq$mom_iq_s, main = "mom_iq - 100", xlab = "QI centrato")
+abline(v = 0, col = "red", lwd = 2, lty = 2)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+La distribuzione è identica: abbiamo solo spostato lo zero della scala (linea rossa) nel punto più sensato, il QI medio.
+
+```{r}
+#| label: m1-centrato
+mcen <- lm(kid_score ~ mom_iq_s, data = kidiq)
+coef(mcen)
+```
+
+
+**Come si leggono i coefficienti?**
+
+
+E se fosse...
+
+```{r}
+kidiq$mom_iq_s2 <- (kidiq$mom_iq - 100)/10
+```
+
+```{r}
+#| label: m1-centrato-2
+mcen <- lm(kid_score ~ mom_iq_s2, data = kidiq)
+coef(mcen)
+```
+
+
+### Il `summary()` del modello {#sec-overview}
+
+Prima di proseguire, guardiamo *tutto* quello che R sa dirci su `m1`, con un solo comando:
+
+```{r}
+#| label: m1-summary-preview
+summary(m1)
+```
+
+
+- **`Residuals`** → gli scarti e i residui (@sec-scarti);
+- **`Residual standard error`** → la variabilità residua $\sigma$
+  (@sec-variabilita);
+- **`Std. Error`, `t value`, `Pr(>|t|)`** → l'incertezza e la precisione delle stime (@sec-bande);
+- **`Multiple R-squared`** e **`Adjusted R-squared`** → la variabilità spiegata (@sec-variabilita);
+- **`F-statistic`** → il test globale del modello (@sec-summary).
+
+
+## La variabilità residua e la variabilità spiegata {#sec-scarti}
+
+Immaginiamo di avere una misura di stile genitoriale (`ParSty`) e una di comportamento del bambino (`ChildBeh`).
+
+```{r}
+#| label: scarti-dati
+set.seed(8)
+ParSty   <- runif(n = 30, 5, 20)
+ChildBeh <- 2 + 1.1 * ParSty + rnorm(n = 30, mean = 0, sd = 2.5)
+# equivale a 
+# ChildBeh <- rnorm(n = 30, mean = 2 + 1.1 * ParSty, sd = 2.5)
+
+mod <- lm(ChildBeh ~ ParSty)
+```
+
+Data l'osservazione empirica $y_i$, possiamo individuare **tre tipi di deviazione o
+scarti**:
+
+1. lo scarto del punto osservato $y_i$ dalla media dei punteggi $\bar{y}$:
+   $\;y_i - \bar{y}$;
+2. lo scarto del punto teorico $\hat{y}_i$ (sulla retta) dalla media $\bar{y}$:
+   $\;\hat{y}_i - \bar{y}$;
+3. lo scarto del punto osservato $y_i$ dal suo corrispondente teorico sulla retta
+   di regressione: $\;y_i - \hat{y}_i$ — questo è il **residuo**.
+
+```{r}
+#| label: scarti-plot
+#| fig-height: 3.6
+#| fig-width: 9
+#| code-fold: true
+par(mfrow = c(1, 3), mar = c(4, 4, 3, 1))
+titoli <- c(expression(y[i] - bar(y)),
+            expression(hat(y)[i] - bar(y)),
+            expression(y[i] - hat(y)[i]))
+for (tipo in 1:3) {
+  plot(ParSty, ChildBeh, pch = 19, col = "grey40", main = titoli[tipo])
+  abline(h = mean(ChildBeh), lty = 2)          # media di Y
+  abline(mod, col = "blue", lwd = 2)           # retta di regressione
+  if (tipo == 1) segments(ParSty, mean(ChildBeh), ParSty, ChildBeh,      col = "red")
+  if (tipo == 2) segments(ParSty, mean(ChildBeh), ParSty, fitted(mod),   col = "red")
+  if (tipo == 3) segments(ParSty, fitted(mod),   ParSty, ChildBeh,       col = "red")
+}
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+Nel primo pannello gli scarti ignorano completamente il modello (distanze dalla media); nel secondo ci sono le distanze *spiegate* dalla retta; nel terzo ciò che resta: i residui.
+
+In R i residui di un modello si ottengono con `residuals()`:
+
+```{r}
+#| label: residui-r
+round(residuals(mod), 3)
+```
+
+
+**I residui sono una misura di cosa?**
+
+```{r}
+#| label: residui-sd
+round(sd(residuals(mod)), 3)
+```
+
+
+### La variabilità residua: $\sigma$
+
+```{r}
+summary(m1)
+```
+
+Il parametro $\sigma$ esprime la variabilità dei residui (@sec-normale).
+
+```{r}
+#| label: sigma-m1
+sigma(m1)
+```
+
+Nel modello `m1`, $\sigma \approx 18$ significa che il modello predice il punteggio del bambino con un'accuratezza media di circa 18 punti: di tanto, in media, i punteggi osservati si discostano da quelli attesi. 
+
+Visivamente, $\sigma$ è l'ampiezza della banda attorno alla retta: se gli errori sono normali, la banda retta $\pm\sigma$ contiene circa il 68% dei punti (e $\pm 2\sigma$ circa il 95%).
+
+```{r}
+#| label: sigma-banda
+#| fig-height: 4
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+plot(kid_score ~ mom_iq, data = kidiq, pch = 19, col = "grey70",
+     xlab = "QI della madre", ylab = "Punteggio del bambino")
+xx <- seq(min(kidiq$mom_iq), max(kidiq$mom_iq), length.out = 100)
+yy <- coef(m1)[1] + coef(m1)[2] * xx
+polygon(c(xx, rev(xx)), c(yy - 2*sigma(m1), rev(yy + 2*sigma(m1))),
+        col = adjustcolor("red", 0.15), border = NA)
+abline(m1, col = "red", lwd = 2)
+```
+
+::: {.callout-tip collapse = "true"}
+### L'errore standard: quanto varia una stima {#sec-se}
+
+Attenzione a non confondere due variabilità diverse. La $\sigma$ appena vista
+misura quanto i **dati** si disperdono attorno alla retta. Ma a noi interessa
+anche un'altra cosa: quanto varierebbe la **stima** (un coefficiente, una media)
+se rifacessimo lo studio su un nuovo campione. Questa seconda variabilità è
+l'**errore standard** della stima.
+
+Prendiamo il caso più semplice, una media. Immaginiamo di estrarre tanti
+campioni — stesso $n$, stessa popolazione — e di calcolare ogni volta la media:
+otteniamo una distribuzione di medie, la **distribuzione campionaria** della
+media.
+
+```{r}
+#| label: se-sampling
+#| fig-height: 4
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(111)
+medie <- replicate(10000, mean(rnorm(50, mean = 10, sd = 2)))  # 10000 medie, n = 50
+
+hist(medie, breaks = 40, col = "grey85", xlab = expression(bar(x)),
+     main = "Distribuzione campionaria della media")
+abline(v = 10, col = "red", lwd = 2)   # la media vera della popolazione
+```
+
+```{r}
+#| label: se-sampling-sd
+sd(medie)   # quanto variano le medie da campione a campione = errore standard
+```
+
+Le medie campionarie si dispongono attorno al valore vero (10), e la loro
+**deviazione standard** (qui $\approx 0.28$) è proprio l'errore standard della
+media. Non serve simulare ogni volta: per la media c'è la formula
+$$
+\text{SE}_{\bar x} = \frac{s}{\sqrt{n}},
+$$
+il rapporto tra la deviazione standard *del campione* e la radice di $n$.
+
+```{r}
+#| label: se-formula
+sd(rnorm(50, mean = 10, sd = 2))/sqrt(50)
+
+# con sigma noto (= 2): sigma / sqrt(n) 
+2 / sqrt(50)  
+
+```
+
+
+- **ogni stima ha il suo errore standard** — non solo la media, ma anche
+  $\hat\beta_0$, $\hat\beta_1$, ogni valore previsto $\hat y_0$. È il "$\pm$ errore standard" di ogni intervallo.
+- l'errore standard **si restringe al crescere di $n$** (c'è $\sqrt{n}$ al denominatore).
+
+La formula usa $s$, la deviazione standard **stimata** dal campione, non la $\sigma$ vera della popolazione (che non conosciamo). 
+
+:::
+
+### Precisione delle stime, accuratezza delle previsioni {#sec-bande}
+
+La banda $\pm\sigma$ appena vista riguarda **le previsioni**: quanto una nuova
+osservazione si discosterà dalla retta. Ma nel modello convive una seconda
+incertezza, di natura diversa: quella sulla **retta stessa**, cioè sulle stime
+dei coefficienti (i loro errori standard). Distinguerle è fondamentale:
+
+- la **banda di confidenza** risponde a "dove sta la *retta vera*?" — è
+  l'incertezza sul **valore atteso** $E(Y \mid x)$. Dipende dagli errori standard
+  dei $\hat\beta$ e **si stringe** all'aumentare di $n$: è la *precisione di
+  stima degli effetti*;
+- la **banda di previsione** risponde a "dove cadrà la *prossima osservazione*?".
+  Oltre all'incertezza sulla retta contiene $\sigma$, e per quanto $n$ cresca non
+  potrà mai stringersi sotto $\pm\sigma$: è l'*accuratezza delle previsioni*.
+
+In R si ottengono entrambe con `predict()`:
+
+```{r}
+#| label: bande-predict
+nuovi <- data.frame(mom_iq = seq(70, 140, length.out = 100))
+ic <- predict(m1, newdata = nuovi, interval = "confidence")   # banda di confidenza
+ip <- predict(m1, newdata = nuovi, interval = "prediction")   # banda di previsione
+head(ic, 3)
+head(ip, 3)
+```
+
+```{r}
+#| label: bande-plot
+#| fig-height: 4.2
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+plot(kid_score ~ mom_iq, data = kidiq, pch = 19, col = "grey80",
+     xlab = "QI della madre", ylab = "Punteggio del bambino")
+polygon(c(nuovi$mom_iq, rev(nuovi$mom_iq)), c(ip[, "lwr"], rev(ip[, "upr"])),
+        col = adjustcolor("blue", 0.12), border = NA)
+polygon(c(nuovi$mom_iq, rev(nuovi$mom_iq)), c(ic[, "lwr"], rev(ic[, "upr"])),
+        col = adjustcolor("red", 0.35), border = NA)
+abline(m1, col = "red", lwd = 2)
+legend("topleft", bty = "n", border = NA,
+       fill = c(adjustcolor("red", 0.35), adjustcolor("blue", 0.12)),
+       legend = c("banda di confidenza (95%)", "banda di previsione (95%)"))
+```
+
+Le due bande rispondono a domande diverse. Per una madre con QI = 100:
+
+```{r}
+#| label: bande-qi100
+predict(m1, newdata = data.frame(mom_iq = 100), interval = "confidence")
+predict(m1, newdata = data.frame(mom_iq = 100), interval = "prediction")
+```
+
+Il punteggio **medio** dei bambini di madri con QI = 100 è stimato con grande
+precisione (circa $\pm 1.7$ punti); il punteggio del **singolo** bambino resta
+incerto di circa $\pm 36$ punti. Stessa retta, due incertezze diverse: la prima
+è la precisione con cui conosciamo gli *effetti*, la seconda è l'accuratezza con cui possiamo *prevedere* (dominata
+da $\sigma$).
+
+Entrambi gli intervalli hanno la stessa struttura di tutti gli intervalli di confidenza:
+
+$$
+\hat{y}_0 \;\pm\; t^* \times \text{errore standard}
+$$
+
+dove $\hat{y}_0 = \hat\beta_0 + \hat\beta_1 x_0$ è il valore previsto nel punto $x_0$ che ci interessa, e $t^*$ è il **quantile della distribuzione $t$** con $n - k - 1$ gradi di libertà che lascia il 2.5% in ciascuna coda — in R, `qt(0.975, df)`; con i nostri 432 gradi di libertà vale 1.97, praticamente l'1.96 della normale.
+
+Quello che distingue le due bande è solo **l'errore standard**:
+
+$$
+\underbrace{\hat\sigma \sqrt{\frac{1}{n} + \frac{(x_0-\bar{x})^2}{\sum_i (x_i-\bar{x})^2}}}_{\text{banda di confidenza}}
+\qquad\qquad
+\underbrace{\hat\sigma \sqrt{\,1 + \frac{1}{n} + \frac{(x_0-\bar{x})^2}{\sum_i (x_i-\bar{x})^2}}}_{\text{banda di previsione}}
+$$
+
+
+- $\dfrac{1}{n}$ è l'incertezza sull'**altezza** della retta (sulla media
+  generale di $Y$): con $n$ grande la conosciamo quasi esattamente — questo
+  termine si riduce al crescere del campione;
+- $\dfrac{(x_0-\bar{x})^2}{\sum_i (x_i-\bar{x})^2}$ è l'incertezza sulla
+  **pendenza**, che pesa tanto più quanto più $x_0$ è lontano da $\bar{x}$: la
+  retta stimata "ruota" attorno al baricentro dei dati $(\bar{x}, \bar{y})$, e
+  un piccolo errore di pendenza si amplifica man mano che ci si allontana dal
+  centro. Ecco perché le bande sono più strette in $\bar{x}$ e si allargano agli
+  estremi. Anche questo termine si riduce al crescere di $n$;
+- $1$ compare **solo** nella banda di previsione: è la varianza del nuovo errore
+  $\epsilon_0$, in unità di $\sigma^2$. Una nuova osservazione non cade sulla retta ma a distanza $\epsilon_0 \sim \mathcal{N}(0, \sigma^2)$ da essa, e questa incertezza **non dipende da $n$**.
+
+Ricalcoliamo a mano gli intervalli per $x_0 = 100$ e
+confrontiamoli con l'output di `predict()` qui sopra.
+
+```{r}
+#| label: bande-a-mano
+x0    <- 100
+n     <- nobs(m1)
+xbar  <- mean(kidiq$mom_iq)
+SSx   <- sum((kidiq$mom_iq - xbar)^2)
+tstar <- qt(0.975, df = n - 2)   # gradi di liberta' residui: n - k - 1, k = 1
+
+y0      <- unname(coef(m1)[1] + coef(m1)[2] * x0)
+se_conf <- sigma(m1) * sqrt(    1/n + (x0 - xbar)^2 / SSx)
+se_prev <- sigma(m1) * sqrt(1 + 1/n + (x0 - xbar)^2 / SSx)
+
+rbind(confidenza = y0 + c(-1, 1) * tstar * se_conf,
+      previsione = y0 + c(-1, 1) * tstar * se_prev)
+```
+
+I numeri coincidono con quelli di `predict()`: l'1 sotto radice è tutta la
+differenza tra "stimare la media" e "prevedere il singolo caso".
+
+Guardiamo l'effetto del campione: lo stesso modello stimato su 40 bambini e su
+tutti i 434.
+
+```{r}
+#| label: bande-n
+#| fig-height: 3.8
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+set.seed(11)
+sotto <- kidiq[sample(nrow(kidiq), 40), ]
+modelli <- list("n = 40" = lm(kid_score ~ mom_iq, data = sotto),
+                "n = 434" = m1)
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+for (nome in names(modelli)) {
+  mod_i <- modelli[[nome]]
+  ic_i <- predict(mod_i, newdata = nuovi, interval = "confidence")
+  ip_i <- predict(mod_i, newdata = nuovi, interval = "prediction")
+  plot(kid_score ~ mom_iq, data = kidiq, type = "n", main = nome,
+       xlab = "QI della madre", ylab = "Punteggio del bambino")
+  polygon(c(nuovi$mom_iq, rev(nuovi$mom_iq)), c(ip_i[, "lwr"], rev(ip_i[, "upr"])),
+          col = adjustcolor("blue", 0.12), border = NA)
+  polygon(c(nuovi$mom_iq, rev(nuovi$mom_iq)), c(ic_i[, "lwr"], rev(ic_i[, "upr"])),
+          col = adjustcolor("red", 0.35), border = NA)
+  abline(mod_i, col = "red", lwd = 2)
+}
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+Da 40 a 434 osservazioni la banda di confidenza (rossa) si stringe vistosamente
+— più dati, effetti stimati con più precisione — mentre la banda di previsione
+(azzurra) resta praticamente uguale: sul singolo bambino comanda $\sigma$.
+
+
+## Le devianze {#sec-devianze}
+
+Data l'osservazione empirica $y_i$, possiamo individuare **tre tipi di deviazione o scarti**:
+
+```{r}
+#| label: scarti-plot-repeat
+#| fig-height: 3.6
+#| fig-width: 9
+#| code-fold: true
+par(mfrow = c(1, 3), mar = c(4, 4, 3, 1))
+titoli <- c(expression(y[i] - bar(y)),
+            expression(hat(y)[i] - bar(y)),
+            expression(y[i] - hat(y)[i]))
+for (tipo in 1:3) {
+  plot(ParSty, ChildBeh, pch = 19, col = "grey40", main = titoli[tipo])
+  abline(h = mean(ChildBeh), lty = 2)          # media di Y
+  abline(mod, col = "blue", lwd = 2)           # retta di regressione
+  if (tipo == 1) segments(ParSty, mean(ChildBeh), ParSty, ChildBeh,      col = "red")
+  if (tipo == 2) segments(ParSty, mean(ChildBeh), ParSty, fitted(mod),   col = "red")
+  if (tipo == 3) segments(ParSty, fitted(mod),   ParSty, ChildBeh,       col = "red")
+}
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+1. lo scarto del punto osservato $y_i$ dalla media dei punteggi $\bar{y}$:
+   $\;y_i - \bar{y}$;
+2. lo scarto del punto teorico $\hat{y}_i$ (sulla retta) dalla media $\bar{y}$:
+   $\;\hat{y}_i - \bar{y}$;
+3. lo scarto del punto osservato $y_i$ dal suo corrispondente teorico sulla retta
+   di regressione: $\;y_i - \hat{y}_i$ — questo è il **residuo**.
+
+
+Sommando i quadrati degli scarti otteniamo tre quantità:
+
+- **Devianza totale**: somma dei quadrati degli scarti delle osservazioni dalla media
+  $$\text{SS}_{T} = \sum_i (y_i - \bar{y})^2$$
+- **Devianza di regressione** (o spiegata): somma dei quadrati degli scarti dei punti sulla retta dalla media
+  $$\text{SS}_{R} = \sum_i (\hat{y}_i - \bar{y})^2$$
+- **Devianza residua**: somma dei quadrati degli scarti delle osservazioni dai punti sulla retta
+  $$\text{SS}_{E} = \sum_i (y_i - \hat{y}_i)^2$$
+
+È facile verificare che
+
+$$
+\sum_i (\hat{y}_i - \bar{y})^2 + \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \bar{y})^2
+$$
+
+ossia che la **devianza totale è la somma delle altre due**:
+$\text{SS}_T = \text{SS}_R + \text{SS}_E$.
+
+::: {.callout-note collapse = "true"}
+## Ordinary Least Squares
+
+L'algoritmo di stima dei parametri $\beta_0$ e $\beta_1$ (il metodo dei **minimi
+quadrati**, *Ordinary Least Squares*) ha come obiettivo proprio la minimizzazione
+della devianza residua: tra tutte le rette possibili, `lm()` sceglie quella che
+rende minima $\sum_i (y_i - \hat{y}_i)^2$.
+
+I segmenti rossi sono gli scarti dalla retta: la loro somma dei quadrati è la $\text{SS}_E$ scritta in cima a ciascun pannello.
+
+```{r}
+#| label: ols-rette
+#| fig-height: 6.5
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+b1_cand <- c(0.4, 0.8, 1.6, coef(mod)[2])    # tre pendenze a mano + quella di lm()
+
+par(mfrow = c(2, 2), mar = c(4, 4, 3, 1))
+for (b1 in b1_cand) {
+  b0  <- mean(ChildBeh) - b1 * mean(ParSty)  # intercetta migliore, data la pendenza
+  att <- b0 + b1 * ParSty                    # valori attesi con questa retta
+  sse <- sum((ChildBeh - att)^2)
+  plot(ParSty, ChildBeh, pch = 19, col = "grey40",
+       main = bquote(beta[1] == .(round(b1, 2)) ~ "," ~ SS[E] == .(round(sse))))
+  segments(ParSty, att, ParSty, ChildBeh, col = "red")
+  abline(b0, b1, col = "blue", lwd = 2)
+  points(mean(ParSty), mean(ChildBeh), pch = 18, cex = 1.8)  # baricentro
+}
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+L'algortimo minimizza la $\text{SS}_E$ rispetto a **entrambi i parametri insieme**. La superficie $\text{SS}_E(\beta_0, \beta_1)$ è un "catino" con un unico fondo, e la stima
+dei minimi quadrati è il suo punto più basso:
+
+```{r}
+#| label: ols-catino
+#| fig-height: 4.2
+#| fig-width: 9
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+b0g <- seq(-6, 14, length.out = 100)
+b1g <- seq(0.2, 1.7, length.out = 100)
+SSE2 <- matrix(NA, nrow = length(b0g), ncol = length(b1g))
+for (i in seq_along(b0g)) {        # per ogni intercetta candidata...
+  for (j in seq_along(b1g)) {      # ...e ogni pendenza candidata:
+    SSE2[i, j] <- sum((ChildBeh - b0g[i] - b1g[j] * ParSty)^2)
+  }
+}
+
+par(mfrow = c(1, 2), mar = c(1, 1, 1, 1))
+persp(b0g, b1g, SSE2, theta = 40, phi = 22, expand = 0.7,
+      col = "lightblue", shade = 0.35, border = NA,
+      xlab = "beta0", ylab = "beta1", zlab = "SSE")
+par(mar = c(4, 4, 1, 1))
+contour(b0g, b1g, SSE2, labcex = 0.7,
+        levels = c(150, 250, 500, 1000, 2000, 4000, 8000, 16000),
+        xlab = expression(beta[0]), ylab = expression(beta[1]))
+b1_fondo <- seq(0.2, 1.7, length.out = 50)            # pendenze candidate
+b0_fondo <- mean(ChildBeh) - b1_fondo * mean(ParSty)  # le intercette migliori
+lines(b0_fondo, b1_fondo, lty = 2)                    # il fondovalle
+
+b1c <- c(0.4, 0.8, 1.6)                      # le tre pendenze dei pannelli
+b0c <- mean(ChildBeh) - b1c * mean(ParSty)   # le loro intercette migliori
+points(b0c, b1c, pch = 18, cex = 1.4)        # un punto = una retta candidata
+points(coef(mod)[1], coef(mod)[2], pch = 19, col = "red", cex = 1.4)  # lm()
+```
+
+```{r,echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+A sinistra lo spazio bidimensionale; a destra lo stesso visto dall'alto, a curve di livello. Il punto rosso è la coppia $(\hat\beta_0, \hat\beta_1)$ stimata da
+`lm()`: il fondo. Notate che la valle è **stretta e obliqua**: intercetta e pendenza si compensano (alzando la pendenza, l'intercetta migliore scende). 
+
+La linea tratteggiata è, per ogni pendenza, la sua intercetta migliore $\beta_0 = \bar{y} - \beta_1\bar{x}$: ogni retta "sensata" passa per il
+baricentro dei dati.
+
+Il fondo è il punto in cui la superficie
+$S(\beta_0, \beta_1)$ è piatta in *entrambe* le direzioni: dove le sue due derivate parziali si annullano insieme.
+
+
+$$
+\beta_0 = \bar{y} - \beta_1\bar{x}
+$$
+
+
+$$
+\beta_1 = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sum_i (x_i - \bar{x})^2}
+$$
+
+cioè la covarianza tra $x$ e $y$ divisa per la varianza di $x$.
+
+```{r}
+#| label: ols-formule
+xbar <- mean(ParSty);  ybar <- mean(ChildBeh)
+b1_hat <- sum((ParSty - xbar) * (ChildBeh - ybar)) / sum((ParSty - xbar)^2)
+b0_hat <- ybar - b1_hat * xbar
+c(intercetta = b0_hat, pendenza = b1_hat)
+coef(mod)
+```
+
+Geometricamente, la formula $\beta_0 = \bar{y} - \beta_1\bar{x}$ dice che la retta
+passa per il **baricentro** $(\bar{x}, \bar{y})$: l'intercetta è semplicemente la
+sua altezza a $x = 0$.
+
+```{r}
+#| label: ols-intercetta-geom
+#| fig-height: 4
+#| fig-width: 6
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+xbar <- mean(ParSty);  ybar <- mean(ChildBeh)
+b0 <- coef(mod)[1];  b1 <- coef(mod)[2]
+
+plot(ParSty, ChildBeh, pch = 19, col = "grey75",
+     xlim = c(-1.5, max(ParSty)), ylim = range(c(ChildBeh, b0)),
+     xlab = "x", ylab = "y")
+abline(mod, col = "blue", lwd = 2)
+abline(v = 0, col = "grey85")
+segments(0, ybar, xbar, ybar, lty = 3)                       # quota della media di y
+arrows(0, ybar, 0, b0, length = 0.1, code = 3, col = "red")  # discesa di beta1 * xbar
+points(xbar, ybar, pch = 18, cex = 1.8)                      # baricentro
+points(0, b0, pch = 19, col = "forestgreen", cex = 1.5)      # intercetta
+text(xbar, ybar, expression(group("(", list(bar(x), bar(y)), ")")), pos = 4, cex = 0.9)
+text(0, b0, expression(beta[0]), pos = 4, col = "forestgreen")
+text(0, (ybar + b0) / 2, expression(beta[1] * bar(x)), pos = 4, col = "red", cex = 0.9)
+```
+
+Se il predittore è **centrato** ($\bar{x} = 0$), il termine $\beta_1\bar{x}$ si annulla *qualunque sia la pendenza*: l'intercetta migliore è $\bar{y}$ per **tutte** le rette candidate.
+
+```{r}
+#| label: catino-centrato
+#| fig-height: 4
+#| fig-width: 8.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+ParSty_c <- ParSty - mean(ParSty)            # predittore centrato
+b0gc <- seq(9, 22, length.out = 60)
+SSE2c <- matrix(NA, length(b0gc), length(b1g))
+for (i in seq_along(b0gc)) {
+  for (j in seq_along(b1g)) {
+    SSE2c[i, j] <- sum((ChildBeh - b0gc[i] - b1g[j] * ParSty_c)^2)
+  }
+}
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+contour(b0g, b1g, SSE2, labcex = 0.7,
+        levels = c(150, 250, 500, 1000, 2000, 4000, 8000, 16000),
+        xlab = expression(beta[0]), ylab = expression(beta[1]),
+        main = "predittore originale")
+lines(b0_fondo, b1_fondo, lty = 2)
+contour(b0gc, b1g, SSE2c, labcex = 0.7,
+        levels = c(150, 250, 500, 1000, 2000, 4000, 8000, 16000),
+        xlab = expression(beta[0]), ylab = expression(beta[1]),
+        main = "predittore centrato")
+abline(v = mean(ChildBeh), lty = 2)          # fondovalle: verticale!
+```
+
+Con il predittore centrato il fondovalle è **verticale** a $\beta_0 = \bar{y}$: cambiare pendenza non sposta più l'intercetta migliore. E le curve di livello si allineano agli assi: intercetta e pendenza non si compensano più — le due stime diventano indipendenti.
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+
+:::
+
+
+Il fit del modello può essere riassunto sfruttando la relazione tra devianza residua e devianza totale:
+
+$$
+R^2 = \frac{\text{SS}_R}{\text{SS}_T} = 1 - \frac{\text{SS}_E}{\text{SS}_T}
+$$
+
+La proporzione di variabilità spiegata **dal modello nel suo complesso** è l'$R^2$. Quando il modello avrà più predittori,
+potremo scomporre la variabilità spiegata anche **effetto per effetto** (è l'$\eta^2$: lo vedremo nella @sec-eta2).
+
+::: {.callout-note icon=false title="✏️ Esercizio 2 — Verificare la scomposizione della devianza"}
+Torniamo al modello `m1` (`kid_score ~ mom_iq`).
+
+a. Calcolate i residui "a mano" come `kidiq$kid_score - fitted(m1)` e verificate
+   che coincidono con `residuals(m1)`.
+b. Calcolate le tre devianze e verificate che $\text{SS}_T = \text{SS}_R + \text{SS}_E$.
+c. Calcolate $R^2 = \text{SS}_R / \text{SS}_T$ e confrontatelo con
+   `summary(m1)$r.squared`.
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 2"}
+```{r}
+#| label: sol-es2
+res_mano <- kidiq$kid_score - fitted(m1)
+all.equal(res_mano, residuals(m1))
+
+SST <- sum((kidiq$kid_score - mean(kidiq$kid_score))^2)
+SSR <- sum((fitted(m1) - mean(kidiq$kid_score))^2)
+SSE <- sum(residuals(m1)^2)
+c(SST = SST, SSR = SSR, SSE = SSE)
+SSR + SSE        # = SST
+
+SSR / SST ; 1-(SSE/SST)
+summary(m1)$r.squared
+```
+
+:::
+
+### Due casi particolari
+
+**Caso 1: dipendenza funzionale perfetta.** Tutti i punti giacciono esattamente
+sulla retta di regressione: tutte le differenze $y_i - \hat{y}_i$ sono nulle,
+quindi la devianza residua è zero e la devianza totale coincide con quella di
+regressione. $R^2 = 1$.
+
+**Caso 2: indipendenza.** La retta di regressione coincide con la media di $Y$
+(pendenza nulla): sono nulle tutte le differenze $\hat{y}_i - \bar{y}$, la devianza
+di regressione è zero e la devianza totale coincide con quella residua.
+$R^2 \approx 0$.
+
+```{r}
+#| label: casi-particolari
+#| fig-height: 3.8
+#| fig-width: 8
+set.seed(1)
+x  <- runif(30, 5, 20)
+y_perf <- 2 + x                          # caso 1: nessun errore
+y_indip <- rnorm(30, 10, 5)              # caso 2: Y non dipende da X
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+plot(x, y_perf, pch = 19, main = expression(R^2 == 1), xlab = "X", ylab = "Y")
+abline(lm(y_perf ~ x), col = "red", lwd = 2)
+plot(x, y_indip, pch = 19, main = expression(R^2 %~~% 0), xlab = "X", ylab = "Y")
+abline(lm(y_indip ~ x), col = "red", lwd = 2)
+abline(h = mean(y_indip), lty = 2)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+::: {.callout-note icon=false title="✏️ Esercizio 3 — Da che cosa dipende R²?"}
+Simulate due dataset con la **stessa** relazione $y = 2 + 0.5x + \epsilon$, 
+
+$n = 200$, $x \sim \mathcal{N}(0,1)$, $\epsilon \sim \mathcal{N}(0,\sigma)$, 
+
+ma errori con deviazione standard diversa:
+$\sigma = 0.5$ nel primo e $\sigma = 2$ nel secondo.
+
+a. Stimate i due modelli: le stime di $\beta_1$ sono simili?
+b. Confrontate gli $R^2$. Che cosa concludete?
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 3"}
+```{r}
+#| label: sol-es3
+set.seed(123)
+n <- 200
+x <- rnorm(n)
+y_preciso <- 2 + 0.5 * x + rnorm(n, 0, 0.5)
+y_rumoroso <- 2 + 0.5 * x + rnorm(n, 0, 2)
+
+mp <- lm(y_preciso ~ x)
+mr <- lm(y_rumoroso ~ x)
+
+summary(mp)
+summary(mr)
+
+```
+
+:::
+
+## Il `summary()` spiegato {#sec-summary}
+
+
+```{r}
+#| label: m1-summary
+summary(m1)
+```
+
+::: {.callout-note icon=false title="✏️ Prima di leggere oltre — Spiegate voi l'output"}
+Coprite la lettura guidata qui sotto e provate a
+spiegare ogni voce dell'output: che cos'è? da
+dove viene? come si interpreta? 
+:::
+
+La lettura guidata, voce per voce:
+
+- **`Call`**: il promemoria di come il modello è stato specificato (formula e
+  dati).
+- **`Residuals`**: la distribuzione dei residui (osservato − previsto). Se il
+  modello è adeguato, mediana vicina a 0 e quartili circa simmetrici. Potete
+  ricostruirla da soli: `summary(residuals(m1))`.
+- **`Estimate`**: le stime dei coefficienti, già viste con `coef()`: i valori
+  che minimizzano la somma dei quadrati degli errori.
+- **`Std. Error`**: l'errore standard di ciascuna stima, cioè la sua incertezza:
+  con campioni diversi otterremmo stime un po' diverse, e l'errore standard ne
+  quantifica la variabilità. È l'incertezza che genera la **banda di
+  confidenza** vista nella @sec-bande.
+- **`t value` e `Pr(>|t|)`**: la statistica $t$ (stima / errore standard) e il
+  relativo p-value per l'ipotesi nulla $\beta = 0$, calcolato sulla
+  distribuzione $t$ con i gradi di libertà residui (il box nella @sec-bande
+  spiega da dove arriva la $t$). Qui il test su `mom_iq` è
+  significativo.
+- **`Residual standard error`** ($\sigma$): è — quasi — la deviazione standard
+  dei residui: l'unica differenza è che al denominatore, al posto di $n - 1$, ci
+  sono i **gradi di libertà residui** $n - k - 1$, dove $k$ è il numero di
+  predittori (qui $434 - 1 - 1 = 432$, i "432 degrees of freedom" dell'output).
+  Vale circa 18.3 punti: di tanto, in media, il modello "sbaglia" le previsioni.
+- **`Multiple R-squared`**: la proporzione di variabilità di $Y$ spiegata dal
+  modello, qui circa il 20%. L'idea: si parte dalla variabilità totale di $Y$ e
+  si sottrae la parte che resta nei residui: è l'$R^2$ definito nella
+  @sec-variabilita.
+- **`Adjusted R-squared`**: l'$R^2$ **corretto per la complessità** del modello.
+  Aggiungere predittori fa salire l'$R^2$ anche quando non servono a nulla; la
+  versione *adjusted* tiene conto di quante osservazioni ($n$) e quanti
+  predittori ($k$) stiamo usando, e rende più equo il confronto tra modelli di
+  complessità diversa. Con un solo predittore e molte osservazioni, come qui, i
+  due valori quasi coincidono.
+- **`F-statistic`**: il test **globale** del modello contro il modello nullo
+  (solo intercetta): ipotesi nulla "tutti i coefficienti, intercetta esclusa,
+  sono zero", alternativa "almeno uno è diverso da zero". Serve da controllo
+  d'insieme prima di guardare i singoli test $t$: facendo molti test, qualche
+  p-value piccolo può saltare fuori anche solo per caso.
+
+
+
+### Il `summary()` ricalcolato a mano
+
+Per calcolare i quattro numeri serve sapere $n$, $k$ e due devianze ormai note
+(@sec-devianze): la residua $\text{SS}_E$ e la totale $\text{SS}_T$:
+
+```{r}
+#| label: summary-a-mano
+n   <- length(residuals(m1))  # numero di osservazioni
+k   <- length(coef(m1)) - 1   # numero di predittori (intercetta esclusa)
+SSE <- sum(residuals(m1)^2)   # variabilità residua
+SST <- sum((kidiq$kid_score - mean(kidiq$kid_score))^2)  # variabilità totale
+
+c(sigma = sqrt(SSE / (n - k - 1)), # devianza/... = sqrt(varianza)
+  R2    = 1 - SSE / SST,
+  R2adj = 1 - (SSE / SST) * (n - 1) / (n - k - 1), # penalizzo x k
+  # rapporto SSR / SSE 
+  Fstat = ((SST - SSE) / k) / (SSE / (n - k - 1))) 
+```
+
+Confrontate con l'output di `summary(m1)` qui sopra: tornano tutti e quattro.
+Notate la logica comune: tutto ruota attorno al confronto tra quanta variabilità
+c'era in partenza (la devianza totale) e quanta ne resta dopo il modello (la
+devianza residua): `summary()` non fa che ricombinare le devianze della
+@sec-devianze.
+
+
+::: {.callout-note icon=false title="✏️ Prova tu — I p-value con pt() e pf()"}
+Manca solo un pezzo: i **p-value**. Anche quelli si ricalcolano a mano, con le funzioni di ripartizione `pt()` e `pf()`.
+
+Leggete dall'output di `summary(m1)` i valori che servono ($t$ dell'intercetta
+= 4.36, $t$ di `mom_iq` = 10.42, $F$ = 108.6, gradi di libertà residui = 432) e:
+
+a. ricalcolate il p-value di `mom_iq` con `pt()`. Attenzione: il test è a
+   **due code** (l'effetto può essere in entrambe le direzioni), quindi la
+   probabilità nella coda va raddoppiata;
+b. fate lo stesso per l'intercetta e confrontate con `Pr(>|t|)`;
+c. ricalcolate il p-value della $F$ con `pf()` (una coda sta volta).
+d. verificate che $t^2 = F$ per `mom_iq`. Perché qui i due test coincidono?
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Prova tu"}
+```{r}
+#| label: sol-pt-pf
+summary(m1)$coefficients   # da qui leggiamo i valori di t
+
+2 * pt(c(4.36, 10.42), df = 432, lower.tail = FALSE)   # a-b: due code
+pf(108.6, df1 = 1, df2 = 432, lower.tail = FALSE)      # c: una coda sola
+c(t2 = 10.42^2, F = 108.6)                             # d: con k = 1, F = t²
+```
+
+a–b. I p-value coincidono con quelli del `summary()` (4.36 dà 1.63e-05 — con
+la normale sarebbe stato 1.3e-05: sono le code più pesanti della $t$ all'opera;
+per 10.42 il valore è così piccolo che R lo riporta come `< 2.2e-16`, il limite
+della precisione di stampa).
+c. **Una coda sola**: la $F$ è un rapporto di varianze, sempre positivo, e solo
+valori grandi sono evidenza contro $H_0$.
+d. Con un solo predittore l'ipotesi globale "tutti i coefficienti sono zero" e
+l'ipotesi sul singolo coefficiente sono la stessa ipotesi: $F = t^2$ e i due
+p-value coincidono (a meno degli arrotondamenti di $t$ e $F$ letti
+dall'output).
+:::
+
+::: {.callout-note icon=false title="✏️ Esercizio 4 — La vostra prima regressione"}
+Stimate un modello in cui il punteggio del bambino è predetto dall'**età della
+madre** (`mom_age`).
+
+a. Scrivete l'equazione di regressione stimata.
+b. Come interpretate la pendenza?
+c. Qual è il punteggio previsto per un bambino la cui madre ha 20 anni? E 30 anni?
+d. Guardando $R^2$, l'età della madre vi sembra un buon predittore?
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 4"}
+```{r}
+#| label: sol-es4
+m_age <- lm(kid_score ~ mom_age, data = kidiq)
+coef(m_age)
+summary(m_age)$r.squared
+```
+
+a. $\hat{Y} = 70.96 + 0.70 \cdot \text{mom\_age}$.
+b. Per ogni anno in più della madre, il punteggio atteso del bambino aumenta in
+   media di 0.70 punti.
+c. Possiamo calcolarli a mano oppure, meglio, con `predict()`:
+
+```{r}
+#| label: sol-es4-pred
+predict(m_age, newdata = data.frame(mom_age = c(20, 30)))
+```
+
+d. $R^2 \approx 0.009$: l'età della madre spiega meno dell'1% della variabilità dei
+   punteggi. La pendenza è positiva ma il predittore, da solo, è debolissimo —
+   un buon promemoria del fatto che un coefficiente "significativo o quasi" non
+   implica un modello *utile*.
+:::
+
+::: {.callout-note icon=false title="✏️ Esercizio 5 — Intervalli di confidenza"}
+Con la funzione `confint()` calcolate l'intervallo di confidenza al
+95% per i coefficienti di `m1`. Come lo interpretate, in particolare per `mom_iq`?
+L'intervallo contiene lo zero?
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 5"}
+```{r}
+#| label: sol-es5
+confint(m1)
+```
+
+L'intervallo per `mom_iq` va da circa 0.50 a 0.73: i dati sono compatibili con un
+effetto del QI della madre compreso tra mezzo punto e tre quarti di punto per ogni
+punto di QI. Lo zero è ben lontano dall'intervallo, coerentemente con il p-value
+piccolissimo visto nel `summary()`. Notate quanto è più informativo dell'enunciato
+"p < .05": l'intervallo ci dice *quanto grande* è plausibilmente l'effetto.
+:::
+
+## La diagnostica grafica {#sec-diagnostica}
+
+Applicando `plot()` a un oggetto `lm` otteniamo quattro grafici diagnostici, che servono a controllare le assunzioni della @sec-assunzioni.
+
+- **Residuals vs Fitted**: i residui contro i valori previsti. Se la relazione è davvero lineare, i punti si dispongono *a caso* attorno allo zero, senza curvature (linearità) né forme a imbuto (omoschedasticità).
+- **Normal Q-Q**: confronta i quantili dei residui standardizzati con quelli di una normale; se l'assunzione di normalità regge, i punti stanno sulla diagonale.
+
+```{r}
+#| label: m1-diag
+#| fig-height: 7
+#| code-fold: true
+par(mfrow = c(2, 2))
+plot(m1)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+
+- **Scale-Location**: versione "stabilizzata" del primo grafico, utile per vedere se la variabilità dei residui cresce con i valori previsti (eteroschedasticità).
+- **Residuals vs Leverage**: evidenzia osservazioni con grande *leva* e grande residuo, cioè i potenziali **casi influenti** (ne parleremo nella @sec-anomali, insieme alla distanza di Cook).
+
+R etichetta automaticamente i casi più estremi (qui 87, 273, 286): non sono necessariamente un problema, ma meritano un'occhiata.
+
+## Un predittore dicotomico {#sec-dicotomico}
+
+Vogliamo ora valutare se il **livello di istruzione della madre** (diplomata o no)
+è predittivo del punteggio del bambino. Il predittore è un `factor` con due
+livelli, quindi R costruisce per noi la dummy $D$ (0 = non diplomata, 1 =
+diplomata):
+
+```{r}
+#| label: m2-boxplot
+m2 <- lm(kid_score ~ mom_hs, data = kidiq)
+
+plot(kid_score ~ mom_hs, data = kidiq,
+     xlab = "Diploma della madre", ylab = "Punteggio del bambino")
+```
+
+(Con un predittore `factor`, `plot()` produce automaticamente dei boxplot.)
+
+```{r}
+#| label: m2-coef
+coef(m2)
+```
+
+L'equazione di regressione è
+
+$$
+\hat{Y} = 77.55 + 11.77 D
+$$
+
+L'interpretazione, con una dummy, è in termini di **medie di gruppo** (è
+esattamente la logica vista in @sec-codifica):
+
+- $\beta_0 = 77.55$: punteggio medio previsto quando $D = 0$, cioè la media dei
+  bambini con madre **non** diplomata;
+- $\beta_1 = 11.77$: la **differenza** tra le medie dei due gruppi. I figli di
+  madri diplomate ottengono in media 11.77 punti in più
+  ($77.55 + 11.77 = 89.32$).
+
+```{r}
+#| label: m2-summary
+summary(m2)
+```
+
+Il test $t$ su `mom_hs1` ci dice che la differenza tra i due gruppi è
+statisticamente significativa, ma $R^2 \approx 0.056$: il diploma della madre, da
+solo, spiega poco della variabilità dei punteggi.
+
+::: {.callout-note icon=false title="✏️ Esercizio 6 — Regressione e medie di gruppo"}
+Verificate "a mano" l'interpretazione dei coefficienti di `m2`:
+
+a. calcolate la media di `kid_score` separatamente per i due gruppi di `mom_hs`
+   (suggerimento: `tapply()`);
+b. confrontate le medie ottenute con i coefficienti del modello;
+c. (extra) confrontate l'output di `summary(m2)` con quello di un test $t$ a
+   varianze uguali: `t.test(kid_score ~ mom_hs, data = kidiq, var.equal = TRUE)`.
+   Che cosa notate?
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 6"}
+```{r}
+#| label: sol-es6
+medie <- tapply(kidiq$kid_score, kidiq$mom_hs, mean)
+medie
+medie[2] - medie[1]
+coef(m2)
+```
+
+La media del gruppo 0 (77.55) coincide con l'intercetta e la differenza tra le
+medie (11.77) coincide con il coefficiente della dummy.
+
+```{r}
+#| label: sol-es6-ttest
+t.test(kid_score ~ mom_hs, data = kidiq, var.equal = TRUE)
+```
+
+La statistica $t$ e il p-value sono identici (a parte il segno, che dipende solo
+dall'ordine dei gruppi) a quelli del coefficiente `mom_hs1` nel `summary(m2)`: il
+test $t$ per due gruppi indipendenti **è** un modello lineare con un predittore
+dicotomico. Molti dei test "classici" sono casi particolari del modello lineare.
+:::
+
+# La regressione multipla
+
+Quando il modello ha più predittori, la formulazione può essere scritta:
+
+**1. in forma matriciale:**
+
+$$
+Y = X\beta + \epsilon
+$$
+
+**2. in forma estesa:**
+
+$$
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_k X_k + \epsilon
+$$
+
+Quando il modello ha più predittori (quantitativi e/o categoriali) e una sola
+variabile dipendente quantitativa $Y$, si parla di **regressione lineare
+multipla**.
+
+## Un esempio con due predittori
+
+Consideriamo un modello che predice il punteggio del bambino a partire dal QI
+**e** dal livello di istruzione della madre. In R basta sommare i predittori nella
+formula:
+
+```{r}
+#| label: m3-fit
+m3 <- lm(kid_score ~ mom_iq + mom_hs, data = kidiq)
+coef(m3)
+```
+
+L'equazione di regressione è
+
+$$
+\hat{Y} = 25.73 + 0.56 X + 5.95 D
+$$
+
+Poiché $D \in \{0, 1\}$, graficamente otteniamo **due rette parallele**: stessa
+pendenza (0.56), intercette diverse (25.73 per le madri non diplomate, $25.73 +
+5.95 = 31.68$ per le diplomate):
+
+```{r}
+#| label: m3-plot
+library(ggplot2)
+cf <- coef(m3)
+ggplot(kidiq, aes(x = mom_iq, y = kid_score, colour = mom_hs)) +
+  geom_point(alpha = 0.5) +
+  geom_abline(intercept = cf[1],         slope = cf[2], colour = "#F8766D", linewidth = 1) +
+  geom_abline(intercept = cf[1] + cf[3], slope = cf[2], colour = "#00BFC4", linewidth = 1) +
+  labs(x = "QI della madre", y = "Punteggio del bambino", colour = "Diploma")
+```
+
+L'interpretazione dei coefficienti cambia in modo sottile ma importante: ogni
+coefficiente esprime l'effetto di quel predittore **a parità degli altri**.
+Ad esempio, $\beta_1 = 0.56$ è l'effetto del QI della madre *a parità di livello di
+istruzione*.
+
+## L'analisi degli effetti
+
+Con `anova()` otteniamo la scomposizione della variabilità spiegata dai singoli
+effetti del modello:
+
+```{r}
+#| label: m3-anova
+anova(m3); a <- anova(m3)
+SST <- sum(a$`Sum Sq`)
+SSE <- a$`Sum Sq`[3]
+R2 <- 1-(SSE/SST); R2
+summary(m3)$r.squared
+```
+
+Entrambi gli effetti risultano significativi e il modello spiega circa il 21.4% della variabilità dei punteggi (era il 20.1% con il solo QI: l'istruzione della madre aggiunge poco, una volta tenuto conto del QI).
+
+
+### La variabilità spiegata dai singoli effetti: $\eta^2$ {#sec-eta2}
+
+Oltre all'$R^2$ complessivo (@sec-variabilita), dalla tabella ANOVA possiamo
+stimare la proporzione di variabilità spiegata **da ciascun effetto**, detta
+$\eta^2$: il rapporto tra la devianza dell'effetto e la devianza totale.
+
+```{r}
+#| label: eta2
+eta2 <- a$"Sum Sq" / sum(a$"Sum Sq")
+data.frame(effetto = rownames(a), eta2 = round(eta2, 3))
+```
+
+Il QI della madre spiega da solo circa il 20% della variabilità; il diploma,
+entrato dopo il QI, aggiunge poco più di un punto percentuale.
+
+## La rappresentazione grafica degli effetti
+
+Per visualizzare gli effetti stimati dal modello esistono comodi pacchetti
+dedicati. Con **sjPlot**:
+
+```{r}
+#| label: m3-sjplot
+#| layout-ncol: 2
+library(sjPlot)
+plot_model(m3, type = "eff", terms = "mom_iq")
+plot_model(m3, type = "eff", terms = "mom_hs")
+```
+
+Con **effects**:
+
+```{r}
+#| label: m3-effects
+#| fig-height: 4
+library(effects)
+plot(allEffects(m3))
+```
+
+Entrambi mostrano l'effetto di ciascun predittore *tenendo gli altri fissi* (ai
+loro valori medi o di riferimento), con le relative bande di confidenza.
+
+::: {.callout-note icon=false title="✏️ Esercizio 7 — Regressione multipla"}
+Stimate un modello con `mom_iq` e `mom_age` come predittori di `kid_score`.
+
+a. Scrivete l'equazione di regressione.
+b. Confrontate il coefficiente di `mom_iq` con quello che aveva nel modello
+   semplice `m1`: è cambiato molto?
+c. Confrontate l'$R^2$ con quello di `m1`: quanto aggiunge l'età della madre?
+d. Disegnate gli effetti del modello con `plot(allEffects(...))`.
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 7"}
+```{r}
+#| label: sol-es7
+m5 <- lm(kid_score ~ mom_iq + mom_age, data = kidiq)
+coef(m5)
+summary(m5)$r.squared
+```
+
+a. $\hat{Y} = 17.60 + 0.60 \cdot \text{mom\_iq} + 0.39 \cdot \text{mom\_age}$.
+b. Il coefficiente di `mom_iq` passa da 0.610 a 0.604: praticamente invariato
+   (QI ed età della madre sono poco correlati, quindi i loro effetti non si
+   "rubano" variabilità a vicenda).
+c. $R^2$ passa da 0.201 a 0.204: l'età della madre, a parità di QI, aggiunge
+   pochissimo.
+
+```{r}
+#| label: sol-es7-eff
+#| fig-height: 4
+plot(allEffects(m5))
+```
+
+Notate la diversa ampiezza delle bande di confidenza: l'effetto del QI è stimato
+con molta più precisione di quello dell'età.
+:::
+
+# Gli effetti di interazione
+
+Nel modello `m3` abbiamo imposto che l'effetto del QI fosse **lo stesso** nei due
+gruppi di madri (rette parallele). Ma potrebbe non essere così: introduciamo allora
+l'**interazione** tra i predittori, che in R si indica con `*`:
+
+```{r}
+#| label: m4-fit
+m4 <- lm(kid_score ~ mom_iq * mom_hs, data = kidiq)
+coef(m4)
+```
+
+La formula `mom_iq * mom_hs` è una scorciatoia per
+`mom_iq + mom_hs + mom_iq:mom_hs`: effetti principali **più** interazione.
+L'equazione di regressione diventa
+
+$$
+\hat{Y} = -11.48 + 0.97 X + 51.27 D - 0.48\, DX
+$$
+
+Il termine $DX$ (prodotto tra dummy e QI) permette alle due rette di avere
+**pendenze diverse**:
+
+```{r}
+#| label: m4-plot
+ggplot(kidiq, aes(x = mom_iq, y = kid_score, colour = mom_hs)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "QI della madre", y = "Punteggio del bambino", colour = "Diploma")
+```
+
+Sostituendo i valori di $D$ si ottengono le equazioni delle due rette:
+
+- madri non diplomate ($D = 0$): $\hat{Y} = -11.48 + 0.97 X$
+- madri diplomate ($D = 1$): $\hat{Y} = (-11.48 + 51.27) + (0.97 - 0.48) X = 39.79 + 0.49 X$
+
+L'interpretazione: tra le madri non diplomate il QI "pesa" molto di più (quasi un
+punto per punto di QI), mentre tra le diplomate la relazione è circa la metà. Con
+un'interazione, gli effetti principali **non si interpretano più da soli**:
+l'effetto di un predittore dipende dal livello dell'altro.
+
+## L'analisi degli effetti
+
+```{r}
+#| label: m4-anova
+anova(m4)
+summary(m4)$r.squared
+```
+
+Anche l'interazione risulta significativa, e il modello spiega circa il 23% della
+variabilità.
+
+## La rappresentazione grafica
+
+Con **sjPlot** (`type = "int"` mostra proprio l'interazione):
+
+```{r}
+#| label: m4-sjplot
+plot_model(m4, type = "int")
+```
+
+Con **effects**:
+
+```{r}
+#| label: m4-effects
+#| fig-height: 4
+plot(allEffects(m4))
+```
+
+::: {.callout-note icon=false title="✏️ Esercizio 8 — Interpretare un'interazione"}
+Usando i coefficienti di `m4` (senza usare `predict()`, prima):
+
+a. calcolate il punteggio previsto per un bambino con madre **non diplomata** con
+   QI = 100;
+b. idem, ma con madre **diplomata** con QI = 100;
+c. verificate i risultati con `predict()`;
+d. per quale valore di QI le due rette si incrociano?
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 8"}
+a. $D = 0$: $\hat{Y} = -11.48 + 0.97 \cdot 100 = 85.4$.
+b. $D = 1$: $\hat{Y} = 39.79 + 0.49 \cdot 100 = 88.3$.
+c. Con `predict()`:
+
+```{r}
+#| label: sol-es8
+predict(m4, newdata = data.frame(mom_iq = c(100, 100),
+                                 mom_hs = factor(c(0, 1))))
+```
+
+d. **Quando si incrociano le due rette?** Scriviamole con i coefficienti del
+   modello, dove $\beta_2$ è il coefficiente della dummy (`mom_hs1` = 51.27) e
+   $\beta_3$ quello dell'interazione (`mom_iq:mom_hs1` = −0.48):
+   $$\hat y_{\text{non dipl}}(X) = \beta_0 + \beta_1 X, \qquad \hat y_{\text{dipl}}(X) = (\beta_0+\beta_2) + (\beta_1+\beta_3)\,X.$$
+   Si incrociano dove la loro **differenza** è zero. Facendo la differenza
+   (diplomate − non diplomate), i termini $\beta_0$ e $\beta_1 X$ si cancellano:
+   $$\hat y_{\text{dipl}} - \hat y_{\text{non dipl}} = \beta_2 + \beta_3 X \qquad (\text{qui } 51.27 - 0.48\,X),$$
+   che è *l'effetto del diploma in funzione del QI*. Posto uguale a zero:
+   $$\beta_2 + \beta_3 X = 0 \;\;\Longrightarrow\;\; X = -\frac{\beta_2}{\beta_3} = \frac{51.27}{0.48} \approx 106,$$
+   cioè il rapporto tra il coefficiente della dummy e quello dell'interazione,
+   cambiato di segno. Sotto QI ≈ 106 i figli di madri diplomate hanno punteggi
+   attesi più alti, sopra la relazione si inverte — anche se, guardando il
+   grafico, le due rette oltre quel punto sono molto vicine e le bande di
+   confidenza si sovrappongono.
+:::
+
+# La valutazione dell'adattamento {#sec-adattamento}
+
+## Casi anomali e casi influenti {#sec-anomali}
+
+Non tutte le osservazioni "strane" sono uguali. Conviene distinguere:
+
+- **outlier**: un'osservazione con $Y$ anomalo rispetto a ciò che il modello
+  prevede per il suo $X$ (residuo grande);
+- **caso a leva alta** (*leverage*): un'osservazione con $X$ estremo, lontano dal grosso dei dati — *potenzialmente* influente;
+- **caso influente**: un'osservazione che, da sola, **cambia sensibilmente le stime** del modello. Tipicamente: leva alta **e** residuo grande insieme.
+
+Vediamolo con dati simulati: in ciascun pannello aggiungiamo ai dati (grigi) un
+solo punto rosso e confrontiamo la retta stimata con il punto (rossa, continua) e
+senza (nera, tratteggiata):
+
+```{r}
+#| label: anomali-plot
+#| fig-height: 3.6
+#| fig-width: 9
+#| code-fold: true
+set.seed(20)
+x <- rnorm(25, 10, 1.5)
+y <- 2 + x + rnorm(25, 0, 1)
+
+extra  <- rbind(c(10, 22),   # outlier: X centrale, Y anomalo
+                c(18, 20),   # leva alta: X estremo, Y coerente
+                c(18, 9))    # outlier influente: X estremo, Y anomalo
+titoli <- c("Outlier", "Caso a leva alta", "Outlier influente")
+
+par(mfrow = c(1, 3), mar = c(4, 4, 3, 1))
+for (i in 1:3) {
+  xx <- c(x, extra[i, 1]); yy <- c(y, extra[i, 2])
+  plot(xx, yy, pch = 19, col = c(rep("grey60", 25), "red"),
+       xlab = "X", ylab = "Y", main = titoli[i])
+  abline(lm(y ~ x),   lty = 2, lwd = 2)               # senza il punto
+  abline(lm(yy ~ xx), col = "red", lwd = 2)           # con il punto
+}
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+```
+
+- l'**outlier** con $X$ centrale sposta un po' l'intercetta ma quasi per niente la
+  pendenza;
+- il caso a **leva alta** ma coerente con la retta non cambia;
+- l'**outlier influente** (X estremo + Y anomalo) ruota vistosamente la retta: è questo il caso davvero pericoloso.
+
+Un modo diretto di *vedere* l'influenza è il **leave-one-out**: si rifà la
+regressione togliendo un'osservazione per volta e si guarda quanto si sposta la
+retta. Se la retta salta, quel punto è influente; se resta ferma, non lo è.
+
+```{r}
+#| label: loo-plot
+#| fig-height: 4
+#| fig-width: 9
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+
+# --- sinistra: dati simulati con un caso influente (lo stesso del pannello sopra) ---
+set.seed(20)
+xinf <- rnorm(25, 10, 1.5)
+yinf <- 2 + xinf + rnorm(25, 0, 1)
+xinf <- c(xinf, 15); yinf <- c(yinf, 9)          # outlier influente: X estremo, Y anomalo
+plot(xinf, yinf, pch = 19, col = c(rep("grey60", 25), "red"),
+     xlab = "X", ylab = "Y", main = "con un caso influente")
+for (i in seq_along(xinf))                        # una retta per ogni punto tolto
+  abline(lm(yinf[-i] ~ xinf[-i]), col = adjustcolor("blue", 0.25))
+abline(lm(yinf[-26] ~ xinf[-26]), col = "darkgreen", lwd = 2)   # senza il punto rosso
+abline(lm(yinf ~ xinf), col = "black", lwd = 2)                 # con tutti i dati
+legend("topleft", lwd = 2, col = c("black", "darkgreen"), bty = "n", cex = 0.85,
+       legend = c("tutti i dati", "senza il rosso"))
+m0 <- lm(yinf ~ xinf)
+# --- destra: distanza di Cook
+plot(cooks.distance(m0), type = "h", col = "grey40", lwd = 4,
+     xlab = "osservazione", ylab = "distanza di Cook",
+     main = "distanza di Cook")
+```
+
+A sinistra (dati simulati) il leave-one-out rende **visibile** l'influenza: la retta stimata senza il punto rosso (verde) si stacca dal fascio di tutte le altre, che invece restano ammucchiate. È lo stesso *outlier influente* del pannello qui sopra.
+
+A destra c'è la versione *quantitativa* della stessa idea: la **distanza di Cook** misura, per ogni osservazione, di quanto cambierebbero le stime togliendola.
+
+## Il predictive check
+
+Un altro metodo per valutare l'adattamento di un modello consiste nel
+**simulare dati dal modello** e confrontarli con i dati osservati:
+
+- se il modello è buono, i dati simulati dovrebbero assomigliare a quelli
+  osservati;
+- viceversa, se il modello genera dati molto diversi da quelli osservati, non è un
+  buon modello per quei dati.
+
+Il pacchetto **performance** rende l'operazione immediata:
+
+```{r}
+#| label: m4-ppcheck
+library(performance)
+check_predictions(m4)
+```
+
+
+Ogni curva sottile è la distribuzione di un dataset *simulato* dal modello; la
+curva in evidenza è quella dei dati osservati. Qui le curve simulate ricalcano
+abbastanza bene quella osservata: il modello riproduce in modo ragionevole la forma
+della distribuzione dei punteggi.
+
+
+
+# La verosimiglianza (likelihood) {#sec-likelihood}
+
+Prima di confrontare modelli tra loro ci serve capire cosa stiamo confrontando: la **verosimiglianza** (*likelihood*).
+
+## Dal campione alla verosimiglianza
+
+1. Abbiamo un **campione di dati**.
+2. **Ipotizziamo** che provenga da una certa distribuzione — il "processo
+   generatore dei dati" — per esempio una normale con $\mu = 10$ e
+   $\sigma = 1.5$.
+3. Con quella distribuzione, calcoliamo la **densità di ciascun punto**
+   osservato.
+
+```{r}
+#| label: lik-campione
+y <- c(7.9, 9.4, 10.1, 10.8, 12.3)   # il nostro piccolo campione
+dnorm(y, mean = 10, sd = 1.5)        # densità di ogni punto se Y ~ N(10, 1.5²)
+```
+
+```{r}
+#| label: lik-idea
+#| fig-height: 4
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+curve(dnorm(x, 10, 1.5), from = 5, to = 15, lwd = 2, xlab = "y", ylab = "f(y)",
+      ylim = c(0, 0.3))
+d <- dnorm(y, 10, 1.5)
+segments(y, 0, y, d, col = "red", lty = 2)
+points(y, rep(0, length(y)), pch = 19)
+points(y, d, pch = 19, col = "red")
+text(y, d + 0.015, round(d, 2), col = "red", cex = 0.8)
+```
+
+Le cinque densità ci dicono quanto ciascun punto è "plausibile" sotto la
+distribuzione ipotizzata. Ma il campione è uno solo: i punti sono stati osservati
+**insieme**, sono eventi congiunti — e la probabilità di eventi congiunti (e
+indipendenti) si ottiene **moltiplicando**. La **verosimiglianza** del campione
+sotto i parametri $\theta$ è quindi il prodotto delle densità:
+
+$$
+\mathcal{L}(\theta) = \prod_i f(y_i \mid \theta)
+$$
+
+```{r}
+#| label: lik-prodotto
+prod(dnorm(y, 10, 1.5))              # verosimiglianza
+sum(dnorm(y, 10, 1.5, log = TRUE))   # log-verosimiglianza
+```
+
+Il prodotto di tante densità è un numero piccolissimo (con 434 osservazioni
+sarebbe ingestibile): per questo si lavora quasi sempre con la
+**log-verosimiglianza** $\log\mathcal{L}$, che trasforma il prodotto in una somma.
+Tenetela d'occhio: è l'ingrediente di AIC e BIC nel prossimo capitolo.
+
+## La funzione di verosimiglianza
+
+Il numero appena calcolato dipende dall'ipotesi che abbiamo fatto ($\mu = 10$).
+Ma potevamo ipotizzare distribuzioni diverse: ciascuna assegna al campione una
+verosimiglianza diversa.
+
+```{r}
+#| label: lik-candidate
+#| fig-height: 4
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+curve(dnorm(x, 10.1, 1.5), from = 4, to = 16, lwd = 2, xlab = "y", ylab = "f(y)")
+curve(dnorm(x,  8.5, 1.5), add = TRUE, lwd = 2, col = "blue")
+curve(dnorm(x, 11.5, 1.5), add = TRUE, lwd = 2, col = "red")
+points(y, rep(0, length(y)), pch = 19)
+L3 <- sapply(c(10.1, 8.5, 11.5), function(m) prod(dnorm(y, m, 1.5)))
+legend("topleft", lwd = 2, col = c("black", "blue", "red"), bty = "n", cex = 0.9,
+       legend = sprintf("mu = %.1f   L = %.5f", c(10.1, 8.5, 11.5), L3))
+```
+
+L'idea allora è: proviamo **tutti** i valori candidati di $\mu$ (con $\sigma$
+fissata, per semplicità), calcoliamo la verosimiglianza del campione per
+ciascuno, e disegniamo i risultati. Quella che otteniamo è la **funzione di
+verosimiglianza** $\mathcal{L}(\mu)$:
+
+```{r}
+#| label: lik-funzione
+mu_griglia <- seq(7, 13, by = 0.05)
+L <- sapply(mu_griglia, function(m) prod(dnorm(y, m, 1.5)))
+
+plot(mu_griglia, L, type = "l", lwd = 2,
+     xlab = expression(mu), ylab = "verosimiglianza del campione")
+abline(v = mean(y), lty = 2, col = "red")
+```
+
+La curva ha un massimo, e il massimo cade esattamente sulla **media campionaria**
+(linea rossa tratteggiata): tra tutte le normali candidate, quella centrata su
+$\bar{y}$ è la più compatibile con i dati osservati.
+
+::: {.callout-note}
+Attenzione alla direzione: la verosimiglianza misura quanto sono plausibili **i
+dati** dato un valore dei parametri, non quanto è probabile **un parametro** dati
+i dati. Per questo $\mathcal{L}(\mu)$ non è una distribuzione di probabilità (non
+integra a 1): è una funzione che *ordina* i valori dei parametri per
+compatibilità con il campione.
+:::
+
+## A che cosa serve
+
+1. **Ottimizzare.** Cercare il valore dei parametri che la massimizza: è la
+   **stima di massima verosimiglianza** (*Maximum Likelihood Estimation*, MLE),
+   uno dei metodi di stima più usati.
+2. **Confrontare modelli.** Modelli diversi assegnano agli stessi dati
+   verosimiglianze diverse: confrontarle ci dice quale modello "spiega" meglio i
+   dati. È la base di AIC e BIC (prossimo capitolo).
+3. **Aggiornare le credenze.** Nell'inferenza bayesiana la verosimiglianza è il
+   fattore che aggiorna le *priors* in *posteriors*.
+
+## Il legame con l'assunzione di normalità
+
+E il modello lineare? L'assunzione di normalità (@sec-assunzioni) dice che
+
+$$
+y_i \sim \mathcal{N}(\mu_i, \sigma^2), \qquad \mu_i = \beta_0 + \beta_1 x_i
+$$
+
+cioè: per ogni osservazione, una campana normale centrata sul valore previsto
+dalla retta (le "campane" della @sec-normale). La verosimiglianza del modello è
+allora il prodotto di quelle densità normali:
+
+$$
+\mathcal{L}(\beta_0, \beta_1, \sigma^2) = \prod_i f(y_i \mid \mu_i, \sigma^2)
+\qquad\Rightarrow\qquad
+\log\mathcal{L} = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{\sum_i (y_i - \mu_i)^2}{2\sigma^2}
+$$
+
+Guardate il numeratore dell'ultimo termine: è la **devianza residua**
+(@sec-devianze). Massimizzare la verosimiglianza rispetto ai $\beta$ significa
+quindi *minimizzare* $\sum_i (y_i - \hat{y}_i)^2$: sotto l'assunzione di
+normalità, **minimi quadrati e massima verosimiglianza scelgono la stessa
+retta**.
+
+Verifichiamolo: ricalcoliamo "a mano" la log-verosimiglianza di `m1` come somma
+dei log delle densità normali centrate sui valori previsti, e confrontiamola con
+quella che R calcola con `logLik()`:
+
+```{r}
+#| label: loglik-m1
+mu_hat   <- fitted(m1)
+sigma_ML <- sqrt(sum(residuals(m1)^2) / length(mu_hat))   # denominatore n!
+
+sum(dnorm(kidiq$kid_score, mean = mu_hat, sd = sigma_ML, log = TRUE))
+logLik(m1)
+```
+
+Identiche. (Unica accortezza: la stima di massima verosimiglianza di $\sigma$ usa
+$n$ al denominatore, non gli $n - k - 1$ del *Residual standard error* — perché?)
+
+::: {.callout-note collapse="true"}
+## Perché due denominatori diversi per la stessa $\sigma$?
+
+Sono due stimatori diversi: $\hat\sigma^2_{\text{ML}} = \text{SS}_E/n$ (massima
+verosimiglianza) e $\hat\sigma^2 = \text{SS}_E/(n-k-1)$ (*Residual standard error*).
+
+**Perché differiscono.** La retta di `lm()` è quella che *minimizza* $\text{SS}_E$:
+si incolla a *questo* campione meglio della retta vera. Quindi i residui sono
+sistematicamente più piccoli dei veri errori, e $\text{SS}_E/n$ **sottostima**
+$\sigma^2$. L'esempio estremo: con una regressione semplice e **solo 2 punti** la
+retta ci passa esattamente sopra, $\text{SS}_E = 0$, e $\text{SS}_E/n = 0$ direbbe
+"errore nullo" — assurdo (con 2 punti non sai nulla sulla dispersione attorno alla
+retta). Dividendo per $n-k-1 = 0$ si ottiene $0/0$, indefinito: la risposta giusta,
+"non stimabile".
+
+**La correzione.** In media $E[\text{SS}_E] = (n-k-1)\,\sigma^2$, quindi
+$\text{SS}_E/(n-k-1)$ è **non distorto**, mentre $\text{SS}_E/n$ è troppo piccolo
+del fattore $(n-k-1)/n$. Quel $n-k-1$ sono i **gradi di libertà residui**: i
+residui obbediscono a $k+1$ vincoli (le equazioni normali), quindi solo $n-k-1$
+sono liberi — esattamente come la varianza campionaria divide per $n-1$, avendo
+speso un grado di libertà per stimare la media.
+
+**Perché allora la verosimiglianza usa $n$?** Perché la massima verosimiglianza
+cerca il valore che rende più probabili i dati: il massimo rispetto a $\sigma^2$
+cade *esattamente* in $\text{SS}_E/n$ — non è pensata per essere non distorta. Per
+questo `logLik()`, AIC e BIC usano $n$, mentre `summary()` (Residual standard
+error), errori standard, test $t$ e bande usano $n-k-1$. Con $n$ grande la
+differenza è trascurabile (qui 434 contro 432).
+
+Verifichiamolo: simuliamo tanti campioni con $\sigma$ noto e confrontiamo le medie
+delle due stime.
+
+```{r}
+#| label: ml-vs-corretta
+set.seed(1)
+stime <- replicate(5000, {
+  x <- 1:8                                  # n = 8, un predittore (k = 1)
+  y <- 2 + 0.5 * x + rnorm(8, 0, sd = 4)    # sigma vero = 4, quindi sigma^2 = 16
+  e <- residuals(lm(y ~ x))
+  c(ML = sum(e^2) / 8, corretta = sum(e^2) / (8 - 1 - 1))   # /n   vs   /(n-k-1)
+})
+rowMeans(stime)        # media delle stime di sigma^2 (vero = 16)
+```
+
+La stima ML centra in media un valore *più basso* del vero $\sigma^2 = 16$ (circa
+$16 \times 6/8 = 12$), mentre quella corretta lo centra in pieno.
+:::
+
+::: {.callout-important}
+**L'assunzione di normalità non è un
+dettaglio tecnico — è lei a definire la funzione di verosimiglianza del
+modello**. Assumere la normalità significa decidere che i dati vanno valutati
+con campane normali centrate sulla retta: è questa la verosimiglianza che
+`logLik()` calcola, e che AIC e BIC useranno nel prossimo capitolo come metro
+di paragone. Cambiare assunzione distribuzionale (per esempio una Poisson per
+dei conteggi) significa cambiare verosimiglianza: è l'idea alla base dei
+modelli lineari *generalizzati*.
+:::
+
+::: {.callout-note icon=false title="✏️ Esercizio 10 — La verosimiglianza all'opera"}
+Usando il campione `y` di questo capitolo (con $\sigma = 1.5$ fissa):
+
+a. calcolate la log-verosimiglianza per $\mu = 9$, $\mu = 10$ e $\mu = 11$:
+   quale ipotesi è più sostenuta dai dati?
+b. cercate il massimo della funzione di verosimiglianza su una griglia fine di
+   valori di $\mu$: coincide con `mean(y)`?
+c. ripetete il "calcolo a mano" della log-verosimiglianza per il modello
+   `m_age` dell'Esercizio 4 (`kid_score ~ mom_age`) e confrontate con
+   `logLik(m_age)`.
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 10"}
+```{r}
+#| label: sol-es10
+sapply(c(9, 10, 11), function(m) sum(dnorm(y, m, 1.5, log = TRUE)))
+
+mu_griglia <- seq(8, 12, by = 0.001)
+ll <- sapply(mu_griglia, function(m) sum(dnorm(y, m, 1.5, log = TRUE)))
+c(massimo = mu_griglia[which.max(ll)], media = mean(y))
+
+m_age <- lm(kid_score ~ mom_age, data = kidiq)
+s_ml  <- sqrt(sum(residuals(m_age)^2) / nobs(m_age))
+c(a_mano = sum(dnorm(kidiq$kid_score, fitted(m_age), s_ml, log = TRUE)),
+  logLik = as.numeric(logLik(m_age)))
+```
+
+a. La log-verosimiglianza più alta è quella di $\mu = 10$: tra le tre ipotesi è
+   la più vicina alla media campionaria.
+b. Il massimo della griglia coincide con `mean(y)` = 10.1: per la normale (con
+   $\sigma$ nota) si può dimostrare che lo stimatore di massima verosimiglianza
+   di $\mu$ è proprio la media campionaria.
+c. I due valori coincidono: `logLik()` non fa altro che sommare i log delle
+   densità normali centrate sui valori previsti dal modello.
+:::
+
+# Confronto e selezione di modelli
+
+> *All models are wrong, but some are useful.* — George E. P. Box
+
+Lo scopo di un modello statistico è essenzialmente questo: a partire da un insieme
+di dati osservati, identificare il processo latente sottostante che li ha generati.
+L'obiettivo del ricercatore è individuare il modello migliore.
+
+## I problemi
+
+Sembra semplice, ma:
+
+- possono esistere **molti modelli** che spiegano gli stessi dati;
+- le **variazioni casuali** rendono difficile identificare il modello;
+- il **modello vero potrebbe non essere** tra quelli effettivamente messi alla
+  prova.
+
+Un obiettivo realistico, quindi, è identificare il modello che rappresenta la
+**migliore approssimazione** al modello vero.
+
+## L'overfitting
+
+C'è una tensione fondamentale tra due proprietà di un modello:
+
+- la **bontà di adattamento** (*goodness of fit*): quanto bene il modello
+  riproduce i dati *osservati* — e questa **cresce sempre** all'aumentare della
+  complessità del modello;
+- la **generalizzabilità**: quanto bene il modello prevede dati *nuovi* — e questa
+  cresce fino a un certo punto, poi peggiora (curva a U rovesciata; Pitt, Myung &
+  Zhang, 2002).
+
+Un modello troppo complesso finisce per adattarsi anche al **rumore** dei dati: è
+il fenomeno dell'**overfitting**.
+
+```{r}
+#| label: overfit-curva
+#| fig-height: 4
+#| fig-width: 6.5
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+cx  <- seq(0, 1, length.out = 200)
+fit <- 1 - exp(-4 * cx)                # adattamento: cresce sempre
+gen <- 1 - exp(-4 * cx) - 1.1 * cx^2   # generalizzabilità: sale, poi scende
+picco <- cx[which.max(gen)]
+
+plot(cx, fit, type = "n", ylim = c(0, 1.08), xaxt = "n", yaxt = "n",
+     xlab = "numero di parametri", ylab = "prestazione del modello")
+rect(picco, -0.1, 1.1, 1.2, col = adjustcolor("grey60", 0.25), border = NA)
+lines(cx, fit, lwd = 3)
+lines(cx, gen, lwd = 3, col = "blue")
+abline(v = picco, lty = 3)
+text(0.66, 1.03, "adattamento ai dati osservati")
+text(0.70, 0.48, "previsione su dati nuovi", col = "blue")
+text(0.86, 0.10, "overfitting", col = "grey30", font = 3)
+```
+
+La zona "buona" sta attorno alla linea tratteggiata: oltre (area grigia), il
+modello continua a migliorare *sui dati osservati* ma peggiora *su dati nuovi*
+(Pitt, Myung & Zhang, 2002).
+
+> *...fitting is easy; prediction is hard.* — Richard McElreath
+
+Vediamolo con un esempio classico (McElreath, 2023): volume cerebrale e massa corporea di
+sette specie di ominidi. Con 7 punti, un polinomio di grado 6 passa *esattamente*
+per tutti i punti:
+
+```{r}
+#| label: overfit-r2
+ominidi <- data.frame(
+  specie   = c("afarensis", "africanus", "habilis", "boisei",
+               "rudolfensis", "ergaster", "sapiens"),
+  massa    = c(37.0, 35.5, 34.5, 41.5, 55.5, 61.0, 53.5),
+  cervello = c(438, 452, 612, 521, 752, 871, 1350))
+
+r2 <- sapply(1:6, function(g)
+  summary(lm(cervello ~ poly(massa, g), data = ominidi))$r.squared)
+round(r2, 2)
+```
+
+L'$R^2$ sale monotonicamente con il grado del polinomio, fino a 1. Ma guardate
+*come* lo fa:
+
+```{r}
+#| label: overfit-plot
+#| fig-height: 6.5
+#| fig-width: 9
+griglia <- data.frame(massa = seq(34.5, 61, length.out = 200))
+par(mfrow = c(2, 3), mar = c(4, 4, 3, 1))
+for (g in 1:6) {
+  m  <- lm(cervello ~ poly(massa, g), data = ominidi)
+  pr <- predict(m, newdata = griglia)
+  plot(cervello ~ massa, data = ominidi, pch = 19,
+       ylim = range(c(ominidi$cervello, pr, 0)),
+       xlab = "Massa corporea (kg)", ylab = "Volume cranico (cc)",
+       main = bquote("Grado" ~ .(g) * ":" ~ R^2 == .(round(summary(m)$r.squared, 2))))
+  lines(griglia$massa, pr, col = "red", lwd = 2)
+  abline(h = 0, lty = 3)
+}
+
+```
+
+Notate la scala verticale dei pannelli, che cambia da pannello a pannello: dal
+grado 4 in su la curva, pur di passare per i punti, "esplode" tra
+un'osservazione e l'altra.
+
+Il polinomio di grado 6 ha $R^2 = 1$ ma, tra un punto e l'altro, arriva a prevedere
+un volume cranico **negativo**: si è adattato perfettamente ai dati e ha perso ogni
+capacità di generalizzare. Massimizzare il fit non è il criterio giusto per
+scegliere un modello: servono criteri che tengano conto anche della complessità.
+
+## Il confronto mediante ANOVA
+
+Costruiamo una serie di modelli per i dati `kidiq`, dal modello **nullo** (solo
+intercetta) al modello con interazione:
+
+```{r}
+#| label: anova-confronto
+m0 <- lm(kid_score ~ 1,               data = kidiq)
+m1 <- lm(kid_score ~ mom_iq,          data = kidiq)
+m2 <- lm(kid_score ~ mom_hs,          data = kidiq)
+m3 <- lm(kid_score ~ mom_iq + mom_hs, data = kidiq)
+m4 <- lm(kid_score ~ mom_iq * mom_hs, data = kidiq)
+
+anova(m0, m1, m2, m3, m4)
+```
+
+`anova()` confronta ogni modello con il precedente tramite test $F$: l'aggiunta di
+parametri riduce significativamente la devianza residua?
+
+Si legge **riga per riga**, e ogni riga (dalla seconda) confronta quel modello con
+quello della riga **sopra**. Colonna per colonna:
+
+- **`Res.Df`** — i gradi di libertà residui del modello ($n$ meno il numero di
+  parametri): partono da 433 (solo intercetta) e calano di 1 a ogni parametro
+  aggiunto.
+- **`RSS`** — la devianza residua $\text{SS}_E$ del modello. Cala sempre man mano
+  che si aggiungono predittori (più parametri ⇒ fit migliore): 180386 → 144137 → …
+- **`Df`** — quanti parametri si sono aggiunti rispetto alla riga precedente (qui
+  uno per volta).
+- **`Sum of Sq`** — di quanto è calata la `RSS` rispetto al modello precedente: è
+  la devianza *in più* spiegata dal termine appena aggiunto. Per esempio,
+  aggiungendo `mom_iq` al modello nullo: $180386 - 144137 = 36249$.
+- **`F` e `Pr(>F)`** — il test $F$ chiede se quel calo è *più grande di quanto ci
+  si aspetterebbe per caso*: confronta la devianza spiegata in più (per parametro
+  aggiunto) con la varianza residua del modello. Un p-value piccolo dice "vale la
+  pena aggiungere quel termine".
+
+Così la **riga 2** (aggiungere `mom_iq` al nullo) abbatte la devianza di 36249,
+$F$ enorme, $p < 2.2\text{e-}16$: il QI è fortemente predittivo. L'**ultima riga**
+(aggiungere l'interazione) fa calare la devianza di 2878, $p = 0.003$: anche
+l'interazione aggiunge qualcosa di significativo.
+
+::: {.callout-warning}
+Questo approccio funziona solo per modelli **annidati** (ogni modello deve essere
+un caso particolare del successivo). Guardate la terza riga: confrontando `m2` con
+`m1` otteniamo `Df = 0` e una somma dei quadrati *negativa* — un confronto privo di
+senso, perché `m1` e `m2` non sono annidati (nessuno dei due contiene l'altro). R
+esegue il calcolo lo stesso: sta a noi accorgerci del problema.
+:::
+
+## AIC e BIC
+
+Due indici molto usati per il confronto fra modelli sono **AIC** (*Akaike
+Information Criterion*; Akaike, 1974) e **BIC** (*Bayesian Information Criterion*;
+Schwarz, 1978):
+
+$$
+\text{AIC} = -2\log\mathcal{L} + 2k
+\qquad
+\text{BIC} = -2\log\mathcal{L} + k\log n
+$$
+
+dove $\mathcal{L}$ è la verosimiglianza del modello (la @sec-likelihood), $k$ il
+numero di parametri e
+$n$ il numero di osservazioni. Entrambi premiano il fit (primo termine) e
+**penalizzano la complessità** (secondo termine): misurano l'efficienza del modello
+in termini di *previsione* dei dati, proprio quello che l'overfitting comprometteva.
+
+Dati $k$ valori di AIC/BIC per $k$ modelli diversi, **si preferisce il modello con
+il valore più basso**. Due vantaggi pratici rispetto all'ANOVA: i modelli non
+devono essere annidati, e non c'è nessun p-value di mezzo.
+
+```{r}
+#| label: aic-bic
+A <- AIC(m0, m1, m2, m3, m4)
+A[order(A$AIC), ]
+
+B <- BIC(m0, m1, m2, m3, m4)
+B[order(B$BIC), ]
+```
+
+Sia per AIC sia per BIC il modello preferito è `m4`, quello con l'interazione.
+
+## La quantificazione dell'evidenza
+
+Un grande vantaggio di AIC/BIC è la possibilità di stimare la **plausibilità
+relativa** di un modello rispetto a un altro, evitando tutti i problemi associati
+al p-value. Il calcolo dell'**evidenza relativa** (*evidence ratio*) è molto
+semplice:
+
+1. sia $\Delta$ la differenza tra i valori di AIC (o BIC) dei due modelli;
+2. si calcola $\ell = e^{\Delta/2}$.
+
+Confrontiamo ad esempio il modello con interazione (`m4`) con quello senza (`m3`):
+
+```{r}
+#| label: evidence-ratio
+(DAIC <- AIC(m3) - AIC(m4))
+exp(DAIC / 2)
+
+(DBIC <- BIC(m3) - BIC(m4))
+exp(DBIC / 2)
+```
+
+- **Conclusione con AIC**: il modello con interazione è circa **32 volte più
+  plausibile** di quello senza interazione.
+- **Conclusione con BIC**: il modello con interazione è circa **4 volte più
+  plausibile** di quello senza.
+
+(Il BIC penalizza la complessità più severamente dell'AIC, da cui la differenza.)
+
+## Verosimiglianza relativa e pesi di Akaike
+
+Possiamo estendere il ragionamento a tutti i modelli insieme, calcolando per
+ciascuno la verosimiglianza relativa rispetto al modello peggiore (qui il nullo):
+
+```{r}
+#| label: relative-likelihood
+A <- AIC(m0, m1, m2, m3, m4)
+A$delta <- max(A$AIC) - A$AIC
+A$rl    <- exp(A$delta / 2)
+A[order(A$AIC), ]
+```
+
+Il modello `m4` (`kid_score ~ mom_iq * mom_hs`) risulta circa $2.19 \times 10^{23}$
+volte più verosimile del modello nullo.
+
+Infine, possiamo **normalizzare** le verosimiglianze relative per ottenere i
+**pesi di Akaike**, interpretabili come la probabilità di ciascun modello $M_i$,
+dati i dati e l'insieme dei modelli considerati $\mathcal{M}$:
+
+$$
+w_i = \text{Prob}(M_i \,|\, \text{dati}, \mathcal{M}) =
+\frac{\ell_i}{\sum_{j=1}^{J} \ell_j}
+$$
+
+dove $J$ è il numero di modelli considerati (nel nostro caso $J = 5$).
+
+```{r}
+#| label: akaike-weights
+A$w <- A$rl / sum(A$rl)
+barplot(A$w, names.arg = rownames(A), xlab = "modelli", ylab = "peso di Akaike")
+```
+
+Praticamente tutto il peso va a `m4`: dato questo insieme di modelli, è di gran
+lunga il candidato migliore.
+
+## Il pacchetto MuMIn
+
+Il pacchetto **MuMIn** automatizza l'intera procedura e produce una tabella di
+selezione completa (stime, gradi di libertà, log-verosimiglianza, AIC, delta e
+pesi):
+
+```{r}
+#| label: mumin
+library(MuMIn)
+(AICtable <- model.sel(m0, m1, m2, m3, m4, rank = AIC))
+```
+
+E per i confronti a coppie possiamo costruire la matrice delle evidenze relative
+(in scala logaritmica, per leggibilità):
+
+```{r}
+#| label: pairwise
+ER <- outer(A$rl, A$rl, "/")
+rownames(ER) <- colnames(ER) <- rownames(A)
+round(log(ER), 1)
+```
+
+Ogni cella riporta il logaritmo dell'evidenza del modello di riga rispetto al
+modello di colonna: valori positivi favoriscono il modello di riga (es. `m4` vs
+`m3`: $\log \ell = 3.5$, cioè $\ell \approx 32$, come calcolato prima).
+
+La stessa matrice si può leggere a colori: celle rosse = il modello di riga è più plausibile di quello di colonna, celle blu = il contrario, diagonale a zero.
+
+```{r}
+#| label: pairwise-plot
+#| fig-height: 4.5
+#| fig-width: 6
+#| code-fold: true
+#| code-summary: "Codice del grafico"
+logER <- log(ER)
+n <- nrow(logER)
+par(mar = c(4, 4, 3, 1))
+image(1:n, 1:n, t(logER[n:1, ]), col = hcl.colors(25, "Blue-Red 3"),
+      axes = FALSE, xlab = "", ylab = "",
+      main = "log evidenza relativa (riga vs colonna)")
+axis(1, at = 1:n, labels = colnames(logER))
+axis(2, at = 1:n, labels = rev(rownames(logER)), las = 1)
+for (i in 1:n) for (j in 1:n)
+  text(j, n + 1 - i, round(logER[i, j], 1), cex = 0.9)
+box()
+```
+
+## I vantaggi dei criteri di informazione
+
+Riassumendo, rispetto al confronto basato su test e p-value:
+
+- si possono confrontare **tutti i modelli** che condividono lo stesso modello
+  nullo, anche non annidati;
+- i valori di AIC/BIC calcolati sono **indipendenti dall'ordine e dal numero** dei
+  modelli considerati;
+- evidenze relative e pesi di Akaike danno al lettore un quadro molto più ricco dei
+  meriti relativi dei modelli in competizione, quantificando la fiducia statistica
+  nel modello con l'AIC più basso (Burnham & Anderson, 2002; Wagenmakers & Farrell,
+  2004).
+
+Esempio di frase per un articolo: "il modello `m4` risulta circa $2.19 \times
+10^{23}$ volte più verosimile del modello nullo, con peso di Akaike $w = 0.97$
+nell'insieme dei cinque modelli considerati".
+
+::: {.callout-note icon=false title="✏️ Esercizio 11 — Un'analisi completa"}
+Mettiamo insieme tutto quello che abbiamo visto. Partendo dal modello `m4`
+(`kid_score ~ mom_iq * mom_hs`), chiedetevi se vale la pena aggiungere le altre
+variabili disponibili:
+
+a. stimate i modelli che aggiungono a `m4`: l'età della madre (`mom_age`); la
+   condizione lavorativa (`mom_work`); entrambe;
+b. costruite la tabella di confronto con AIC, delta e pesi di Akaike (a mano o con
+   `model.sel()`);
+c. quale modello scegliete? Con quanta fiducia?
+d. controllate la diagnostica e il predictive check del modello scelto;
+e. scrivete due righe di conclusione "da articolo".
+:::
+
+::: {.callout-tip collapse="true" title="Soluzione — Esercizio 11"}
+```{r}
+#| label: sol-es11
+mA <- lm(kid_score ~ mom_iq * mom_hs,                      data = kidiq)
+mB <- lm(kid_score ~ mom_iq * mom_hs + mom_age,            data = kidiq)
+mC <- lm(kid_score ~ mom_iq * mom_hs + mom_work,           data = kidiq)
+mD <- lm(kid_score ~ mom_iq * mom_hs + mom_age + mom_work, data = kidiq)
+
+tab <- AIC(mA, mB, mC, mD)
+tab$delta <- tab$AIC - min(tab$AIC)
+tab$w     <- exp(-tab$delta / 2) / sum(exp(-tab$delta / 2))
+tab[order(tab$AIC), ]
+```
+
+Il modello più semplice `mA` resta il preferito ($w \approx 0.49$), seguito da `mB`
+($\Delta \approx 0.8$): un delta sotto 2 indica che i due modelli sono
+sostanzialmente equivalenti, e in questi casi conviene la **parsimonia**. Né l'età
+né la condizione lavorativa della madre migliorano la capacità predittiva
+abbastanza da giustificare i parametri aggiuntivi.
+
+```{r}
+#| label: sol-es11-diag
+#| fig-height: 7
+par(mfrow = c(2, 2))
+plot(mA)
+par(mfrow = c(1, 1))
+```
+
+```{r}
+#| label: sol-es11-ppc
+check_predictions(mA)
+```
+
+Possibile conclusione: "Tra i modelli considerati, quello con QI della madre,
+diploma e loro interazione risulta il migliore (AIC = 3745.1, $w = 0.49$);
+l'aggiunta di età e condizione lavorativa della madre non migliora la capacità
+predittiva ($\Delta\text{AIC} < 4$, a fronte di più parametri). Il modello spiega
+circa il 23% della variabilità dei punteggi, con un errore medio di previsione di
+circa 18 punti."
+:::
+
+# Riferimenti bibliografici
+
+**Testi di riferimento:**
+
+- Fox, J. (1997). *Applied Regression Analysis, Linear Models, and Related Methods*. SAGE.
+- Fox, J. (2002). *An R and S-Plus Companion to Applied Regression*. SAGE.
+- Gelman, A., Hill, J., Vehtari, A. (2020). *Regression and Other Stories*. Cambridge University Press.
+- McElreath, R. (2020). **Statistical rethinking: A Bayesian course with examples in R and Stan** (2nd ed.). Chapman and Hall/CRC. https://doi.org/10.1201/9780429029608
+
+**In italiano:**
+
+- Bortot, P., Ventura, L., Salvan, A. (2000). *Inferenza Statistica: Applicazioni con S-PLUS e R*. Cedam, Padova.
+- Grigoletto, M., Ventura, L., Pauli, F. (2017). *Modello lineare. Teoria e applicazioni con R*. Giappichelli, Torino.
+- Pastore, M. (2015). *Analisi dei dati in psicologia (con applicazioni in R)*. Il Mulino, Bologna.
+
+**Sul confronto fra modelli:**
+
+- Burnham, K. P., Anderson, D. R. (2002). *Model Selection and Multimodel Inference*. Springer.
+- Wagenmakers, E.-J., Farrell, S. (2004). AIC model selection using Akaike weights. *Psychonomic Bulletin & Review*, 11, 192–196.
+
+**Pacchetti R utilizzati in questa dispensa:**
+
+- **ggplot2** (Wickham, 2016) — grafici;
+- **sjPlot** (Lüdecke, 2023) — visualizzazione degli effetti dei modelli;
+- **effects** (Fox & Weisberg, 2019) — visualizzazione degli effetti dei modelli;
+- **performance** (Lüdecke et al., 2021) — predictive check e diagnostica;
+- **MuMIn** (Bartoń, 2020) — selezione di modelli.
+
+```{r}
+sessionInfo()
+```
+
+---
+
+*Materiale didattico adattato dalle slide del Prof. Massimiliano Pastore.*

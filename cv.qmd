@@ -6,50 +6,125 @@ format:
     toc-title: Section
     toc-location: right
     page-layout: full
-from: markdown+emoji  
+    format-links: false
+  pdf:
+    output-file: cv-pdf   # keeps the same URL as before: docs/cv-pdf.pdf
+    toc: false
+    colorlinks: true
+    linkcolor: accent
+    urlcolor: accent
+    margin-right: 1in
+    margin-left: 1in
+    margin-top: 1.15in
+    margin-bottom: 1.25in
+    # mainfont: "Avenir Next"   # uncomment to change the body font (any font installed on your Mac)
+    include-in-header:
+      text: |
+        \usepackage{fontawesome5}
+        \usepackage{academicons}
+        % ---------- Style (easy to edit) ----------
+        \usepackage{xcolor}
+        % Accent color for headings and links: change the hex code here
+        \definecolor{accent}{HTML}{1A5276}
+        % Section headings: accent color, thin rule under main sections
+        \usepackage{titlesec}
+        \titleformat{\section}{\Large\bfseries\color{accent}}{}{0pt}{}[{\color{accent}\titlerule[0.6pt]}]
+        \titleformat{\subsection}{\large\bfseries\color{accent}}{}{0pt}{}
+        \titleformat{\subsubsection}{\normalsize\bfseries}{}{0pt}{}
+        % Never leave a heading stranded at the bottom of a page
+        \usepackage{needspace}
+        \newcommand{\sectionbreak}{\needspace{5\baselineskip}}
+        \newcommand{\subsectionbreak}{\needspace{4\baselineskip}}
+        % Footer: name on the left, page number on the right
+        \usepackage{fancyhdr}
+        \fancyhf{}
+        \renewcommand{\headrulewidth}{0pt}
+        \fancyfoot[L]{\footnotesize\textcolor{gray}{Margherita Calderan — Curriculum Vitae}}
+        \fancyfoot[R]{\footnotesize\textcolor{gray}{\thepage}}
+        \pagestyle{fancy}
+        \fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[L]{\footnotesize\textcolor{gray}{Margherita Calderan — Curriculum Vitae}}\fancyfoot[R]{\footnotesize\textcolor{gray}{\thepage}}}
+engine: knitr
+editor:
+  markdown:
+    wrap: 72
 ---
+
+::: {.content-visible when-format="pdf"}
+\begin{center}
+{\huge\bfseries\textcolor{accent}{Margherita Calderan, Ph.D.}}
+
+\normalsize My research interests include computational models of cognition, Bayesian statistics, and metascience.
+
+\faEnvelope\ \href{mailto:margherita.calderan@gmail.com}{margherita.calderan@gmail.com}\\[0.2em]
+\faGithub\ \href{https://github.com/mar-cald}{github.com/mar-cald} \quad
+\faGitlab\ \href{https://gitlab.pavlovia.org/mar.cald}{gitlab.pavlovia.org/mar.cald} \quad
+\aiResearchGate\ \href{https://www.researchgate.net/profile/Margherita-Calderan-2}{ResearchGate} \quad
+\aiOSF\ \href{https://osf.io/5ca9t/}{OSF}
+\end{center}
+:::
+
+::: {.content-visible when-format="html"}
+Download the [PDF](cv-pdf.pdf){target="_blank"} version.
+
+*Last update: `r Sys.Date()`*
+:::
 
 ```{r}
 #| label: cvevents
 #| echo: false
 
+# One function, two outputs: HTML gets the styled two-column divs
+# (see .cvevent in styles.css), PDF gets plain Markdown.
 cvevents <- function(tbl, when, what, where, details = NULL) {
   result <- ""
 
-  for (i in seq_len(nrow(tbl))) {
-    block <- '<div class="cvevent">\n'
-    
-    # Left column
-    block <- paste0(block, '  <div class="cvevent-left">\n')
-    block <- paste0(block, '    <strong>', tbl[[what]][i], '</strong><br/>\n')
-    block <- paste0(block, '    <em>', tbl[[where]][i], '</em><br/>\n')
+  if (knitr::is_html_output()) {
+    for (i in seq_len(nrow(tbl))) {
+      block <- '<div class="cvevent">\n'
+      block <- paste0(block, '  <div class="cvevent-left">\n')
+      block <- paste0(block, '    <strong>', tbl[[what]][i], '</strong><br/>\n')
+      block <- paste0(block, '    <em>', tbl[[where]][i], '</em><br/>\n')
 
-    if (!is.null(details)) {
-      detail_items <- tbl[[details]][[i]]
-
-      if (length(detail_items) > 0) {
-        block <- paste0(block, '    <ul>\n')
-        for (item in detail_items) {
-          # Auto-link any URLs in item
-          item <- gsub("(https?://[^\\s)]+)", "<a href='\\1' target='_blank' rel='noopener noreferrer'>\\1</a>", item, perl = TRUE)
-          block <- paste0(block, '      <li>', item, '</li>\n')
+      if (!is.null(details)) {
+        detail_items <- tbl[[details]][[i]]
+        if (length(detail_items) > 0) {
+          block <- paste0(block, '    <ul>\n')
+          for (item in detail_items) {
+            # Auto-link any URLs in item
+            item <- gsub("(https?://[^\\s)]+)", "<a href='\\1' target='_blank' rel='noopener noreferrer'>\\1</a>", item, perl = TRUE)
+            block <- paste0(block, '      <li>', item, '</li>\n')
+          }
+          block <- paste0(block, '    </ul>\n')
         }
-        block <- paste0(block, '    </ul>\n')
       }
+
+      block <- paste0(block, '  </div>\n')
+      block <- paste0(block, '  <div class="cvevent-right">', tbl[[when]][i], '</div>\n')
+      block <- paste0(block, '</div>\n\n')
+      result <- paste0(result, block)
     }
+  } else {
+    for (i in seq_len(nrow(tbl))) {
+      header <- paste0("**", tbl[[what]][i], "**  \n")
+      institution <- paste0("_", tbl[[where]][i], "_  \n")
+      date <- paste0(tbl[[when]][i], "\n")
 
-    block <- paste0(block, '  </div>\n')
+      block <- paste0(header, institution, date)
 
-    # Right column (date)
-    block <- paste0(
-      block,
-      '  <div class="cvevent-right">',
-      tbl[[when]][i],
-      '</div>\n'
-    )
-
-    block <- paste0(block, '</div>\n\n')
-    result <- paste0(result, block)
+      if (!is.null(details)) {
+        detail_items <- tbl[[details]][[i]]
+        if (length(detail_items) > 0) {
+          block <- paste0(block, "\n")
+          for (item in detail_items) {
+            # Auto-link any URLs in item
+            item <- gsub("(https?://[^\\s)]+)", "<\\1>", item, perl = TRUE)
+            block <- paste0(block, "  - ", item, "\n")
+          }
+        }
+      }
+      block <- paste0(block, "\n")
+      result <- paste0(result, block)
+    }
   }
 
   knitr::asis_output(result)
@@ -57,26 +132,37 @@ cvevents <- function(tbl, when, what, where, details = NULL) {
 
 ```
 
-:::{.pdf .no-print}
-Download the [PDF](cv-pdf.pdf){target="_blank"} version.
-</br>
-<center>*Last update: `r Sys.Date()`*</center>
-</br>
-:::
+------------------------------------------------------------------------
 
 ## Current Position
 
 ```{r}
-#| label: experience
+#| label: present
 #| output: asis
 #| echo: false
+
 tibble::tribble(
     ~role, ~institution, ~dates, ~details, ~tasks,
-    "Postdoctoral Researcher", "Department of General Psychology, University of Padova, Italy", "Oct. 2024 - Present",
-    " ", c("Tails or types? Testing the dimensional hypothesis in neurodevelopmental disorders", "Supervisor: Prof. Enrico Toffalini",
-           "1.5 year research grant")) |>
+    "Research Assistant", "Department of Developmental Psychology and Socialization, University of Padova, Italy", "May 2026 - Present",
+    " ", c("Number-space association: A comparative, developmental and neurobiological
+approach", "PI: Prof. Silvia Benavides")) |>
     cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
 ```
+
+## Research
+
+```{r}
+#| label: past
+#| output: asis
+#| echo: false
+
+tibble::tribble(
+    ~role, ~institution, ~dates, ~details, ~tasks,
+    "Postdoctoral Researcher", "Department of General Psychology, University of Padova, Italy", "Oct. 2024 - Mar. 2026",
+    " ", c("Tails or types? Testing the dimensional hypothesis in neurodevelopmental disorders", "Supervisor: Prof. Enrico Toffalini")) |>
+    cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
+```
+
 
 ## Education
 
@@ -86,95 +172,91 @@ tibble::tribble(
 #| echo: false
 tibble::tribble(
     ~degree, ~institution, ~dates, ~details,
-    "Ph.D. in Psychological Sciences - cum laude", "University of Padova, Italy", "Oct. 2021 - Oct. 2024", 
-      c("Thesis: Balancing stability and flexibility in cognitive control and learning: the effects of arousal", "https://researchdata.cab.unipd.it/1437/",
+    "Ph.D. in Psychological Sciences - cum laude", "University of Padova, Italy", "Defense: 06/03/2025",
+      c("Thesis: Balancing stability and flexibility in cognitive control and learning: the effects of arousal",
+        "https://researchdata.cab.unipd.it/1437/",
         "Supervisors: Prof. Roberta Sellaro, Prof. Nicola Cellini"),
      "Postgraduate Internship", "Psychophysiology Lab, University of Padova, Italy", "Jan. 2021 - Dec. 2021", c(
         "Investigated the role of sleep characteristics in false memory formation and emotional reactivity.",
         "Supervisors: Prof. Andrea Spoto, Prof. Nicola Cellini"),
-    "M.Sc. in Cognitive Neuroscience and Clinical Neuropsychology - 110 cum laude", "University of Padova, Italy", "Oct. 2018 - Dec. 2020", 
+    "M.Sc. in Cognitive Neuroscience and Clinical Neuropsychology - 110/110 cum laude", "University of Padova, Italy", "Oct. 2018 - Dec. 2020",
       c("Thesis: Sleep characteristics in adults with high functioning autism: a polysomnographic study", "Supervisor: Prof. Nicola Cellini"),
     "Curricular Internship", "Psychophysiology Lab, University of Padova, Italy", "Dec. 2019 - Aug. 2020", c(
         "Analyzed polysomnographic data to examine sleep architecture in young adults with high-functioning autism.",
         "Collaborated with the University of Trento and the University of Tübingen.",
         "Supervisor: Prof. Nicola Cellini"
     ),
-    "B.S. in Cognitive Psychology and Psychobiology - 109/110", "University of Padova, Italy", "Sept. 2015 - July 2018", 
-      c("Thesis: Gender differences in the long-term consolidation of emotional memories", 
+    "B.Sc. in Cognitive Psychology and Psychobiology - 109/110", "University of Padova, Italy", "Sept. 2015 - July 2018",
+      c("Thesis: Gender differences in the long-term consolidation of emotional memories",
         "Supervisor: Prof. Michela Sarlo")
 ) |>
   cvevents(when = "dates", what = "degree", where = "institution", details = "details")
 ```
 
-\newpage
-
 ## Abroad
 
 ```{r}
-#| label: Abroad 
+#| label: Abroad
 #| output: asis
 #| echo: false
 tibble::tribble(
     ~role, ~institution, ~dates, ~details, ~tasks,
-    "Visiting PostDoc", "Department of Biomedical Data Sciences, Leiden University Medical Center, the Netherlands", "1.5 months (Sept. 2025 - Oct. 2025)",
+    "Visiting Postdoctoral Researcher", "Department of Biomedical Data Sciences, Leiden University Medical Center, the Netherlands", "1.5 months (Sept. 2025 - Oct. 2025)",
     "", c(
         "Research on Bayesian approaches to the problem of multiplicity.",
         "Supervisor: Prof. Jelle Goeman"
     ),
-    "Visiting PhD student", "Cognitive Psychology Unit, University of Leiden, the Netherlands", "4 months (Feb. 2024 - Jun. 2024)",
+    "Visiting Ph.D. Student", "Cognitive Psychology Unit, University of Leiden, the Netherlands", "4 months (Feb. 2024 - Jun. 2024)",
     "", c(
         "Worked on a research project investigating how mind-wandering affects cognitive flexibility, applying computational models (https://psyarxiv.com/quhns) to analyze behavioral data.",
         "Supervisor: Prof. Bryant Jongkees"
     ),
          "Research Intern", "Donders Sleep and Memory Lab, Donders Institute, the Netherlands", "2 months (Jun. 2019 – Aug. 2019)",
     "", c(
-        "Studied associations between affective memory bias, medial prefrontal schema processing, and sleep in depressed patients and healthy controls.",
+        "Assisted with a project on the association between affective memory bias, medial prefrontal schema processing, and sleep in depressed patients and healthy controls.",
         "Assisted with a project on lucid dream induction.",
         "Supervisor: Prof. Martin Dresler"
     ),
-    "Erasmus +", "Jaume I University, Spain", "5 months (Feb. 2015 – July. 2015)",
+    "Erasmus +", "Jaume I University, Spain", "5 months (Feb. 2015 – July 2015)",
     " ", c("Completed a semester-long academic exchange as part of my undergraduate studies.")
     ) |>
     cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
 ```
 
-
 ## Publications
-
-### In Press
-
-1. **Calderan, M.**, Visalli, A., Degasperi, G., Toffoli, L., Sellaro,
-    R., & Cellini, N. Predictions under sleep restriction: The effects
-    of partial sleep deprivation on learning and inhibitory control.
-    Accepted for publication in *Royal Society Open Science*, <https://doi.org/10.1098/rsos.252345>. **Preprint:** <https://doi.org/10.31234/osf.io/x7m4z\_v3>. **OSF** repo: <https://osf.io/6fxmh/> 
-    
-2. Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan, M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., & Carìa, A., Aperiodic and periodic neural activity during sleep in autism spectrum disorders. Accepted for publication in *BMC medicine*.
 
 ### Published
 
-1.  **Calderan, M.**, Jongkees, J.B., Gambarota, F., Pastore, M.,
-    Cellini, N., & Sellaro, R. (2025) Isolating working memory gating processes
-    under stress. *Collabra::Psychology*. <https://doi.org/10.1525/collabra.140750>; **OSF** repo: <https://osf.io/d43vs/> 
+1. Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan, M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., & Carìa, A. (2026). Aperiodic and periodic neural activity during sleep in autism spectrum disorders. *BMC Medicine*. <https://doi.org/10.1186/s12916-026-04771-6>
 
-2.  **Calderan, M.**, Toffalini, E., Mirandola, C., & Cellini, N.
+2. **Calderan, M.**, Visalli, A., Degasperi, G., Toffoli, L., Sellaro,
+    R., & Cellini, N. Predictions under sleep restriction: The effects
+    of partial sleep deprivation on learning and inhibitory control.
+    *Royal Society Open Science*. <https://doi.org/10.1098/rsos.252345>. **Preprint:** <https://doi.org/10.31234/osf.io/x7m4z_v3>; **OSF** repo: <https://osf.io/6fxmh/>
+
+3.  **Calderan, M.**, Jongkees, J.B., Gambarota, F., Pastore, M.,
+    Cellini, N., & Sellaro, R. (2025) Isolating working memory gating processes
+    under stress. *Collabra::Psychology*. <https://doi.org/10.1525/collabra.140750>; **OSF** repo: <https://osf.io/d43vs/>
+
+4.  **Calderan, M.**, Toffalini, E., Mirandola, C., & Cellini, N.
     (2025). Sleep does not affect false memory production on a
     script-based test. *Neuropsychologia*.
-    <https://doi.org/10.1016/j.neuropsychologia.2025.109210>; **OSF** repo: <https://osf.io/kwycq/> 
+    <https://doi.org/10.1016/j.neuropsychologia.2025.109210>; **OSF** repo: <https://osf.io/kwycq/>
 
-3.  Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
+5.  Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
     M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. (2025).
     Can I afford one more candy? How motivational contexts shape
     adaptive cognitive control in children. *Developmental Psychology*.
-    <https://doi.org/10.1037/dev0001976>; **OSF** repo: <https://osf.io/shuq2/> 
+    <https://doi.org/10.1037/dev0001976>; **OSF** repo: <https://osf.io/shuq2/>
 
-4.  Sobol, M., Błachnio, A., **Calderan, M.**, Degasperi, G., Mioni, G.,
+6.  Sobol, M., Błachnio, A., **Calderan, M.**, Degasperi, G., Mioni, G.,
     Hryhorchuk, I., Plucińska, E., Stasiniewicz, J., Kwapiński, J.,
     Jankowski, K., & Cellini, N. (2025). Balanced time perspective as a
     factor mitigating the negative consequences of sleep disruptions in
     the perinatal period. *Chronobiology International*, 1–12.
-    <https://doi.org/10.1080/07420528.2025.2490499> 
+    <https://doi.org/10.1080/07420528.2025.2490499>
 
-5.  **Calderan, M.**, & Visalli, A. (2024). Challenges of meta-learning
+7.  **Calderan, M.**, & Visalli, A. (2024). Challenges of meta-learning
     and rational analysis in large worlds. *Behavioral and Brain
     Sciences*, 47, e148.
     <https://doi.org/10.1017/S0140525X24000128>.
@@ -182,13 +264,12 @@ tibble::tribble(
 
 ### Under Review
 
-1.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F., Zorzi, M., & Ambrosini, E. A computational framework for integrating Predictive processes with evidence Accumulation Models (PAM). Under Review in *Behavior Research Methods*. **Preprint:** <https://doi.org/10.48550/arXiv.2411.13203>.
+1.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F., Zorzi, M., & Ambrosini, E. A computational framework for integrating Predictive processes with evidence Accumulation Models (PAM). Under review in *Behavior Research Methods*. **Preprint:** <https://doi.org/10.48550/arXiv.2411.13203>.
 
-2.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V. & Sonuga-Barke, E. A   Critical Tails or Types? A Critical Systematic Review of Taxometric Studies of  Neurodevelopmental Conditions. Under review in *JCPP Advances* **Preprint:** <https://osf.io/ys5ad/files/bem36>. 
+2.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V., & Sonuga-Barke, E. Tails or Types? A Critical Systematic Review of Taxometric Studies of Neurodevelopmental Conditions. Under review in *JCPP Advances*. **Preprint:** <https://osf.io/ys5ad/files/bem36>.
 
-3.  Feraco, T., **Calderan, M.** & Pellegrino, G. (2025). The Living SEB Skills Project: A Living Resource for Review and Meta-Analysis of Social, Emotional, and Behavioral Skills. Under review in *European Journal of Personality*. **Preprint:** <https://doi.org/10.31234/osf.io/ewvuf_v1>. 
+3.  Feraco, T., **Calderan, M.** & Pellegrino, G. (2025). The Living SEB Skills Project: A Living Resource for Review and Meta-Analysis of Social, Emotional, and Behavioral Skills. Under review in *European Journal of Personality*. **Preprint:** <https://doi.org/10.31234/osf.io/ewvuf_v1>.
 
-4.  Bastianello, T., **Calderan, M.**,  Adriana Grazia-Maria  Loschiavo, A. GM A., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. Domestic Media Exposure Delay Attainment of Babbling in Infants While Adult Input Accelerates Progress. Under review in *JAMA Network Open*.
 
 
 ### Preregistration
@@ -199,22 +280,26 @@ tibble::tribble(
     Culturally Diverse Sample. **Preprint:**
     <https://doi.org/10.17605/OSF.IO/WN4VX>.
 
-2.  Toffalini, E., **Calderan, M.**, Feraco, T., & Gambarota, F. Link
+2.  Toffalini, E., **Calderan, M.**, Sità, L., Feraco, T., & Gambarota, F. Link
     Functions and Generalized Linear Models in Interaction Testing
-    within Psychological Research.
-    <https://osf.io/sjdu4>
+    within Psychological Research. <https://osf.io/sjdu4>
 
 ### In Preparation
 
 1.  **Calderan, M.**, Gambarota, F., Toffalini, E., & Altoè, G.,
     Adjusting the Probability of Direction for Multiple Testing.
-    
-2.  Barbiero, J., **Calderan, M.**, & Mioni, G., The contribution of cerebellum in time perception: A systematic review and meta-analyses. 
-    
-2.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino, V., & Mento, G., I am talking to you! Engagement modulates the effects of digital contents exposure on preschoolers’ adaptive cognitive control. 
-    
-3.  **Calderan, M.**, van Dooren, R., Sellaro, R., & Jongkees, J.B., Dynamic and contextual modulation of constraints on cognitive control. 
-    
+
+2.  Goeman, J., **Calderan, M.**, & Solari, A.,
+    Bonferroni for Bayesians: Multiplicity Correction Based on Joint Credibility
+
+3.  Barbiero, J., **Calderan, M.**, Zeilinga, K.,  & Mioni, G., The contribution of the cerebellum in time perception: A systematic review and meta-analyses.
+
+4.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino, V., & Mento, G., I am talking to you! Engagement modulates the effects of digital content exposure on preschoolers’ adaptive cognitive control.
+
+5. Bastianello, T., **Calderan, M.**, Loschiavo, A.G.M., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. Domestic Media Exposure Delays Attainment of Babbling in Infants While Adult Input Accelerates Progress.
+
+6. **Calderan, M.**, van Dooren, R., Sellaro, R., & Jongkees, J.B., Dynamic and contextual modulation of constraints on cognitive control.
+
 
 ### Published Abstract
 
@@ -224,7 +309,7 @@ tibble::tribble(
     of the Cognitive Science Society, 46.
     <https://escholarship.org/uc/item/65b2f0n7>.
 
-2.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N., (2024).
+2.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N. (2024).
     The Effects of Partial Sleep Deprivation on Adaptive Cognitive
     Control. *Sleep Medicine*,
     <https://doi.org/10.1016/j.sleep.2023.11.156>.
@@ -235,83 +320,101 @@ tibble::tribble(
     Sleep Research*, <https://doi.org/10.1111/jsr.14291>.
 
 4.  Baldassarri, A., Colombo, C., Bergamo, D., **Calderan, M.**,
-    Varanini, A., Ferrentino, A.,D’atri, A., & Cellini, N. (2024).
+    Varanini, A., Ferrentino, A., D’Atri, A., & Cellini, N. (2024).
     Exploring the impact of oscillatory events during a nap on emotional
     memory consolidation. *Journal of Sleep Research*,
     <https://doi.org/10.1111/jsr.14291>
 
-\newpage
-
 ## Conferences
 
-1.  Stefanelli G., Toffoli L., **Calderan M.**, Del Popolo Cristaldi F.,
-    Duma G. M., Tarantino V., Visalli A., Sellaro R., Mento
-    G. Apprendimento associativo implicito e volatilità ambientale
+1. Bastianello, T., Loschiavo, A., Nascimben, C., Reoyo-Serrano, N., **Calderan, M.**, Altoè, G., & Benavides-Varela, S. (accepted). The effects of TV and electronic devices on language: a longitudinal study. ICIS 2026 (Panama), July 2026.
+
+2. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional Responses to Renaissance Art: Differences Between Venetian and Bohemian Paintings. Poster accepted at the AIP - Experimental Section XXXII Conference, Venice (Italy), September 2026.
+
+3. **Toward Robust Replicability: Modern Perspectives and Methods**. Organizer: **Calderan, M.** Speakers: Alongi, E., Garofalo, S., **Calderan, M.**, Andreella, A. Moderator: Epifania, M.O. Symposium accepted for the AIP - Experimental Section XXXII Conference, Venice (Italy), September 2026.
+
+4. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional Responses to Renaissance Painting: A Comparison Between Venetian and Bohemian Works. Poster accepted at the Visual Science of Art Conference (VSAC) 2026, Vision Forward: Perception, Art & Technology, London (United Kingdom), August 2026.
+
+
+5. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional and Aesthetic Experience in Venetian and Bohemian Paintings from the Renaissance. Poster presented at the International Association of Empirical Aesthetics (IAEA) 2026 Conference, Future Follows Past – Creating a Gesamtkunstwerk together for Arts and Aesthetics Research, Jena (Germany), May 2026.
+
+6. Bastianello, T., **Calderan, M.**, Loschiavo, A., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. (2026). L’esposizione ai media rallenta il raggiungimento del babbling e l’input dell’adulto ne accelera il progresso. Presentazione Orale in sessione, Conferenza CLASTA, Torino (5-6 June 2026).
+
+
+7.  Stefanelli G., Toffoli L., **Calderan M.**, Del Popolo Cristaldi F.,
+    Duma G. M., Tarantino V., Visalli A., Sellaro R., Mento G.
+    Apprendimento associativo implicito e volatilità ambientale
     nell’ADHD. **Video-Poster** at Giornate di aggiornamento sull’uso
-    degli strumenti in Psicologia Clinica dello Sviluppo Bologna
+    degli strumenti in Psicologia Clinica dello Sviluppo, Bologna
     (Italy), February 2025.
 
-2.  Stefanelli G., Toffoli L., **Calderan M.**, Duma G. M., Del Popolo
-    Cristaldi F., Tarantino V., Visalli A., Sellaro R. & Mento G. Super Learning Bros:
-    Developmental trajectories of probabilistic learning in volatile
-    environment. **Talk** at the Cognitive Science Arena, Brixen
-    (Italy), February 2025.
+8.  Stefanelli G., Toffoli L., **Calderan M.**, Duma G. M., Del Popolo
+    Cristaldi F., Tarantino V., Visalli A., Sellaro R. & Mento G. Super
+    Learning Bros: Developmental trajectories of probabilistic learning
+    in volatile environment. **Talk** at the Cognitive Science Arena,
+    Brixen (Italy), February 2025.
 
-3.  **Calderan, M.**, Visalli, A., Degasperi, G., Calistroni, F.M.,
+9.  **Calderan, M.**, Visalli, A., Degasperi, G., Calistroni, F.M.,
     Sellaro, R., & Cellini, N. Expecting the unexpected: a closer look
-    at the eﬀect of partial sleep deprivation on learning and inhibitory
+    at the effect of partial sleep deprivation on learning and inhibitory
     control. **Poster** presented at Sleep Europe 2024, Seville (Spain),
     September 2024.
 
-4.  **Calderan, M.**, Visalli, A., Degasperi, G., Calistroni, F.M.,
+10.  **Calderan, M.**, Visalli, A., Degasperi, G., Calistroni, F.M.,
     Sellaro, R., & Cellini, N. Restless Sleep, Uncertain Minds: Learning
     and Inhibitory Control Under Partial Sleep Deprivation. **Poster**
     presented at CogSci 2024: Dynamics of Cognition, Rotterdam
     (Netherlands), July 2024.
+11.  Degasperi, G., **Calderan, M.**, Mioni, G., Meisner, M., Blachnio,
+    A., Hryhorchuk, I., Plucinska, E., Sobol, M., & Cellini, N. The role
+    of sleep, circadian rhythms, balanced time perspective on perinatal
+    depression symptoms. **Poster** at the Cognitive Science Arena,
+    Brixen (Italy), February 2024.
 
-4.  Degasperi, G.,**Calderan, M.**, Mioni, G., Meisner, M., Blachnio, A., Hryhorchuk, I.,  Plucinska, E., Sobol, M., & Cellini, N. The role of sleep, circadian rhythms, balanced time perspective on perinatal depression symptoms. **Poster** at the Cognitive Science Arena, Brixen (Italy), February 2024.
+12.  Toffoli, L., **Calderan, M.**, Duma, G. M., Frisina, S., Tarantino
+    V., & Mento, G. I'm talking to you! Interactive digital content
+    effects on children's adaptive cognitive control. **Talk** at the
+    Cognitive Science Arena, Brixen (Italy), February 2024.
 
-4.  Toffoli, L.,**Calderan, M.**, Duma, G. M., Frisina, S., Tarantino V., & Mento, G. I'm talking to you! Interactive digital content effects on children's adaptive cognitive control. **Talk** at the Cognitive Science Arena, Brixen (Italy), February 2024.
-    
-    
-5.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N. The Effects
-    of Partial Sleep Deprivation on Adaptive Cognitive Control.
+13.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N. The
+    Effects of Partial Sleep Deprivation on Adaptive Cognitive Control.
     **Poster** presented at World Sleep Congress, Rio de Janeiro
-    (Brasil), October 2023.
+    (Brazil), October 2023.
 
-6.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N. The
-    sleep-deprived predictive brain: modeling the eﬀect of partial sleep
+14.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N. The
+    sleep-deprived predictive brain: modeling the effect of partial sleep
     deprivation on adaptive cognitive control. **Talk** at the XXIX
     Conference of the Italian Association of Psychology (AIP) -
     Experimental Psychology Section. Lucca (Italy), September 2023.
 
-7.  **Calderan, M.**, Cellini, N., Sellaro, R., Stressed Minds:
+15.  **Calderan, M.**, Cellini, N., Sellaro, R., Stressed Minds:
     Unraveling Acute-Stress Effects on Working Memory Processes.
     **Mini-Talk** at the Cognitive Science Arena, Brixen (Italy),
     February 2023.
 
+16. Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
+    M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. Can I
+    afford one more candy? How motivational contexts shape adaptive
+    cognitive control in children. **Talk** at the Cognitive Science
+    Arena, Brixen (Italy), February 2023.
 
-4.  Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G. M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. Can I afford one more candy? How motivational contexts shape adaptive cognitive control in children. **Talk** at the Cognitive Science Arena, Brixen (Italy), February 2023.
-
-8.  **Calderan, M.**, Cellini, N., Sellaro, R., Exploring the Influence
+17. **Calderan, M.**, Cellini, N., Sellaro, R., Exploring the Influence
     of Stress on Working Memory Gating Mechanisms. **Mini-Talk** at the
     XXX Conference of the Italian Association of Psychology (AIP).
     Padova (Italy), September 2022.
 
-9.  **Calderan, M.**, Cellini, N., Sellaro, R., Understanding
+18. **Calderan, M.**, Cellini, N., Sellaro, R., Understanding
     stress-induced Effects on Working Memory gating mechanisms.
     **Poster** presented at the 22nd meeting of the European Society for
     Cognitive Psychology (ESCoP), Lille (France), August 2022.
-    
-\newpage
 
 
 ### Pre-conference workshops
 
--   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop **Cognitive Science Arena**, Brixen (Italy). 5 February 2026. Hands-on methodological workshop held with Dr. Filippo Gambarota. <https://psicostat.github.io/glm-workshop/>
+-   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop **Cognitive Science Arena**, Brixen (Italy). 5 February 2026. Hands-on methodological workshop held with Filippo Gambarota, PhD. <https://psicostat.github.io/glm-workshop/>
 
 
--  **A Practical Introduction to Evidence Accumulation Models in Visual Perception Research**. European Conference on Visual Perception, Mainz (Germany). 24 August 2025 (2.30 hr.). Material:
+-  **A Practical Introduction to Evidence Accumulation Models in Visual Perception Research**. European Conference on Visual Perception, Mainz (Germany). 24 August 2025 (2.5 hrs.). Hands-on methodological workshop held with Carolina Maria Oletto, PhD.
     <https://mar-cald.github.io/eam-workshop/eam-home.html>.
 
 -  **Introduction to Reproducible Science**. Pre-School workshop
@@ -322,128 +425,134 @@ tibble::tribble(
 
 -  **Bayesian inference and multiple comparisons: From idealization of methods to conscious practice**. **C**ognitive **N**euroscience **S**eminars, Department of General Psychology,  University of Padova, Italy. 4th December 2025.
 
--  **From Cognitive Psychology to Bayesian Multiple Testing**. Medical Statistics Meeting, Department of Biomedical Data Sciences, Leiden University Medical Center, Leiden, The Netherlands. 23rd October 2025.
+-   **From Cognitive Psychology to Bayesian Multiple Testing**. Medical Statistics Meeting, Department of Biomedical Data Sciences, Leiden University Medical Center, Leiden, The Netherlands. 23rd October 2025.
 
--  **Bayesian Multiple Testing**. STAT-Talk Series, Methodology and Statistics Department, Institute of Psychology, Leiden University, Leiden, The Netherlands. 18th September 2025.
+-   **Bayesian Multiple Testing**. STAT-Talk Series, Methodology and
+    Statistics Department, Institute of Psychology, Leiden University,
+    Leiden, The Netherlands. 18th September 2025.
 
-\newpage
+
 
 ## Awards and Grants
 
--  **Travel Grant**: Cognitive Science Arena, Brixen, (Italy).
--  **Travel Grant**: European Conference on Visual Perception, Mainz, (Germany).
--  **Travel Grant**: qHelp international seminar on Quantitative
-    Psychology. Arrifana (Portugal)
-- **Painter Award**: Best Poster, Cognitive Science Arena, Brixen, (Italy).
--  **Erasmus Placement Grant (2 Months)**: Donders Sleep and Memory Lab, Nijmegen (Netherlands).
--  **Erasmus Placement Grant (5 Months)**: Jaume I University,
-    Castellón de la Plana, (Spain).
-
-\newpage
+-  **Travel Grant**: Cognitive Science Arena, Brixen (Italy).
+-   **Travel Grant**: European Conference on Visual Perception, Mainz (Germany).
+-   **Travel Grant**: qHelp international seminar on Quantitative
+    Psychology, Arrifana (Portugal).
+-   **Painter Award**: Best Poster, Cognitive Science Arena, Brixen (Italy).
+-   **Erasmus Placement Grant (2 Months)**: Donders Sleep and Memory
+    Lab, Nijmegen (The Netherlands).
+-   **Erasmus Placement Grant (5 Months)**: Jaume I University,
+    Castellón de la Plana (Spain).
 
 ## Peer Reviews
 
-Ad-hoc reviewer (3 reviewed papers) for:
+Ad hoc reviewer (4 reviewed papers) for:
 
 - Italian Journal of Applied Statistics (1)
 - Frontiers in Psychology - Theoretical and Philosophical Psychology (1)
 - Frontiers in Psychology - Cognition (1)
+- PLoS ONE (1)
 
 ## Teaching
 
 ### Lectures on contract (docenze a contratto)
 
-- **Test per le organizzazioni** (21 hours, 3 CFU). 2nd semester of the 2025/2026 academic year. Lecturer (titolare di modulo) for the Master’s Degree in Psicologia Sociale, del Lavoro e della Comunicazione, University of Padova.
+- **Inferenza e statistica Bayesiana** (10 hours). Master in Quantitative Psychology, Department of Philosophy, Sociology, Education and Applied Psychology, University of Padova. 21 July 2026 (planned).
 
-- **Introduction to meta-analysis with application in R** (5 hours, 1 CFU). Scheduled for the 2nd semester of the 2025/2026 academic year. Professor for the course within the PhD program in Psychological Sciences, University of Padova.
+- **Modelli lineari** (10 hours). Master in Quantitative Psychology, Department of Philosophy, Sociology, Education and Applied Psychology, University of Padova. 19 June 2026 (planned).
 
+-   **Test per le organizzazioni** (21 hours, 3 CFU). 2nd semester of the 2025/2026 academic year. Lecturer (titolare di
+    modulo) for the Master’s Degree in Psicologia Sociale, del Lavoro e
+    della Comunicazione, University of Padova.
+
+-   **Introduction to meta-analysis with application in R** (5 hours, 1
+    CFU). Scheduled for the 2nd semester of the 2025/2026 academic year.
+    Professor for the course within the PhD program in Psychological
+    Sciences, University of Padova.
 
 ### Seminars
 
--  **Introduction to R**. An intensive R programming course offered
+[planned] means that the course has been officially scheduled but not delivered yet
+
+- **Introduction to Bayesian Statistics with R and Stan** (30 hrs.). Intensive course on Bayesian statistics organized by the Italian Psychological Association (AIP). CEUB, Bertinoro (Italy), 29 June - 4 July 2026 (planned).
+
+
+-   **Introduction to R**. An intensive R programming course offered
     within the ARCA (Applied Research Course Academy) courses,
     Department of Developmental Psychology and Socialization, University
     of Padova. Material: <https://github.com/arca-dpss/course-R-2425>
-    -  December, 2024 (20 hrs.)
-    -  April, 2025 (20 hrs.)
-    -  November, 2025 (20 hrs.)
-    -  May, 2026 (20 hrs., planned)
-    
--  **Learning in Dynamic Environments: A Tentative Implementation of the Volatile Kalman Filter in STAN.** Presentation (1 hr.) on a Bayesian-based implementation of a learning algorithm for the
+    -   December, 2024 (20 hrs.)
+    -   April, 2025 (20 hrs.)
+    -   November, 2025 (20 hrs.)
+    -   March, 2026 (20 hrs.)
+-   **Learning in Dynamic Environments: A Tentative Implementation of
+    the Volatile Kalman Filter in Stan.** Presentation (1 hr.) on a
+    Bayesian-based implementation of a learning algorithm for the
     2023/24 Psicostat meeting series:
     <https://psicostat.dpss.psy.unipd.it/meetings/slides/2024-03-22_calderan.pdf>
 
-
 ### Integrative teaching (Didattica integrativa)
 
--  **Assistance** during lectures for the course **Testing Psicologico** (Prof. Tatiana Marci), Bachelor's degree in Scienze psicologiche dello sviluppo, della personalità e delle relazioni interpersonali, University of Padova (14 hrs.).
+-   **Assistance** during lectures for the course **Testing
+    Psicologico** (Prof. Tatiana Marci), Bachelor's degree in Scienze psicologiche dello sviluppo, della personalità e delle relazioni interpersonali, University of Padova (14 hrs.).
 
--  Preparation and correction of **practical group exercises** and
+-   Preparation and correction of **practical group exercises** and
     exams for the course **Experimental Research Methods in Psychology**
     (Prof. Roberta Sellaro), Master's degree in Developmental and
     Educational Psychology, University of Padova (14 hrs.).
 
--  **Assistance** in the preparation of exercises and corrections for
-    the course **General Psychology** (Prof. Enrico Toﬀalini),
+-   **Assistance** in the preparation of exercises and corrections for
+    the course **General Psychology** (Prof. Enrico Toffalini),
     Bachelor's degree in Techniques and Methods in Psychological
     Sciences, University of Padova (15 hrs.).
 
--  **Assistance** during lectures and preparation of **practical group
-    exercise** for the course **General Psychology** (Prof.Giovanna
-    Mioni),Bachelor's degree in Social and Work Psychological Sciences,
+-   **Assistance** during lectures and preparation of **practical group
+    exercise** for the course **General Psychology** (Prof. Giovanna
+    Mioni), Bachelor's degree in Social and Work Psychological Sciences,
     University of Padova (14 hrs.).
 
 ### Workshops
 
--  **Bayesian Approaches To Multiplicity**. Psicostat HandZone on Bayesian Approaches To Multiplicity, Univeristy of Padova, Padova (Italy). 27 December 2025 (1.5 hr.). <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
+-  **Bayesian Approaches To Multiplicity**. Psicostat HandZone on Bayesian Approaches To Multiplicity, University of Padova, Padova (Italy). 27 December 2025 (1.5 hrs.). <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
 
 
 -  **Tempi di risposta**. Workshop on reaction time distributions,
-    Univeristy of Padova, Padova (Italy). 10 June 2025 (1 hr.).
+    University of Padova, Padova (Italy). 10 June 2025 (1 hr.).
     Material: <https://mar-cald.github.io/tempi/>,
     <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
-    
-    
+
+
 ## Academic Roles
 
 -  **Expert (Cultore della Materia) of Psychometrics (PSIC-01/C ex M-PSI/03)**
 Department of Developmental Psychology and Socialization, University of Padova, Italy. January 2026-present.
 
 -   **Representative of Research Fellows** in the Department of General
-    Psychology, University of Padova. 02/2024 – Present
+    Psychology, University of Padova. 02/2025 – 03/2026
 
 -   **Co-supervision of students** for their internships and
     Bachelor’s (2) and Master’s theses (1)
-
-\newpage
 
 ## Organizational Activities
 
 ### Methodological School: Replicability Crisis in Science
 
-Member of the **Organizing team**. The school aims to provide a
-broad and interdisciplinary perspective on replicability, along with
-tools that help participants explore aspects most relevant to their own
-field. Lectures cover the epistemological, philosophical, and
-statistical foundations of replicability and the so-called replication
-crisis. Students engage in guided group activities to discuss core
-issues and apply the course concepts to real data analysis. Padova
-(Italy). (<https://psicostat.github.io/replicability-psy-unipd-phd>)
+Member of the **Organizing team**. The school covers the epistemological, philosophical, and statistical foundations of replicability
+(<https://psicostat.github.io/replicability-psy-unipd-phd>).
+
+- 6-11 June 2025, Padova (Italy)
+- 18-20 May 2026, Padova (Italy)
 
 -   **Lecturers**: Prof. Branden Fitelson, Prof. Giovanni Parmigiani,
-    Dr. Filippo Gambarota
+    Dr. Filippo Gambarota, Dr. Margherita Calderan (ed. 2026)
 
 ### International Winter School - The 4 Ms: Meta-research, Measurement, Multi-lab, and Multiverse data analysis in Behavioral Sciences
 
-Member of the **Organizing team**. The Winter School aims to
-address the methodological challenges in behavioral sciences, which
-impact theory, measurement, and data analysis. Its main purpose is to
-introduce attendees to advancements in meta-research, providing both
-theoretical insights and practical tools to conduct rigorous research.
-Additionally, it aims to foster collaborative networks by enabling
-attendees to discuss their ongoing projects with teachers and peers,
-facilitating new collaborations and the application of the presented
-tools. Padova (Italy). (<https://winterschool4ms.dpg.unipd.it/>)
+Member of the **Organizing team**. The Winter School aims to introduce
+attendees to advancements in meta-research, providing both theoretical
+insights and practical tools to conduct rigorous research. 7-21 February 2025, Padova
+(Italy). (<https://winterschool4ms.dpg.unipd.it/>)
 
 -   **Lecturers**: Prof. Daniël Lakens, Prof. Dorothy Bishop, Prof.
     Jessica Flake, Prof. Lisa DeBruine, Prof. Ulrich Schimmack, Prof.
@@ -452,8 +561,8 @@ tools. Padova (Italy). (<https://winterschool4ms.dpg.unipd.it/>)
 
 ### ONIRICAMENTE
 
-Member of the **Organizing team** of the one-day workshop
-dedicated to public outreach on the Psychology of Sleep. Padova (Italy)
+Member of the **Organizing team** of the one-day workshop dedicated to
+public outreach on the Psychology of Sleep. 21st June 2024, Padova (Italy)
 (<https://sites.google.com/view/oniricamente/home-page?authuser=0>)
 
 ### Cognitive Neuroscience of Sleep Summer School
@@ -463,7 +572,35 @@ for investigating sleep and memory in humans and animals. It also
 covered topics related to sleep medicine and dreaming. Nijmegen
 (Netherlands)
 
-\newpage
+## Third Mission (Terza Missione)
+
+```{r }
+#| label: terzamissione
+#| output: asis
+#| echo: false
+tibble::tribble(
+    ~degree, ~institution, ~dates, ~details,
+
+     "Replicability Crisis in Science – Methodological Seminars", "University of Padova, Italy", "2025", "The school aims to provide a broad
+and interdisciplinary perspective on replicability, along with tools
+that help participants explore aspects most relevant to their own field.
+Lectures cover the epistemological, philosophical, and statistical
+foundations of replicability and the so-called replication crisis (6-11/06/2025).",
+
+    "Replicability Crisis in Science – Methodological Seminars", "University of Padova, Italy", "2026", "The school aims to provide a broad
+and interdisciplinary perspective on replicability, along with tools
+that help participants explore aspects most relevant to their own field.
+Lectures cover the epistemological, philosophical, and statistical
+foundations of replicability and the so-called replication crisis (18-20/05/2026).",
+
+    "Science4all", "University of Padova, Italy", "2025",
+     "Centra il bersaglio: tra misurazione, probabilità e incertezza. Activity organized by the Psicostat Research Group and proposed during the Science4All activity at the University of Padova (27-28/09/2025)",
+
+"ONIRICAMENTE", "University of Padova, Italy", "2024",
+     "One-day workshop dedicated to public outreach on the Psychology of Sleep (21/06/2024)"
+) |>
+  cvevents(when = "dates", what = "degree", where = "institution", details = "details")
+```
 
 ## Research Groups Membership
 
@@ -473,10 +610,10 @@ covered topics related to sleep medicine and dreaming. Nijmegen
 #| echo: false
 tibble::tribble(
     ~degree, ~institution, ~dates, ~details,
-    "Psicostat", "University of Padova", "2024 - Present", 
+    "Psicostat", "University of Padova", "2024 - Present",
       c("I am a core team member of Psicostat, an interdisciplinary research group specializing in quantitative psychology, psychometrics, psychological testing, and statistics.",
-    "https://psicostat.dpss.psy.unipd.it/people.html"),
-    "SleePy", "University of Padova", "2019 - Present", 
+        "https://psicostat.dpss.psy.unipd.it/people.html"),
+    "SleePy", "University of Padova", "2019 - Present",
       c("I am a member of SleePy, a research group focusing on sleep psychology.")
 ) |>
   cvevents(when = "dates", what = "degree", where = "institution", details = "details")
@@ -491,15 +628,21 @@ tibble::tribble(
 tibble::tribble(
     ~degree, ~institution, ~dates, ~details,
     "Prof. Jelle Goeman", "Leiden University Medical Center, The Netherlands", "2025 - Present",
-      c("Multiple testing."),
+      c("Research on Bayesian approaches to the problem of multiplicity."),
     "Prof. Aldo Solari", "Ca’ Foscari University of Venice, Italy", "2025 - Present",
-      c("Multiple testing."),
+      c("Research on Bayesian approaches to the problem of multiplicity."),
+
     "Prof. Giovanni Parmigiani", "Harvard University", "2025 - Present",
-      c("Multiple testing."),
-    "Dr. Bryant Jongkees", "Univerisity of Leiden, The Netherlands", "2024 - Present", 
-      c("Stability and flexibility in cognitive control."),
-    "Dr. Antonino Visalli", "University of Modena-Reggio Emilia, Italy", "2023 - Present", 
-      c("Computational models of learning and control.")
+      c("Research and teaching projects about replicability in Psychology and Biomedical sciences."),
+
+    "Prof. Branden Fitelson", "Northeastern University", "2025 - Present",
+      c("Research and teaching projects about replicability in Psychology and Biomedical sciences."),
+
+    "Dr. Bryant Jongkees", "Leiden University, The Netherlands", "2024 - Present",
+      c("Research on stability and flexibility in cognitive control."),
+
+    "Dr. Antonino Visalli", "University of Modena and Reggio Emilia, Italy", "2023 - Present",
+      c("Research on computational models of learning and control.")
 ) |>
   cvevents(when = "dates", what = "degree", where = "institution", details = "details")
 ```
@@ -516,10 +659,13 @@ include:
 
 -   Toffalini, E., **Calderan, M.**, Feraco, T., & Gambarota, F. Link
     Functions and Generalized Linear Models in Interaction Testing
-    within Psychological Research.
-    <https://osf.io/sjdu4>
+    within Psychological Research. <https://osf.io/sjdu4>
 
--   Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V. & Sonuga-Barke, E. A   Critical Tails or Types? A Critical Systematic Review of Taxometric Studies of  Neurodevelopmental Conditions. Under review in *Journal of Child Psychology and Psychiatry* <https://github.com/EnricoToffalini/Taxometrics-Neurodevelopmental-Disorders/tree/main>
+-   Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V., &
+    Sonuga-Barke, E. Tails or Types? A Critical Systematic
+    Review of Taxometric Studies of Neurodevelopmental Conditions. Under
+    review in *JCPP Advances*.
+    <https://github.com/EnricoToffalini/Taxometrics-Neurodevelopmental-Disorders/tree/main>
 
 ### National Project on Adaptive Cognitive Control in Children
 
@@ -535,13 +681,17 @@ specifically focused on the application of **Bayesian methods**,
 including **generalized multilevel models** and **survival analysis**
 techniques, in the following selected works:
 
--   Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G. M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. (2025). Can I afford one more candy? How motivational contexts shape adaptive cognitive control in children. *Developmental Psychology*. Advance online publication.  <https://doi.org/10.1037/dev0001976>.
+-   Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
+    M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. (2025).
+    Can I afford one more candy? How motivational contexts shape
+    adaptive cognitive control in children. *Developmental Psychology*.
+    Advance online publication. <https://doi.org/10.1037/dev0001976>.
 
 -   Stefanelli G., Toffoli L., **Calderan M.**, Del Popolo Cristaldi F.,
-    Duma G. M., Tarantino V., Visalli A., Sellaro R., Mento
-    G. Apprendimento associativo implicito e volatilità ambientale
+    Duma G. M., Tarantino V., Visalli A., Sellaro R., Mento G.
+    Apprendimento associativo implicito e volatilità ambientale
     nell’ADHD. **Video-Poster** at Giornate di aggiornamento sull’uso
-    degli strumenti in Psicologia Clinica dello Sviluppo Bologna
+    degli strumenti in Psicologia Clinica dello Sviluppo, Bologna
     (Italy), February 2025.
 
 -   Stefanelli G., Toffoli L., **Calderan M.**, Duma G. M., Del Popolo
@@ -550,11 +700,16 @@ techniques, in the following selected works:
     in volatile environment. **Talk** at the Cognitive Science Arena,
     Brixen (Italy), February 2025.
 
--   Toffoli, L.,**Calderan, M.**, Duma, G. M., Frisina, S., Tarantino V., & Mento, G. I'm talking to you! Interactive digital content effects on children's adaptive cognitive control. **Talk** at the Cognitive Science Arena, Brixen (Italy), February 2024.
+-   Toffoli, L., **Calderan, M.**, Duma, G. M., Frisina, S., Tarantino
+    V., & Mento, G. I'm talking to you! Interactive digital content
+    effects on children's adaptive cognitive control. **Talk** at the
+    Cognitive Science Arena, Brixen (Italy), February 2024.
 
--   Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G. M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. Can I afford one more candy? How motivational contexts shape adaptive cognitive control in children. **Talk** at the Cognitive Science Arena, Brixen (Italy), February 2023.
-
-\newpage
+-   Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
+    M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. Can I
+    afford one more candy? How motivational contexts shape adaptive
+    cognitive control in children. **Talk** at the Cognitive Science
+    Arena, Brixen (Italy), February 2023.
 
 ## Training
 
@@ -566,12 +721,12 @@ tibble::tribble(
     ~role, ~institution, ~dates, ~details, ~tasks,
     "Model-based Neuroscience Summer School", "University of Amsterdam, the Netherlands", "29/07/2024 - 02/08/2024",
     " ", c("Hands-on experience in both cognitive modeling using evidence-accumulation models and cognitive neuroscience methods. Three-day introduction to evidence-accumulation modeling using Bayesian inference. Two
-days focused on how to use the evidence-accumulation framework to formalize performance in complex experimental paradigms, how to construct joint models of multiple tasks using techniques such as hierarchical factor models, and how to combine evidence-accumulation and reinforcement-learning models.", "Lecturers: Prof. Andrew Heathcote, Prof. Dora Matzke, Dr. Michael Nunez, Dr. Steven Miletic, and Dr. Niek Stevenson"), 
+days focused on how to use the evidence-accumulation framework to formalize performance in complex experimental paradigms, how to construct joint models of multiple tasks using techniques such as hierarchical factor models, and how to combine evidence-accumulation and reinforcement-learning models.", "Lecturers: Prof. Andrew Heathcote, Prof. Dora Matzke, Dr. Michael Nunez, Dr. Steven Miletic, and Dr. Niek Stevenson"),
     "qHelp international seminar on Quantitative Psychology", "Arrifana, Portugal", "26/03/2023 - 02/04/2023",
     " ", c("A one-week intensive seminar covering Shiny and R Markdown for interactive data reporting, Copula theory and its applications in dependence modeling, numerical methods, and optimization techniques for computational analysis.", "Lecturers: Julian Mollenhauer, Ana Lourenço, Prof. Luciano Stefanutti, Prof. Hans Colonius, Prof. Francis Tuerlinckx, and Prof. Sérgio Moreira"
     ),
 "Statistical Rethinking", "Online Course", "06/01/2023 - 10/03/2023",
-    " ", c("Pre-recorded lectures and weekly meetings to discuss the material. This course teaches data analysis, focusing on scientific models: conceptual and causal models. Bayesian data analysis to connect scientific models to evidence.", "Lecturers: Prof. Richard McElreath"),
+    " ", c("Pre-recorded lectures and weekly meetings to discuss the material. This course teaches data analysis, focusing on scientific models: conceptual and causal models. Bayesian data analysis to connect scientific models to evidence.", "Lecturer: Prof. Richard McElreath"),
 "Fundamentals and Applications of Pupillometry", "University of Padova, Italy", "20 hours",
     " ", c("This course offers an introduction to the use of pupillometry in cognitive science, combining practical exercises in data processing with free software tools: OpenSesame for implementing classic cognitive psychology tasks and R for analyzing and visualizing continuous pupil diameter changes. Covering key topics such as noise sources, experimental design, data processing options, and the cognitive interpretation of pupillometric measures.", "Professor: Dr. Giulia Calignano"),
     "EEGLAB: analysis of electroencephalographic data", "University of Padova, Italy", "20 hours",
@@ -583,8 +738,6 @@ days focused on how to use the evidence-accumulation framework to formalize perf
     cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
 ```
 
-\newpage
-
 ## Scientific Societies Membership
 
 ```{r }
@@ -593,14 +746,14 @@ days focused on how to use the evidence-accumulation framework to formalize perf
 #| echo: false
 
 tibble::tribble(
-    ~degree, ~dates, 
-    "Cognitive Science Society",  "2024 - Present", 
-    "Italian Reproduciblity Network",  "2023 - Present", 
-    "European Sleep Research Society",  "2023 - Present", 
-    "AIP, Sezione Sperimentale",  "2022 - Present", 
-    "Society for the Improvement of Psychological Science",  "2022 - 2023", 
-    "European Society for Cognitive Psychology",  "2021 - 2023"
-    
+    ~degree, ~dates, ~institution,
+    "Cognitive Science Society", "", "2024 - Present",
+    "Italian Reproducibility Network",  "", "2023 - Present",
+    "European Sleep Research Society",  "", "2023 - Present",
+    "AIP, Sezione Sperimentale", "",  "2022 - Present",
+    "Society for the Improvement of Psychological Science",  "", "2022 - 2023",
+    "European Society for Cognitive Psychology",  "", "2021 - 2023"
+
 ) |>
   cvevents(when = "dates", what = "degree", where = "institution")
 
@@ -608,32 +761,51 @@ tibble::tribble(
 
 ## Languages
 
-:it:   Italian: Mother Tongue\
-:uk:  English : Proficient\
-:es:  Spanish : Beginner
+::: {.content-visible when-format="html"}
+🇮🇹 Italian: Mother Tongue\
+🇬🇧 English: Proficient\
+🇪🇸 Spanish: Beginner
+:::
 
-## Programming Languages
+::: {.content-visible unless-format="html"}
 
 ```{r}
-#| label: Programming 
+#| label: Languages
 #| output: asis
 #| echo: false
 tibble::tribble(
      ~role, ~institution, ~dates, ~details, ~tasks,
-    "R/R Studio", "Proficient", " ",
+    "Italian", "Mother Tongue", " ",
     " ", c(),
-    "STAN", "Intermediate", " ",
+    "English", "Proficient", " ",
+    " ", c(),
+    "Spanish", "Beginner", " ",
+    " ", c()) |>
+    cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
+```
+
+:::
+
+## Programming Languages
+
+```{r}
+#| label: Programming
+#| output: asis
+#| echo: false
+tibble::tribble(
+     ~role, ~institution, ~dates, ~details, ~tasks,
+    "R / RStudio", "Proficient", " ",
+    " ", c(),
+    "Stan", "Intermediate", " ",
     " ", c(),
     "JAGS", "Basic", " ",
     " ", c(),
      "Python", "Basic", " ",
     " ", c(),
-    "MatLab", "Basic", " ",
+    "MATLAB", "Basic", " ",
     " ", c()) |>
     cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
 ```
-
-\newpage
 
 ## Research and Project Management Skills
 
@@ -650,12 +822,46 @@ tibble::tribble(
      "Docker", "Basic", " ",
     " ", c("Development and deployment of containers."),
     "Google Suite, Office Suite", "Intermediate", " ",
-    " ", c("Gmail, Calendar, Drive, Meet, Docs, Forms, Sheets."),
-     "Operating Systems", " ", " ",
-    " ", c("macOS (Intermediate)", "Windows (Intermediate)", "Linux (Intermediate)"),) |>
+    " ", c("Gmail, Calendar, Drive, Meet, Docs, Forms, Sheets.")) |>
+    cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
+
+```
+
+
+## R Packages
+
+- *multibayes*: tools for Bayesian multiplicity adjustments (**maintainer**). <https://mar-cald.github.io/multibayes/>
+
+## Operating Systems
+
+```{r}
+#| label: syst
+#| output: asis
+#| echo: false
+
+tibble::tribble(
+     ~role, ~institution, ~dates, ~details, ~tasks,
+    "macOS", "Intermediate", " ",
+    " ", c(),
+    "Windows", "Intermediate", " ",
+    " ", c(),
+     "Linux", "Intermediate", " ",
+    " ", c()) |>
     cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
 ```
 
 ------------------------------------------------------------------------
 
+::: {.content-visible when-format="pdf"}
+\footnotesize
 
+I authorize the processing of personal data included in my CV in accordance with Legislative
+Decree 101/2018 and the GDPR (Regulation EU 2016/679).
+I hereby declare that the information and details provided in this Curriculum Vitae are true
+and accurate to the best of my knowledge, acknowledging the legal and criminal consequences
+of providing false statements as per Article 76 of Presidential Decree 445/2000.
+
+\begin{center}
+\textit{Last update: `r Sys.Date()`}
+\end{center}
+:::

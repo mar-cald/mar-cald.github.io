@@ -1,0 +1,104 @@
+/* Title */
+#title-block-header .title {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Base text */
+body {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+/* Main content */
+main {
+  padding: 2rem;
+}
+
+/* TOC */
+#TOC {
+  font-size: 0.95rem;
+  padding: 0.75rem;
+}
+
+#toc-title {
+  display: none;
+}
+
+#TOC a {
+  text-decoration: none;
+}
+
+#TOC .active {
+  font-weight: bold;
+}
+
+/* Headings */
+h1 {
+  font-size: 1.6rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+h2 {
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+/* Spacing */
+p,
+ul,
+ol,
+table,
+pre,
+blockquote {
+  margin-bottom: 1rem;
+}
+
+ul,
+ol {
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.4rem;
+}
+
+/* Callouts */
+.callout-title-container,
+.callout-body,
+.callout strong,
+.callout b {
+  font-size: 1rem !important;
+}
+
+/* Code blocks */
+pre {
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Tables */
+th,
+td {
+  padding: 0.75rem;
+}
+
+/* Blockquotes */
+blockquote {
+  padding: 1rem;
+  font-style: italic;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
