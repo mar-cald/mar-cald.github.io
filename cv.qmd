@@ -289,16 +289,11 @@ tibble::tribble(
 1.  **Calderan, M.**, Gambarota, F., Toffalini, E., & Altoè, G.,
     Adjusting the Probability of Direction for Multiple Testing.
 
-2.  Goeman, J., **Calderan, M.**, & Solari, A.,
-    Bonferroni for Bayesians: Multiplicity Correction Based on Joint Credibility
+2.  Barbiero, J., **Calderan, M.**, Zeilinga, K.,  & Mioni, G., The contribution of the cerebellum in time perception: A systematic review and meta-analyses.
 
-3.  Barbiero, J., **Calderan, M.**, Zeilinga, K.,  & Mioni, G., The contribution of the cerebellum in time perception: A systematic review and meta-analyses.
+3.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino, V., & Mento, G., I am talking to you! Engagement modulates the effects of digital content exposure on preschoolers’ adaptive cognitive control.
 
-4.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino, V., & Mento, G., I am talking to you! Engagement modulates the effects of digital content exposure on preschoolers’ adaptive cognitive control.
-
-5. Bastianello, T., **Calderan, M.**, Loschiavo, A.G.M., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. Domestic Media Exposure Delays Attainment of Babbling in Infants While Adult Input Accelerates Progress.
-
-6. **Calderan, M.**, van Dooren, R., Sellaro, R., & Jongkees, J.B., Dynamic and contextual modulation of constraints on cognitive control.
+4. Bastianello, T., **Calderan, M.**, Loschiavo, A.G.M., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. Domestic Media Exposure Delays Attainment of Babbling in Infants While Adult Input Accelerates Progress.
 
 
 ### Published Abstract
