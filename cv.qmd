@@ -174,7 +174,7 @@ tibble::tribble(
 #| echo: false
 tibble::tribble(
     ~degree, ~institution, ~dates, ~details,
-    "Ph.D. in Psychological Sciences - cum laude", "University of Padova, Italy", "Defense: 06/03/2025",
+    "Ph.D. in Psychological Sciences - cum laude", "University of Padova, Italy", "Defense: Mar. 2025",
       c("Thesis: Balancing stability and flexibility in cognitive control and learning: the effects of arousal",
         "https://researchdata.cab.unipd.it/1437/",
         "Supervisor: Prof. Roberta Sellaro, Co-Supervisor: Prof. Nicola Cellini"),
@@ -188,7 +188,7 @@ tibble::tribble(
         "Collaborated with the University of Trento and the University of Tübingen.",
         "Supervisor: Prof. Nicola Cellini"
     ),
-    "B.Sc. in Cognitive Psychology and Psychobiology - 109/110", "University of Padova, Italy", "Sept. 2015 - July 2018",
+    "B.Sc. in Cognitive Psychology and Psychobiology - 109/110", "University of Padova, Italy", "Sept. 2015 - Jul. 2018",
       c("Thesis: Gender differences in the long-term consolidation of emotional memories",
         "Supervisor: Prof. Michela Sarlo")
 ) |>
@@ -213,13 +213,13 @@ tibble::tribble(
         "Worked on a research project investigating how mind-wandering affects cognitive flexibility, applying computational models (https://psyarxiv.com/quhns) to analyze behavioral data.",
         "Supervisor: Dr. Bryant Jongkees"
     ),
-         "Research Intern", "Donders Sleep and Memory Lab, Donders Institute, the Netherlands", "2 months (Jun. 2019 – Aug. 2019)",
+         "Research Intern", "Donders Sleep and Memory Lab, Donders Institute, the Netherlands", "2 months (Jun. 2019 - Aug. 2019)",
     "", c(
         "Assisted with a project on the association between affective memory bias, medial prefrontal schema processing, and sleep in depressed patients and healthy controls.",
         "Assisted with a project on lucid dream induction.",
         "Supervisor: Prof. Martin Dresler"
     ),
-    "Erasmus +", "Jaume I University, Spain", "5 months (Jan. 2017 – Jun. 2017)",
+    "Erasmus +", "Jaume I University, Spain", "5 months (Jan. 2017 - Jun. 2017)",
     " ", c("Completed a semester-long academic exchange as part of my undergraduate studies.")
     ) |>
     cvevents(when = "dates", what = "role", where = "institution", details = "tasks")
@@ -277,7 +277,7 @@ tibble::tribble(
 ### Preregistration
 
 1.  Sirota, M., Šrol, J., Lisi, M., Juanchich, M., Guglani, K.,
-    Silverstein, P., … **Calderan, M.**, ... Schmidt, K. (2025, January
+    Silverstein, P., … **Calderan, M.**, ... Schmidt, K. (2025, Jan.
     14). Mapping and Increasing Error Correction Behaviour in a
     Culturally Diverse Sample. **Preprint:**
     <https://doi.org/10.17605/OSF.IO/WN4VX>.
@@ -329,15 +329,15 @@ tibble::tribble(
 
 ## Conferences
 
-1. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional Responses to Renaissance Art: Differences Between Venetian and Bohemian Paintings. **Poster** accepted at the AIP - Experimental Section XXXII Conference, Venice (Italy), September 2026.
+1. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional Responses to Renaissance Art: Differences Between Venetian and Bohemian Paintings. **Poster** accepted at the AIP - Experimental Section XXXII Conference, Venice (Italy), Sept. 2026.
 
-2. **Toward Robust Replicability: Modern Perspectives and Methods**. Organizer: **Calderan, M.** Speakers: Alongi, E., Garofalo, S., **Calderan, M.**, Andreella, A. Moderator: Epifania, M.O. **Symposium** accepted for the AIP - Experimental Section XXXII Conference, Venice (Italy), September 2026.
+2. **Toward Robust Replicability: Modern Perspectives and Methods**. Organizer: **Calderan, M.** Speakers: Alongi, E., Garofalo, S., **Calderan, M.**, Andreella, A. Moderator: Epifania, M.O. **Symposium** accepted for the AIP - Experimental Section XXXII Conference, Venice (Italy), Sept. 2026.
 
-3. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional Responses to Renaissance Painting: A Comparison Between Venetian and Bohemian Works. **Poster** accepted at the Visual Science of Art Conference (VSAC) 2026, Vision Forward: Perception, Art & Technology, London (United Kingdom), August 2026.
+3. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional Responses to Renaissance Painting: A Comparison Between Venetian and Bohemian Works. **Poster** accepted at the Visual Science of Art Conference (VSAC) 2026, Vision Forward: Perception, Art & Technology, London (United Kingdom), Aug. 2026.
 
-4. Bastianello, T., Loschiavo, A., Nascimben, C., Reoyo-Serrano, N., **Calderan, M.**, Altoè, G., & Benavides-Varela, S. The effects of TV and electronic devices on language: a longitudinal study. **Poster** accepted at the ICIS 2026 (Panama), July 2026.
+4. Bastianello, T., Loschiavo, A., Nascimben, C., Reoyo-Serrano, N., **Calderan, M.**, Altoè, G., & Benavides-Varela, S. The effects of TV and electronic devices on language: a longitudinal study. **Poster** accepted at the ICIS 2026 (Panama), Jul. 2026.
 
-5. Bastianello, T., **Calderan, M.**, Loschiavo, A., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. (2026). L’esposizione ai media rallenta il raggiungimento del babbling e l’input dell’adulto ne accelera il progresso. **Talk** at CLASTA, Torino (5-6 June 2026).
+5. Bastianello, T., **Calderan, M.**, Loschiavo, A., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. (2026). L’esposizione ai media rallenta il raggiungimento del babbling e l’input dell’adulto ne accelera il progresso. **Talk** at CLASTA, Torino (Jun. 2026).
 
 6. Barbolan, S., Slaby, R., **Calderan, M.**, Knedlíková Wanková, V., & Bertamini, M. Emotional and Aesthetic Experience in Venetian and Bohemian Paintings from the Renaissance. **Poster** presented at the International Association of Empirical Aesthetics (IAEA) 2026 Conference, Future Follows Past – Creating a Gesamtkunstwerk together for Arts and Aesthetics Research, Jena (Germany), May 2026.
 
@@ -347,75 +347,75 @@ tibble::tribble(
     Apprendimento associativo implicito e volatilità ambientale
     nell’ADHD. **Video-Poster** at Giornate di aggiornamento sull’uso
     degli strumenti in Psicologia Clinica dello Sviluppo, Bologna
-    (Italy), February 2025.
+    (Italy), Feb. 2025.
 
 8.  Stefanelli G., Toffoli L., **Calderan M.**, Duma G. M., Del Popolo
     Cristaldi F., Tarantino V., Visalli A., Sellaro R. & Mento G. Super
     Learning Bros: Developmental trajectories of probabilistic learning
     in volatile environment. **Talk** at the Cognitive Science Arena,
-    Brixen (Italy), February 2025.
+    Brixen (Italy), Feb. 2025.
 
 9.  **Calderan, M.**, Visalli, A., Degasperi, G., Calistroni, F.M.,
     Sellaro, R., & Cellini, N. Expecting the unexpected: a closer look
     at the effect of partial sleep deprivation on learning and inhibitory
     control. **Poster** presented at Sleep Europe 2024, Seville (Spain),
-    September 2024.
+    Sept. 2024.
 
 10.  **Calderan, M.**, Visalli, A., Degasperi, G., Calistroni, F.M.,
     Sellaro, R., & Cellini, N. Restless Sleep, Uncertain Minds: Learning
     and Inhibitory Control Under Partial Sleep Deprivation. **Poster**
     presented at CogSci 2024: Dynamics of Cognition, Rotterdam
-    (Netherlands), July 2024.
+    (Netherlands), Jul. 2024.
 11.  Degasperi, G., **Calderan, M.**, Mioni, G., Meisner, M., Blachnio,
     A., Hryhorchuk, I., Plucinska, E., Sobol, M., & Cellini, N. The role
     of sleep, circadian rhythms, balanced time perspective on perinatal
     depression symptoms. **Poster** at the Cognitive Science Arena,
-    Brixen (Italy), February 2024.
+    Brixen (Italy), Feb. 2024.
 
 12.  Toffoli, L., **Calderan, M.**, Duma, G. M., Frisina, S., Tarantino
     V., & Mento, G. I'm talking to you! Interactive digital content
     effects on children's adaptive cognitive control. **Talk** at the
-    Cognitive Science Arena, Brixen (Italy), February 2024.
+    Cognitive Science Arena, Brixen (Italy), Feb. 2024.
 
 13.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N. The
     Effects of Partial Sleep Deprivation on Adaptive Cognitive Control.
     **Poster** presented at World Sleep Congress, Rio de Janeiro
-    (Brazil), October 2023.
+    (Brazil), Oct. 2023.
 
 14.  **Calderan, M.**, Visalli, A., Sellaro, R., & Cellini, N. The
     sleep-deprived predictive brain: modeling the effect of partial sleep
     deprivation on adaptive cognitive control. **Talk** at the XXIX
     Conference of the Italian Association of Psychology (AIP) -
-    Experimental Psychology Section. Lucca (Italy), September 2023.
+    Experimental Psychology Section. Lucca (Italy), Sept. 2023.
 
 15.  **Calderan, M.**, Cellini, N., Sellaro, R., Stressed Minds:
     Unraveling Acute-Stress Effects on Working Memory Processes.
     **Mini-Talk** at the Cognitive Science Arena, Brixen (Italy),
-    February 2023.
+    Feb. 2023.
 
 16. Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
     M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. Can I
     afford one more candy? How motivational contexts shape adaptive
     cognitive control in children. **Talk** at the Cognitive Science
-    Arena, Brixen (Italy), February 2023.
+    Arena, Brixen (Italy), Feb. 2023.
 
 17. **Calderan, M.**, Cellini, N., Sellaro, R., Exploring the Influence
     of Stress on Working Memory Gating Mechanisms. **Mini-Talk** at the
     XXX Conference of the Italian Association of Psychology (AIP).
-    Padova (Italy), September 2022.
+    Padova (Italy), Sept. 2022.
 
 18. **Calderan, M.**, Cellini, N., Sellaro, R., Understanding
     stress-induced Effects on Working Memory gating mechanisms.
     **Poster** presented at the 22nd meeting of the European Society for
-    Cognitive Psychology (ESCoP), Lille (France), August 2022.
+    Cognitive Psychology (ESCoP), Lille (France), Aug. 2022.
 
 
 ### Pre-conference workshops
 
--   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop Cognitive Science Arena, Brixen (Italy). 5 February 2026 (4 hrs.). Hands-on methodological workshop held with Filippo Gambarota, PhD. <https://psicostat.github.io/glm-workshop/>
+-   **Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses**. Pre-conference Workshop Cognitive Science Arena, Brixen (Italy). Feb. 2026 (4 hrs.). Hands-on methodological workshop held with Filippo Gambarota, PhD. <https://psicostat.github.io/glm-workshop/>
 
 
--  **A Practical Introduction to Evidence Accumulation Models in Visual Perception Research**. European Conference on Visual Perception, Mainz (Germany). 24 August 2025 (2.5 hrs.). Hands-on methodological workshop held with Carolina Maria Oletto, PhD.
+-  **A Practical Introduction to Evidence Accumulation Models in Visual Perception Research**. European Conference on Visual Perception, Mainz (Germany). Aug. 2025 (2.5 hrs.). Hands-on methodological workshop held with Carolina Maria Oletto, PhD.
     <https://mar-cald.github.io/eam-workshop/eam-home.html>.
 
 -  **Introduction to Reproducible Science**. Pre-School workshop
@@ -424,13 +424,13 @@ tibble::tribble(
 
 ## Invited talks
 
--  **Bayesian inference and multiple comparisons: From idealization of methods to conscious practice**. **C**ognitive **N**euroscience **S**eminars, Department of General Psychology,  University of Padova, Italy. 4 December 2025.
+-  **Bayesian inference and multiple comparisons: From idealization of methods to conscious practice**. **C**ognitive **N**euroscience **S**eminars, Department of General Psychology,  University of Padova, Italy. Dec. 2025.
 
--   **From Cognitive Psychology to Bayesian Multiple Testing**. Medical Statistics Meeting, Department of Biomedical Data Sciences, Leiden University Medical Center, Leiden, The Netherlands. 23 October 2025.
+-   **From Cognitive Psychology to Bayesian Multiple Testing**. Medical Statistics Meeting, Department of Biomedical Data Sciences, Leiden University Medical Center, Leiden, The Netherlands. Oct. 2025.
 
 -   **Bayesian Multiple Testing**. STAT-Talk Series, Methodology and
     Statistics Department, Institute of Psychology, Leiden University,
-    Leiden, The Netherlands. 18 September 2025.
+    Leiden, The Netherlands. Sept. 2025.
 
 
 
@@ -461,9 +461,9 @@ Ad hoc reviewer (4 reviewed papers) for:
 
 ### Lectures on contract (docenze a contratto)
 
-- **Inferenza e statistica Bayesiana** (10 hours). Master in Quantitative Psychology, Department of Philosophy, Sociology, Education and Applied Psychology, University of Padova. 21 July 2026 [planned].
+- **Inferenza e statistica Bayesiana** (10 hours). Master in Quantitative Psychology, Department of Philosophy, Sociology, Education and Applied Psychology, University of Padova. Jul. 2026 [planned].
 
-- **Modelli lineari** (10 hours). Master in Quantitative Psychology, Department of Philosophy, Sociology, Education and Applied Psychology, University of Padova. 19 June 2026 [planned].
+- **Modelli lineari** (10 hours). Master in Quantitative Psychology, Department of Philosophy, Sociology, Education and Applied Psychology, University of Padova. Jun. 2026 [planned].
 Material: <https://mar-cald.github.io/psqt/modelli-lineari.html>
 
 -   **Test per le organizzazioni** (21 hours, 3 CFU). 2nd semester of the 2025/2026 academic year. Lecturer (titolare di
@@ -472,23 +472,23 @@ Material: <https://mar-cald.github.io/psqt/modelli-lineari.html>
     Material: <https://ottaviae.github.io/test-organizzioni-fisppa/>
 
 -   **Introduction to meta-analysis with application in R** (5 hours, 1
-    CFU). Professor for the course within the PhD program in Psychological Sciences, University of Padova. 16 April 2026.
+    CFU). Professor for the course within the PhD program in Psychological Sciences, University of Padova. Apr. 2026.
     Material: <https://mar-cald.github.io/meta-phd/>
 
 ### Seminars
 
 
-- **Introduction to Bayesian Statistics with R and Stan** (30 hrs.). Intensive course on Bayesian statistics organized by the Italian Psychological Association (AIP). CEUB, Bertinoro (Italy), 29 June - 4 July 2026 [planned].
+- **Introduction to Bayesian Statistics with R and Stan** (30 hrs.). Intensive course on Bayesian statistics organized by the Italian Psychological Association (AIP). CEUB, Bertinoro (Italy), Jun. - Jul. 2026 [planned].
 
 
 -   **Introduction to R**. An intensive R programming course offered
     within the ARCA (Applied Research Course Academy) courses,
     Department of Developmental Psychology and Socialization, University
     of Padova. Material: <https://github.com/arca-dpss/course-R-2425>
-    -   December, 2024 (20 hrs.)
-    -   April, 2025 (20 hrs.)
-    -   November, 2025 (20 hrs.)
-    -   March, 2026 (20 hrs.)
+    -   Dec. 2024 (20 hrs.)
+    -   Apr. 2025 (20 hrs.)
+    -   Nov. 2025 (20 hrs.)
+    -   Mar. 2026 (20 hrs.)
 -   **Learning in Dynamic Environments: A Tentative Implementation of
     the Volatile Kalman Filter in Stan.** Presentation (1 hr.) on a
     Bayesian-based implementation of a learning algorithm for the
@@ -517,11 +517,11 @@ Material: <https://mar-cald.github.io/psqt/modelli-lineari.html>
 
 ### Workshops
 
--  **Bayesian Approaches To Multiplicity**. Psicostat HandZone on Bayesian Approaches To Multiplicity, University of Padova, Padova (Italy). 27 December 2025 (1.5 hrs.). <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
+-  **Bayesian Approaches To Multiplicity**. Psicostat HandZone on Bayesian Approaches To Multiplicity, University of Padova, Padova (Italy). Dec. 2025 (1.5 hrs.). <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
 
 
 -  **Tempi di risposta**. Workshop on reaction time distributions,
-    University of Padova, Padova (Italy). 10 June 2025 (1 hr.).
+    University of Padova, Padova (Italy). Jun. 2025 (1 hr.).
     Material: <https://mar-cald.github.io/tempi/>,
     <https://psicostat.dpss.psy.unipd.it/pages/handzone.html>
 
@@ -529,10 +529,10 @@ Material: <https://mar-cald.github.io/psqt/modelli-lineari.html>
 ## Academic Roles
 
 -  **Expert (Cultore della Materia) of Psychometrics (PSIC-01/C ex M-PSI/03)**
-Department of Developmental Psychology and Socialization, University of Padova, Italy. January 2026-present.
+Department of Developmental Psychology and Socialization, University of Padova, Italy. Jan. 2026 - Present.
 
 -   **Representative of Research Fellows** in the Department of General
-    Psychology, University of Padova. 02/2025 – 03/2026
+    Psychology, University of Padova. Feb. 2025 - Mar. 2026
 
 -   **Co-supervision of students** for their internships and
     Bachelor’s (2) and Master’s theses (1)
@@ -544,8 +544,8 @@ Department of Developmental Psychology and Socialization, University of Padova, 
 Member of the **Organizing team**. The school covers the epistemological, philosophical, and statistical foundations of replicability
 (<https://psicostat.github.io/replicability-psy-unipd-phd>).
 
-- 6-11 June 2025, Padova (Italy)
-- 18-20 May 2026, Padova (Italy)
+- Jun. 2025, Padova (Italy)
+- May 2026, Padova (Italy)
 
 -   **Lecturers**: Prof. Branden Fitelson, Prof. Giovanni Parmigiani,
     Dr. Filippo Gambarota, Dr. Margherita Calderan (ed. 2026)
@@ -554,7 +554,7 @@ Member of the **Organizing team**. The school covers the epistemological, philos
 
 Member of the **Organizing team**. The Winter School aims to introduce
 attendees to advancements in meta-research, providing both theoretical
-insights and practical tools to conduct rigorous research. 7-21 February 2025, Padova
+insights and practical tools to conduct rigorous research. Feb. 2025, Padova
 (Italy). (<https://winterschool4ms.dpg.unipd.it/>)
 
 -   **Lecturers**: Prof. Daniël Lakens, Prof. Dorothy Bishop, Prof.
@@ -565,7 +565,7 @@ insights and practical tools to conduct rigorous research. 7-21 February 2025, P
 ### ONIRICAMENTE
 
 Member of the **Organizing team** of the one-day workshop dedicated to
-public outreach on the Psychology of Sleep. 21st June 2024, Padova (Italy)
+public outreach on the Psychology of Sleep. Jun. 2024, Padova (Italy)
 (<https://sites.google.com/view/oniricamente/home-page?authuser=0>)
 
 ### Cognitive Neuroscience of Sleep Summer School
@@ -588,13 +588,13 @@ tibble::tribble(
 and interdisciplinary perspective on replicability, along with tools
 that help participants explore aspects most relevant to their own field.
 Lectures cover the epistemological, philosophical, and statistical
-foundations of replicability and the so-called replication crisis (6-11/06/2025).",
+foundations of replicability and the so-called replication crisis (Jun. 2025).",
 
     "Science4all", "University of Padova, Italy", "2025",
-     "Centra il bersaglio: tra misurazione, probabilità e incertezza. Activity organized by the Psicostat Research Group and proposed during the Science4All activity at the University of Padova (27-28/09/2025)",
+     "Centra il bersaglio: tra misurazione, probabilità e incertezza. Activity organized by the Psicostat Research Group and proposed during the Science4All activity at the University of Padova (Sept. 2025)",
 
 "ONIRICAMENTE", "University of Padova, Italy", "2024",
-     "One-day workshop dedicated to public outreach on the Psychology of Sleep (21/06/2024)"
+     "One-day workshop dedicated to public outreach on the Psychology of Sleep (Jun. 2024)"
 ) |>
   cvevents(when = "dates", what = "degree", where = "institution", details = "details")
 ```
@@ -689,24 +689,24 @@ techniques, in the following selected works:
     Apprendimento associativo implicito e volatilità ambientale
     nell’ADHD. **Video-Poster** at Giornate di aggiornamento sull’uso
     degli strumenti in Psicologia Clinica dello Sviluppo, Bologna
-    (Italy), February 2025.
+    (Italy), Feb. 2025.
 
 -   Stefanelli G., Toffoli L., **Calderan M.**, Duma G. M., Del Popolo
     Cristaldi F., Tarantino V., Visalli A., Sellaro R. & Mento G. Super
     Learning Bros: Developmental trajectories of probabilistic learning
     in volatile environment. **Talk** at the Cognitive Science Arena,
-    Brixen (Italy), February 2025.
+    Brixen (Italy), Feb. 2025.
 
 -   Toffoli, L., **Calderan, M.**, Duma, G. M., Frisina, S., Tarantino
     V., & Mento, G. I'm talking to you! Interactive digital content
     effects on children's adaptive cognitive control. **Talk** at the
-    Cognitive Science Arena, Brixen (Italy), February 2024.
+    Cognitive Science Arena, Brixen (Italy), Feb. 2024.
 
 -   Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
     M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. Can I
     afford one more candy? How motivational contexts shape adaptive
     cognitive control in children. **Talk** at the Cognitive Science
-    Arena, Brixen (Italy), February 2023.
+    Arena, Brixen (Italy), Feb. 2023.
 
 ## Training
 
@@ -716,13 +716,13 @@ techniques, in the following selected works:
 #| echo: false
 tibble::tribble(
     ~role, ~institution, ~dates, ~details, ~tasks,
-    "Model-based Neuroscience Summer School", "University of Amsterdam, the Netherlands", "29/07/2024 - 02/08/2024",
+    "Model-based Neuroscience Summer School", "University of Amsterdam, the Netherlands", "Jul. - Aug. 2024",
     " ", c("Hands-on experience in both cognitive modeling using evidence-accumulation models and cognitive neuroscience methods. Three-day introduction to evidence-accumulation modeling using Bayesian inference. Two
 days focused on how to use the evidence-accumulation framework to formalize performance in complex experimental paradigms, how to construct joint models of multiple tasks using techniques such as hierarchical factor models, and how to combine evidence-accumulation and reinforcement-learning models.", "Lecturers: Prof. Andrew Heathcote, Prof. Dora Matzke, Dr. Michael Nunez, Dr. Steven Miletic, and Dr. Niek Stevenson"),
-    "qHelp international seminar on Quantitative Psychology", "Arrifana, Portugal", "26/03/2023 - 02/04/2023",
+    "qHelp international seminar on Quantitative Psychology", "Arrifana, Portugal", "Mar. - Apr. 2023",
     " ", c("A one-week intensive seminar covering Shiny and R Markdown for interactive data reporting, Copula theory and its applications in dependence modeling, numerical methods, and optimization techniques for computational analysis.", "Lecturers: Julian Mollenhauer, Ana Lourenço, Prof. Luciano Stefanutti, Prof. Hans Colonius, Prof. Francis Tuerlinckx, and Prof. Sérgio Moreira"
     ),
-"Statistical Rethinking", "Online Course", "06/01/2023 - 10/03/2023",
+"Statistical Rethinking", "Online Course", "Jan. - Mar. 2023",
     " ", c("Pre-recorded lectures and weekly meetings to discuss the material. This course teaches data analysis, focusing on scientific models: conceptual and causal models. Bayesian data analysis to connect scientific models to evidence.", "Lecturer: Prof. Richard McElreath"),
 "Fundamentals and Applications of Pupillometry", "University of Padova, Italy", "20 hours",
     " ", c("This course offers an introduction to the use of pupillometry in cognitive science, combining practical exercises in data processing with free software tools: OpenSesame for implementing classic cognitive psychology tasks and R for analyzing and visualizing continuous pupil diameter changes. Covering key topics such as noise sources, experimental design, data processing options, and the cognitive interpretation of pupillometric measures.", "Professor: Dr. Giulia Calignano"),
