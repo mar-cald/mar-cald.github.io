@@ -290,8 +290,7 @@ tibble::tribble(
 
 1.  **Calderan, M.**, Gambarota, F., Toffalini, E., & Altoè, G.,
     Adjusting the Probability of Direction for Multiple Testing.
-    
-2.  Goeman, J., **Calderan, M.**, & Solari, A., Bonferroni for Bayesians: Multiplicity Correction Based on Joint Credibility
+
 
 3.  Barbiero, J., **Calderan, M.**, Zeilinga, K.,  & Mioni, G., The contribution of the cerebellum in time perception: A systematic review and meta-analyses.
 
