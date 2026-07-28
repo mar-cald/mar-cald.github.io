@@ -1,0 +1,170 @@
+---
+documentclass: europasscv
+classoption:
+  - a4paper
+pdf-engine: pdflatex
+format:
+  pdf:
+    documentclass: europasscv
+    classoption:
+      - a4paper
+    pdf-engine: pdflatex
+    output-file: cv-europass-calderan
+    keep-tex: false
+    toc: false
+header-includes:
+  - \ecvname{Margherita Calderan}
+  - \ecvfootername{Margherita Calderan}
+  #- \ecvaddress{Via Argine San Marco, San Donà di Piave (VE), 30027}
+  #- \ecvmobile{+39 3427185305}
+  #- \ecvemail{margherita.calderan@unipd.it}
+  #- \ecvdateofbirth{15/05/1995}
+  #- \ecvhomepage{https://mar-cald.github.io}
+  #- \ecvgithubpage{https://github.com/Mar-Cald}
+  - \ecvLeftColumnWidth{43mm}
+  - \ecvfootnote{Curriculum vitae -- Margherita Calderan}
+---
+
+\begin{europasscv}
+
+\ecvpersonalinfo
+
+\ecvsection{Profilo professionale}
+\ecvitem{}{Dottoressa di ricerca in Scienze Psicologiche presso l’Università degli Studi di Padova. L’attività di ricerca riguarda principalmente lo sviluppo di modelli computazionali della cognizione e dell’apprendimento, oltre a temi legati alla metascienza, alla replicabilità e alla psicometria.}
+
+\ecvsection{Esperienza professionale}
+% TODO: verificare la qualifica contrattuale esatta della posizione attuale (es. borsa/contratto di ricerca)
+\ecvtitle{05/2026--oggi}{Incarico di Supporto alla Ricerca, Dipartimento di Psicologia dello Sviluppo e della Socializzazione, Università degli Studi di Padova. Progetto: \emph{Number-space association: A comparative, developmental and neurobiological approach}. PI: prof.ssa Silvia Benavides-Varela.}
+\ecvtitle{10/2024--03/2026}{Assegnista di ricerca (M/PSI-01), Dipartimento di Psicologia Generale, Università degli Studi di Padova. Progetto: \emph{Tails or types? Testing the dimensional hypothesis in neurodevelopmental disorders}. PI: prof. Enrico Toffalini.}
+
+\ecvsection{Istruzione e formazione}
+\ecvtitle{10/2021-09/2024}{Dottorato di ricerca in Psychological Sciences (\emph{cum laude}), Università degli Studi di Padova. Tesi: \emph{Balancing stability and flexibility in cognitive control and learning: the effects of arousal} (\url{https://researchdata.cab.unipd.it/1437/}). Supervisione: prof.ssa Roberta Sellaro; co-supervisione: prof. Nicola Cellini. Discussione: 6 marzo 2025.}
+\ecvtitle{01/2021--12/2021}{Tirocinio post-laurea, Laboratorio di Psicofisiologia, Università degli Studi di Padova. Ricerca sul ruolo delle caratteristiche del sonno nella formazione di falsi ricordi e nella reattività emotiva. Supervisione: prof. Andrea Spoto, prof. Nicola Cellini.}
+\ecvtitle{10/2018--12/2020}{Laurea Magistrale in Cognitive Neuroscience and Clinical Neuropsychology, Università degli Studi di Padova. Voto: 110/110 e lode. Tesi: \emph{Sleep characteristics in adults with high functioning autism: a polysomnographic study}. Relatore: prof. Nicola Cellini.}
+\ecvtitle{12/2019--08/2020}{Tirocinio curricolare, Laboratorio di Psicofisiologia, Università degli Studi di Padova. Analisi di dati polisonnografici sull'architettura del sonno in giovani adulti con autismo ad alto funzionamento, in collaborazione con l'Università di Trento e l'Università di Tubinga. Supervisione: prof. Nicola Cellini.}
+\ecvtitle{09/2015--07/2018}{Laurea Triennale in Scienze Psicologiche Cognitive e Psicobiologiche, Università degli Studi di Padova. Voto: 109/110. Tesi: \emph{Gender differences in the long-term consolidation of emotional memories}. Relatrice: prof.ssa Michela Sarlo.}
+\ecvitem{Formazione specialistica}{\begin{ecvitemize}
+\item \emph{Model-based Neuroscience Summer School}, University of Amsterdam, Paesi Bassi, luglio 2024 (5 giorni): modelli di accumulo di evidenza, inferenza Bayesiana, e modelli di apprendimento. Docenti: A. Heathcote, D. Matzke, M. Nunez, S. Miletic, N. Stevenson.
+\item \emph{qHelp international seminar on Quantitative Psychology}, Arrifana, Portogallo, marzo 2023 (7 giorni): Shiny e R Markdown, copula theory, metodi di ottimizzazione. Docenti e organizzatori: J. Mollenhauer, A. Lourenço, L. Stefanutti, H. Colonius, F. Tuerlinckx, S. Moreira.
+\item \emph{Statistical Rethinking} (Docente: R. McElreath), corso online, gennaio--marzo 2023: statistica Bayesiana.
+\item Corsi metodologici (20 ore ciascuno), Università degli Studi di Padova: \emph{Fundamentals and Applications of Pupillometry}; \emph{EEGLAB: analysis of electroencephalographic data}; \emph{Introduction to R}; \emph{PsychoPy3: experimental programming}.
+\end{ecvitemize}}
+
+\ecvsection{Didattica}
+\ecvitem{Didattica frontale}{\begin{ecvitemize}
+\item \textbf{Inferenza e statistica bayesiana}, Master in Quantitative Psychology, UniSmart e Dipartimento FISPPA, Università degli Studi di Padova: 10 ore, 21 luglio 2026 (programmata).
+\item \textbf{Modelli lineari}, Master in Quantitative Psychology, UniSmart e Dipartimento FISPPA, Università degli Studi di Padova: 10 ore, 19 giugno 2026. Materiale: \url{https://mar-cald.github.io/psqt/modelli-lineari.html}
+\item \textbf{Test per le organizzazioni}, Laurea Magistrale in Psicologia Sociale, del Lavoro e della Comunicazione, Università degli Studi di Padova: titolare di modulo, 21 ore/3 CFU, AA 2025/26. Materiale: \url{https://ottaviae.github.io/test-organizzioni-fisppa/}
+\item \textbf{Introduction to meta-analysis with application in R}, Dottorato in Psychological Sciences, Università degli Studi di Padova: 5 ore/1 CFU, 16 aprile 2026. Materiale: \url{https://mar-cald.github.io/meta-phd/}
+\end{ecvitemize}}
+\ecvitem{Corsi intensivi e workshop}{\begin{ecvitemize}
+\item \textbf{Introduzione alla statistica bayesiana con applicazioni in R e STAN}, corso intensivo dell'Associazione Italiana di Psicologia (AIP), CEUB, Bertinoro: 29 giugno - 4 luglio 2026. Materiale: \url{https://mar-cald.github.io/intro-bayes-bertinoro/}
+\item \textbf{Introduzione a R}, corsi ARCA (Applied Research Course Academy), Dipartimento di Psicologia dello Sviluppo e della Socializzazione, Università degli Studi di Padova: 4 edizioni da 20 ore (dicembre 2024, aprile 2025, novembre 2025, marzo 2026). Materiale: \url{https://github.com/arca-dpss/course-R-2425}
+\item \textbf{Generalized Linear Models for Psychology: Understanding, Simulating, and Planning Your Analyses}, pre-conference workshop, Cognitive Science Arena, Bressanone: 4 ore, febbraio 2026, con F. Gambarota. Materiale: \url{https://psicostat.github.io/glm-workshop/}
+\item \textbf{A Practical Introduction to Evidence Accumulation Models in Visual Perception Research}, European Conference on Visual Perception, Magonza, Germania: 2,5 ore, agosto 2025, con C. M. Oletto. Materiale: \url{https://mar-cald.github.io/eam-workshop/eam-home.html}
+\item \textbf{Introduction to Reproducible Science}, pre-school workshop della scuola \emph{Replicability Crisis in Science}, Padova: 2 ore, edizioni 2025 e 2026. Materiale: \url{https://github.com/Mar-Cald/repro-pre-school}
+\item \textbf{Bayesian Approaches To Multiplicity}, Psicostat HandZone, Università degli Studi di Padova: 1,5 ore, dicembre 2025.
+\item \textbf{Tempi di risposta}, workshop sulle distribuzioni dei tempi di reazione, Università degli Studi di Padova: 1 ora, giugno 2025. Materiale: \url{https://mar-cald.github.io/tempi/}
+\end{ecvitemize}}
+\ecvitem{Didattica integrativa}{Attività di supporto alla didattica (esercitazioni, correzioni, assistenza in aula) presso l'Università degli Studi di Padova nei corsi: \textbf{Testing Psicologico} (prof.ssa T. Marci, 14 ore); \textbf{Experimental Research Methods in Psychology} (prof.ssa R. Sellaro, 14 ore); \textbf{Psicologia Generale} (prof. E. Toffalini, 15 ore); \textbf{Psicologia Generale} (prof.ssa G. Mioni, 14 ore).}
+\ecvitem{Supervisione}{Co-supervisione di 1 tesi magistrale e 2 tesi triennali e di studentesse e studenti in tirocinio, Università degli Studi di Padova.}
+
+\ecvsection{Esperienze internazionali}
+\ecvtitle{2025}{Visiting Scholar, Department of Biomedical Data Sciences, Leiden University Medical Center, Paesi Bassi, settembre--ottobre 2025 (1,5 mesi). Ricerca su approcci bayesiani al problema della molteplicità. Supervisione: prof. Jelle Goeman.}
+\ecvtitle{2024}{Visiting Ph.D. Student, Cognitive Psychology Unit, Leiden University, Paesi Bassi, febbraio--giugno 2024 (4 mesi). Ricerca sugli effetti del mind-wandering sulla flessibilità cognitiva mediante modelli computazionali. Supervisione: prof. Bryant Jongkees.}
+\ecvtitle{2019}{Research Intern, Donders Sleep and Memory Lab, Donders Institute, Nimega, Paesi Bassi, giugno--agosto 2019 (2 mesi). Progetti su bias di memoria affettiva, elaborazione di schemi e sonno in pazienti con depressione, e sull'induzione di sogni lucidi. Supervisione: prof. Martin Dresler.}
+\ecvtitle{2017}{Erasmus+, Jaume I University, Castellón de la Plana, Spagna, gennaio--giugno 2017 (5 mesi). Semestre di scambio nell'ambito della laurea triennale.}
+
+\ecvsection{Ricerca, pubblicazioni e indicatori}
+\ecvitem{Aree di ricerca}{Modelli computazionali della cognizione; controllo cognitivo adattivo; soluzioni al problema della molteplicità nell'approccio Bayesiano; metascienza e replicabilità; psicologia del sonno.}
+\ecvitem{Produzione scientifica}{7 articoli su riviste internazionali peer-reviewed, 3 lavori in revisione, 3 preregistrazioni, 4 abstract pubblicati e diversi lavori in preparazione; autrice e maintainer del pacchetto R \emph{multibayes}. Elenco completo e aggiornato: \url{https://mar-cald.github.io/cv.html}}
+\ecvitem{Articoli peer-reviewed}{\begin{ecvitemize}
+\item Feraco, T., \textbf{Calderan, M.}, \& Pellegrino, G. (2026). The Living SEB Skills Project: A Living Resource for Review and Meta-Analysis of Social, Emotional, and Behavioral Skills. \emph{European Journal of Personality}.  \url{https://doi.org/10.1177/0890207026146747}
+\item Mazzoni, N., Kurz, E. V., Cellini, N., Ciringione, L., \textbf{Calderan, M.}, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., \& Carìa, A. (2026). Aperiodic and periodic neural activity during sleep in autism spectrum disorders. \emph{BMC Medicine}. \url{https://doi.org/10.1186/s12916-026-04771-6}
+\item \textbf{Calderan, M.}, Visalli, A., Degasperi, G., Toffoli, L., Sellaro, R., \& Cellini, N. (2026). Predictions under sleep restriction: The effects of partial sleep deprivation on learning and inhibitory control. \emph{Royal Society Open Science}. \url{https://doi.org/10.1098/rsos.252345}
+\item \textbf{Calderan, M.}, Jongkees, J. B., Gambarota, F., Pastore, M., Cellini, N., \& Sellaro, R. (2025). Isolating working memory gating processes under stress. \emph{Collabra: Psychology}. \url{https://doi.org/10.1525/collabra.140750}
+\item \textbf{Calderan, M.}, Toffalini, E., Mirandola, C., \& Cellini, N. (2025). Sleep does not affect false memory production on a script-based test. \emph{Neuropsychologia}. \url{https://doi.org/10.1016/j.neuropsychologia.2025.109210}
+\item Toffoli, L., \textbf{Calderan, M.}, Del Popolo Cristaldi, F., Duma, G. M., Calcagnì, A., Pastore, M., Tarantino, V., \& Mento, G. (2025). Can I afford one more candy? How motivational contexts shape adaptive cognitive control in children. \emph{Developmental Psychology}. \url{https://doi.org/10.1037/dev0001976}
+\item Sobol, M., Błachnio, A., \textbf{Calderan, M.}, Degasperi, G., Mioni, G., Hryhorchuk, I., Plucińska, E., Stasiniewicz, J., Kwapiński, J., Jankowski, K., \& Cellini, N. (2025). Balanced time perspective as a factor mitigating the negative consequences of sleep disruptions in the perinatal period. \emph{Chronobiology International}, 1--12. \url{https://doi.org/10.1080/07420528.2025.2490499}
+\item \textbf{Calderan, M.}, \& Visalli, A. (2024). Challenges of meta-learning and rational analysis in large worlds. \emph{Behavioral and Brain Sciences}, 47, e148. \url{https://doi.org/10.1017/S0140525X24000128}
+\end{ecvitemize}}
+\ecvitem{Lavori in revisione}{\begin{ecvitemize}
+\item \textbf{Calderan, M.}, Gambarota, F., Finos, L., \& Altoè, G. (2026, July 10). A Prior-Odds Adjustment for the Probability of Direction in Multiple Testing.  \emph{Advance in Methods and Practice in Psychological Sciences}. Preprint: \url{osf.io/preprints/psyarxiv/8zwx2_v2}
+\item Visalli, A., Calistroni, F. M., \textbf{Calderan, M.}, Donnarumma, F., Zorzi, M., \& Ambrosini, E. A computational framework for integrating Predictive processes with evidence Accumulation Models (PAM). \emph{Behavior Research Methods}. Preprint: \url{https://doi.org/10.48550/arXiv.2411.13203}
+\item Toffalini, E., \textbf{Calderan, M.}, Pagan, R., Tobia, V., \& Sonuga-Barke, E. Tails or Types? A Critical Systematic Review of Taxometric Studies of Neurodevelopmental Conditions. \emph{JCPP Advances}. Preprint: \url{https://osf.io/ys5ad/files/bem36}
+\end{ecvitemize}}
+\ecvitem{Preregistrazioni}{\begin{ecvitemize}
+\item Manente, M., Altoè, G., Alfarone, I., \& \textbf{Calderan, M.} (2026, July 14). Mapping Researcher Degrees of Freedom in Meta-Analyses of Randomized Controlled Trials of EMDR for PTSD: A Systematic Scoping Review. \url{osf.io/8hefb}
+\item Toffalini, E., \textbf{Calderan, M.}, Sità, L., Feraco, T., \& Gambarota, F. Link Functions and Generalized Linear Models in Interaction Testing within Psychological Research. \url{https://osf.io/sjdu4}
+\item Sirota, M., Šrol, J., Lisi, M., Juanchich, M., Guglani, K., Silverstein, P., \ldots{} \textbf{Calderan, M.}, \ldots{} Schmidt, K. (2025). Mapping and Increasing Error Correction Behaviour in a Culturally Diverse Sample. \url{https://doi.org/10.17605/OSF.IO/WN4VX}
+\end{ecvitemize}}
+\ecvitem{Abstract pubblicati}{4 abstract pubblicati (2024) in \emph{Journal of Sleep Research}, \emph{Sleep Medicine} e \emph{Proceedings of the Annual Meeting of the Cognitive Science Society}.}
+\ecvitem{Software R}{\emph{multibayes}: soluzioni bayesiane al problema della molteplicità (maintainer). \url{https://mar-cald.github.io/multibayes/}}
+
+\ecvsection{Conferenze e organizzazione scientifica}
+\ecvitem{Conferenze}{\begin{ecvitemize}
+\item \textbf{18 contributi} a conferenze nazionali e internazionali (comunicazioni orali, poster, video-poster), tra cui: Sleep Europe (Siviglia, 2024), CogSci (Rotterdam, 2024), World Sleep Congress (Rio de Janeiro, 2023), ESCoP (Lille, 2022), AIP -- Sezione Sperimentale (2022, 2023, 2026), Cognitive Science Arena (Brixen, 2023--2025), CLASTA (Torino, 2026), ICIS (Panama, 2026), VSAC (London, 2026) e IAEA (Jena, 2026).
+\item Proponente del \textbf{simposio} \emph{Toward Robust Replicability: Modern Perspectives and Methods}, XXXII Congresso AIP -- Sezione Sperimentale, Venezia, settembre 2026 (anche relatrice nel simposio).
+\item Elenco completo e aggiornato: \url{https://mar-cald.github.io/cv.html}
+\end{ecvitemize}}
+\ecvitem{Talk su invito}{\begin{ecvitemize}
+\item \textbf{Bayesian inference and multiple comparisons: From idealization of methods to conscious practice}, Cognitive Neuroscience Seminars, Dipartimento di Psicologia Generale, Università degli Studi di Padova, dicembre 2025.
+\item \textbf{From Cognitive Psychology to Bayesian Multiple Testing}, Medical Statistics Meeting, Department of Biomedical Data Sciences, Leiden University Medical Center, Paesi Bassi, ottobre 2025.
+\item \textbf{Bayesian Multiple Testing}, STAT-Talk Series, Methodology and Statistics Department, Institute of Psychology, Leiden University, Paesi Bassi, settembre 2025.
+\end{ecvitemize}}
+\ecvitem{Organizzazione}{\begin{ecvitemize}
+\item Scuola metodologica \textbf{Replicability Crisis in Science}, Università degli Studi di Padova (edizioni giugno 2025 e maggio 2026). \url{https://psicostat.github.io/replicability-psy-unipd-phd}
+\item International Winter School \textbf{The 4 Ms: Meta-research, Measurement, Multi-lab, and Multiverse data analysis in Behavioral Sciences}, Università degli Studi di Padova, febbraio 2025. \url{https://winterschool4ms.dpg.unipd.it/}
+\item \textbf{Cognitive Neuroscience of Sleep Summer School}, Nimega, Paesi Bassi.
+\end{ecvitemize}}
+
+\ecvsection{Terza missione e public engagement}
+\ecvitem{}{\begin{ecvitemize}
+\item \textbf{Science4All}, Università degli Studi di Padova, settembre 2025: attività \emph{Centra il bersaglio: tra misurazione, probabilità e incertezza}, proposta con il gruppo di ricerca Psicostat.
+\item \textbf{ONIRICAMENTE}, Padova, giugno 2024: membro del comitato organizzativo della giornata di divulgazione dedicata alla psicologia del sonno.
+\end{ecvitemize}}
+
+\ecvsection{Premi e riconoscimenti}
+\ecvitem{Premi} {\textbf{Painter Award} per il miglior poster, Cognitive Science Arena, Bressanone.}
+\ecvitem{Grant e borse di mobilità}{\begin{ecvitemize}
+\item \textbf{Travel Grant}, European Conference on Visual Perception, Magonza, Germania, 2025.
+\item \textbf{Travel Grant}, qHelp international seminar on Quantitative Psychology, Arrifana, Portogallo, 2023.
+\item \textbf{Erasmus Placement Grant} (2 mesi), Donders Institute, Nimega, Paesi Bassi, 2019.
+\item \textbf{Erasmus+ Study Grant} (5 mesi), Jaume I University, Castellón de la Plana, Spagna, 2017.
+\end{ecvitemize}}
+
+\ecvsection{Collaborazioni, gruppi di ricerca e comunità scientifiche}
+\ecvitem{Collaborazioni}{Collaborazioni attive con Jelle Goeman (Leiden University Medical Center) e Aldo Solari (Università Ca' Foscari Venezia) - approcci bayesiani alla molteplicità; Giovanni Parmigiani (Harvard University) e Branden Fitelson (Northeastern University) - replicabilità nelle scienze psicologiche e biomediche; Bryant Jongkees (Leiden University) e Antonino Visalli (Università di Modena e Reggio Emilia) - modelli computazionali sul controllo cognitivo.}
+\ecvitem{Progetti nazionali}{\begin{ecvitemize}
+\item Progetto nazionale sulle malpractice metodologiche nella ricerca psicologica, con E. Toffalini, F. Gambarota e T. Feraco (Università degli Studi di Padova).
+\item Gruppo di ricerca nazionale sul controllo cognitivo adattivo in età evolutiva in popolazioni tipiche, a rischio e atipiche, con G. Mento e colleghi (Università degli Studi di Padova; IRCCS E. Medea).
+\end{ecvitemize}}
+\ecvitem{Gruppi di ricerca}{\begin{ecvitemize}
+\item \textbf{Psicostat}: gruppo interdisciplinare di psicologia quantitativa, psicometria e statistica, Università degli Studi di Padova (2024--oggi); 
+\item \textbf{SleePy}: gruppo di ricerca sulla psicologia del sonno, Università degli Studi di Padova (2019--oggi).
+\end{ecvitemize}}
+\ecvitem{Società scientifiche}{AIP -- Sezione Sperimentale (2022--oggi); Italian Reproducibility Network (2023--oggi); Cognitive Science Society (2024--2025); European Sleep Research Society (2023--2025); Society for the Improvement of Psychological Science (2022--2023); European Society for Cognitive Psychology (2021--2023).}
+
+\ecvsection{Incarichi istituzionali, editoriali e di revisione}
+\ecvitem{Incarichi istituzionali}{\begin{ecvitemize}
+\item Dal 01/2026: Cultore della materia in Psicometria (PSIC-01/C, ex M-PSI/03), Dipartimento di Psicologia dello Sviluppo e della Socializzazione, Università degli Studi di Padova.
+\item 02/2025--03/2026: Rappresentante degli assegnisti di ricerca, Dipartimento di Psicologia Generale, Università degli Studi di Padova.
+\end{ecvitemize}}
+\ecvitem{Referaggio}{Revisore ad hoc per le riviste \emph{Italian Journal of Applied Statistics}, \emph{Frontiers in Psychology} (sezioni \emph{Theoretical and Philosophical Psychology} e \emph{Cognition}) e \emph{PLoS ONE}.}
+
+\ecvsection{Competenze digitali e metodologiche}
+\ecvitem{Programmazione}{R (avanzato); Stan (intermedio); Python, MATLAB e JAGS (base).}
+\ecvitem{Strumenti di ricerca}{PsychoPy/Pavlovia e OpenSesame/OSWeb per lo sviluppo di esperimenti comportamentali; Git, GitHub e GitLab per il controllo di versione e la collaborazione; Docker (base); Quarto e R Markdown per documenti e materiali riproducibili; Google Suite e Microsoft Office.}
+\ecvitem{Sistemi operativi}{macOS, Windows e Linux (livello intermedio).}
+
+\ecvsection{Lingue}
+\ecvitem{Italiano}{Madrelingua.}
+% TODO: inserire eventuale livello QCER (es. C1) se richiesto dal bando
+\ecvitem{Inglese}{Livello avanzato: uso professionale e scientifico nella produzione di articoli, didattica, collaborazioni internazionali e presentazioni a conferenze.}
+\ecvitem{Spagnolo}{Livello base.}
+
+\ecvsection{Dichiarazioni finali}
+\ecvitem{}{Padova, 14 luglio 2026 \hfill Margherita Calderan}
+\ecvitem{}{\footnotesize Autorizzo il trattamento dei dati personali contenuti nel presente curriculum vitae ai sensi del Regolamento UE 2016/679 (GDPR) e del D.Lgs. 101/2018. Consapevole delle sanzioni penali previste dall'art. 76 del D.P.R. 445/2000 in caso di dichiarazioni mendaci, dichiaro che le informazioni contenute nel presente curriculum corrispondono a verità (artt. 46 e 47 del D.P.R. 445/2000).}
+
+\end{europasscv}

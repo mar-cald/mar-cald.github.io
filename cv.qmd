@@ -229,36 +229,39 @@ tibble::tribble(
 
 ### Published
 
-1. Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan, M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., & Carìa, A. (2026). Aperiodic and periodic neural activity during sleep in autism spectrum disorders. *BMC Medicine*. <https://doi.org/10.1186/s12916-026-04771-6>
+1. Feraco, T., **Calderan, M.** & Pellegrino, G. (2025).  The Living SEB Skills Project: A Living Resource for Review and Meta-Analysis of Social, Emotional, and Behavioral Skills. *European Journal of Personality*. <https://doi.org/10.1177/08902070261467477>.
 
-2. **Calderan, M.**, Visalli, A., Degasperi, G., Toffoli, L., Sellaro,
+
+2. Mazzoni, N., Kurz, E.V., Cellini, N., Ciringione, L., **Calderan, M.**, Gallitto, G., Falco, S., Venuti, P., Zinke, K., Born, J., & Carìa, A. (2026). Aperiodic and periodic neural activity during sleep in autism spectrum disorders. *BMC Medicine*. <https://doi.org/10.1186/s12916-026-04771-6>
+
+3. **Calderan, M.**, Visalli, A., Degasperi, G., Toffoli, L., Sellaro,
     R., & Cellini, N. (2026). Predictions under sleep restriction: The effects
     of partial sleep deprivation on learning and inhibitory control.
-    *Royal Society Open Science*. <https://doi.org/10.1098/rsos.252345>. **Preprint:** <https://doi.org/10.31234/osf.io/x7m4z_v3>; **OSF** repo: <https://osf.io/6fxmh/>
+    *Royal Society Open Science*. <https://doi.org/10.1098/rsos.252345>. 
 
-3.  **Calderan, M.**, Jongkees, J.B., Gambarota, F., Pastore, M.,
+4.  **Calderan, M.**, Jongkees, J.B., Gambarota, F., Pastore, M.,
     Cellini, N., & Sellaro, R. (2025). Isolating working memory gating processes
-    under stress. *Collabra::Psychology*. <https://doi.org/10.1525/collabra.140750>; **OSF** repo: <https://osf.io/d43vs/>
+    under stress. *Collabra::Psychology*. <https://doi.org/10.1525/collabra.140750>.
 
-4.  **Calderan, M.**, Toffalini, E., Mirandola, C., & Cellini, N.
+5.  **Calderan, M.**, Toffalini, E., Mirandola, C., & Cellini, N.
     (2025). Sleep does not affect false memory production on a
     script-based test. *Neuropsychologia*.
-    <https://doi.org/10.1016/j.neuropsychologia.2025.109210>; **OSF** repo: <https://osf.io/kwycq/>
+    <https://doi.org/10.1016/j.neuropsychologia.2025.109210>.
 
-5.  Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
+6.  Toffoli, L., **Calderan, M.**, Del Popolo Cristaldi, F., Duma, G.
     M., Calcagnì, A., Pastore, M., Tarantino, V., & Mento, G. (2025).
     Can I afford one more candy? How motivational contexts shape
     adaptive cognitive control in children. *Developmental Psychology*.
-    <https://doi.org/10.1037/dev0001976>; **OSF** repo: <https://osf.io/shuq2/>
+    <https://doi.org/10.1037/dev0001976>.
 
-6.  Sobol, M., Błachnio, A., **Calderan, M.**, Degasperi, G., Mioni, G.,
+7.  Sobol, M., Błachnio, A., **Calderan, M.**, Degasperi, G., Mioni, G.,
     Hryhorchuk, I., Plucińska, E., Stasiniewicz, J., Kwapiński, J.,
     Jankowski, K., & Cellini, N. (2025). Balanced time perspective as a
     factor mitigating the negative consequences of sleep disruptions in
     the perinatal period. *Chronobiology International*, 1–12.
     <https://doi.org/10.1080/07420528.2025.2490499>
 
-7.  **Calderan, M.**, & Visalli, A. (2024). Challenges of meta-learning
+8.  **Calderan, M.**, & Visalli, A. (2024). Challenges of meta-learning
     and rational analysis in large worlds. *Behavioral and Brain
     Sciences*, 47, e148.
     <https://doi.org/10.1017/S0140525X24000128>.
@@ -266,39 +269,39 @@ tibble::tribble(
 
 ### Under Review
 
-1.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F., Zorzi, M., & Ambrosini, E. A computational framework for integrating Predictive processes with evidence Accumulation Models (PAM). Under review in *Behavior Research Methods*. **Preprint:** <https://doi.org/10.48550/arXiv.2411.13203>.
+1. **Calderan, M.**, Gambarota, F., Toffalini, E., & Altoè, G., Adjusting the Probability of Direction for Multiple Testing. **Preprint:** <https://doi.org/10.31234/osf.io/8zwx2_v2>.
 
-2.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V., & Sonuga-Barke, E. Tails or Types? A Critical Systematic Review of Taxometric Studies of Neurodevelopmental Conditions. Under review in *JCPP Advances*. **Preprint:** <https://osf.io/ys5ad/files/bem36>.
+2. Barbiero, J., Zeilinga, K., **Calderan, M.**  & Mioni, G., The contribution of the cerebellum in time perception: A systematic review and meta-analyses.
 
-3.  Feraco, T., **Calderan, M.** & Pellegrino, G. (2025). The Living SEB Skills Project: A Living Resource for Review and Meta-Analysis of Social, Emotional, and Behavioral Skills. Under review in *European Journal of Personality*. **Preprint:** <https://doi.org/10.31234/osf.io/ewvuf_v1>.
+3. Stefanelli, G., Toffoli, L., Del Popolo Cristaldi, F., Duma, G.M., **Calderan, M.**, ... & Mento, G. Growing Up in a Changing World: volatility-driven implicit associative learning throughout development.
+
+4.  Visalli, A., Calistroni, F. M., **Calderan, M.**, Donnarumma, F., Zorzi, M., & Ambrosini, E. A computational framework for integrating Predictive processes with evidence Accumulation Models (PAM). **Preprint:** <https://doi.org/10.48550/arXiv.2411.13203>.
+
+5.  Toffalini, E., **Calderan, M.**, Pagan, R., Tobia, V., & Sonuga-Barke, E. Tails or Types? A Critical Systematic Review of Taxometric Studies of Neurodevelopmental Conditions. **Preprint:** <https://osf.io/ys5ad/files/bem36>.
 
 
 
 ### Preregistration
 
-1.  Sirota, M., Šrol, J., Lisi, M., Juanchich, M., Guglani, K.,
-    Silverstein, P., … **Calderan, M.**, ... Schmidt, K. (2025, Jan.
-    14). Mapping and Increasing Error Correction Behaviour in a
-    Culturally Diverse Sample. **Preprint:**
-    <https://doi.org/10.17605/OSF.IO/WN4VX>.
+1. Manente, M., Altoè, G., Alfarone, I., **Calderan, M.** (2026, July 14). Mapping Researcher Degrees of Freedom in Meta-Analyses of Randomized Controlled Trials of EMDR for PTSD: A Systematic Scoping Review. <https://osf.io/8hefb>
 
 2.  Toffalini, E., **Calderan, M.**, Sità, L., Feraco, T., & Gambarota, F. Link
     Functions and Generalized Linear Models in Interaction Testing
     within Psychological Research. <https://osf.io/sjdu4>
 
+3.  Sirota, M., Šrol, J., Lisi, M., Juanchich, M., Guglani, K.,
+    Silverstein, P., … **Calderan, M.**, ... Schmidt, K. (2025, Jan.
+    14). Mapping and Increasing Error Correction Behaviour in a
+    Culturally Diverse Sample. **Preprint:**
+    <https://doi.org/10.17605/OSF.IO/WN4VX>.
+    
 ### In Preparation
 
-1.  **Calderan, M.**, Gambarota, F., Toffalini, E., & Altoè, G.,
-    Adjusting the Probability of Direction for Multiple Testing.
+1.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino, V., & Mento, G., I am talking to you! Engagement modulates the effects of digital content exposure on preschoolers’ adaptive cognitive control.
 
+2. Bastianello, T., **Calderan, M.**, Loschiavo, A.G.M., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. Domestic Media Exposure Delays Attainment of Babbling in Infants While Adult Input Accelerates Progress.
 
-3.  Barbiero, J., **Calderan, M.**, Zeilinga, K.,  & Mioni, G., The contribution of the cerebellum in time perception: A systematic review and meta-analyses.
-
-4.  Toffoli, L., **Calderan, M.**, Stefanelli, G., Duma, G.M., Del Popolo Cristaldi, F., Duma, G., Pastore, M., Frisina, S., Tarantino, V., & Mento, G., I am talking to you! Engagement modulates the effects of digital content exposure on preschoolers’ adaptive cognitive control.
-
-5. Bastianello, T., **Calderan, M.**, Loschiavo, A.G.M., Nascimben, C., Visibelli, E., Reoyo-Serrano, N., Altoè, G., & Benavides-Varela, S. Domestic Media Exposure Delays Attainment of Babbling in Infants While Adult Input Accelerates Progress.
-
-6. Stefanelli, G., Toffoli, L., Del Popolo Cristaldi, F., Duma, G.M., **Calderan, M.**, ... & Mento, G. Growing Up in a Changing World: volatility-driven implicit associative learning throughout development
+3. Van Dooren, R., **Calderan, M.**, Sellaro, R., & Jongkees, J.B., Dynamic and contextual modulation of constraints on cognitive control.
 
 
 

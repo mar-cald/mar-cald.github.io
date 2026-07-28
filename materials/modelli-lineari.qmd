@@ -5,6 +5,8 @@ author: "Margherita Calderan"
 date: last-modified
 date-format: "D MMMM YYYY"
 number-sections: true
+categories: [teaching]
+
 ---
 
 Questo [documento](https://mar-cald.github.io/psqt/modelli-lineari.html) raccoglie tutto il materiale della lezione sui modelli lineari. Parte del materiale didattico è stato adattato dalle slide del Prof. [Massimiliano Pastore](https://dpss.psy.unipd.it/~massimiliano.pastore/index.html) (a.a. 2024/2025).

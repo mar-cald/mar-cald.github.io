@@ -16,7 +16,7 @@ execute:
   echo: true
   warning: false
   message: false
-categories: [psicometrics, teaching]
+categories: [psychometrics, teaching]
 ---
 
 Questo [documento](https://ottaviae.github.io/test-organizzioni-fisppa/dispensa/dispensa.html) raccoglie tutto il materiale del corso Test per le Organizzazioni.
