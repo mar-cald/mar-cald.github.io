@@ -17,6 +17,31 @@ website:
         href: open-materials.qmd
       - text: "contact"
         href: contact.qmd
+    # Right side: just the icons, shown before the search lens.
+    # Remove "text:" from an item to show only its symbol.
+    right:
+      - icon: github
+        href: https://github.com/mar-cald
+        target: _blank
+        aria-label: "GitHub"
+      - icon: gitlab
+        href: https://gitlab.pavlovia.org/mar.cald
+        target: _blank
+        aria-label: "GitLab"
+      - icon: file-text
+        href: https://www.researchgate.net/profile/Margherita-Calderan-2
+        target: _blank
+        aria-label: "ResearchGate"
+      - icon: flower2
+        href: https://osf.io/user/5ca9t?tab=2
+        target: _blank
+        aria-label: "OSF"
+      # The ORCID symbol is drawn by styles.css (search for "orcid"),
+      # the icon named here is only a fallback.
+      - icon: person-circle
+        href: https://orcid.org/0009-0005-5668-5162
+        target: _blank
+        aria-label: "ORCID"
 format:
   html:
     # default = clean base theme; brand = colours + fonts from _brand.yml

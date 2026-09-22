@@ -22,6 +22,9 @@
   --accent: #6e0748;                    /* same purple as _brand.yml */
   --accent-soft: rgba(110, 7, 72, 0.25); /* light version, for lines/borders */
   --muted: #6c757d;                     /* grey for secondary text */
+
+  /* logo shapes used in the top bar (see section 3) */
+  --icon-orcid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947 0 .525-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c2.359 0 3.588-1.444 3.588-3.722 0-2.016-.984-3.722-3.588-3.722h-2.297z'/%3E%3C/svg%3E");
 }
 
 
@@ -63,44 +66,141 @@ strong, b{ font-weight: 600; }
   border-bottom-color: #ffffff;
 }
 
+/* The symbols on the right (GitHub, GitLab, ...): a bit bigger, and no white
+   line on hover - they are external links, not pages of this site */
+.navbar .navbar-nav.ms-auto .nav-link{
+  font-size: 1.15rem;
+  padding: 0.4rem 0.45rem !important;
+  border-bottom-color: transparent !important;
+}
+
+.navbar .navbar-nav .nav-link .bi{
+  vertical-align: -0.1em;
+}
+
+/* ORCID has no symbol in the icon set Quarto uses, so we draw the real logo
+   here. The shape is the official ORCID mark (Simple Icons, CC0); it is used
+   as a "mask", which means it always takes the colour of the text around it. */
+.navbar .nav-link[href*="orcid.org"] .bi::before{
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  background-color: currentColor;
+  -webkit-mask: var(--icon-orcid) center / contain no-repeat;
+  mask: var(--icon-orcid) center / contain no-repeat;
+}
+
+/* In the phone menu, keep the symbols on one row instead of a long column */
+@media (max-width: 991.98px){
+  .navbar .navbar-nav.ms-auto{
+    flex-direction: row;
+    gap: 0.4rem;
+    padding: 0.5rem 0 0.25rem;
+  }
+}
+
 
 /* ---------- 4. Home page ---------- */
-/* Quarto's "trestles" layout: left column = photo, name, links;
-   right column = your text */
+/* Quarto's "trestles" layout: left column = photo,
+   right column = name + your text.
+   The size of the photo is set in index.qmd (image-width).
+   The social symbols are in the top bar now (see _quarto.yml). */
 
-/* Photo */
-.quarto-about-trestles .about-image{
-  aspect-ratio: 4 / 5;         /* portrait shape */
+/* The two columns start at the same height, so the top of the photo lines up
+   with the name */
+div.quarto-about-trestles{
+  align-items: flex-start;
+  gap: 2.5rem;
+}
+
+/* --- left column: the photo --- */
+/* align-self: stretch + height:100% make the photo exactly as tall as the
+   text next to it, at any window size, so the two columns always match */
+.quarto-about-trestles .about-entity{
+  padding: 0;
+  align-self: stretch;
+}
+
+/* (the long selector is needed to override Quarto's own spacing) */
+div.quarto-about-trestles .about-entity .about-image{
+  height: 100%;
+  min-height: 20rem;           /* never shorter than this */
+  aspect-ratio: auto;
+  object-fit: cover;           /* fills the frame without squashing the photo */
   object-position: 0% 40%;     /* which part of the photo to show (x y) */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  margin-bottom: 0;
 }
 
-/* Name under the photo */
-.quarto-about-trestles .about-entity .quarto-title h1.title{
-  font-size: 1.6rem;
+/* Quarto leaves an empty title box under the photo: remove it */
+.quarto-about-trestles .about-entity #title-block-header{
+  display: none;
+}
+
+/* --- right column: name + text --- */
+/* align-self: stretch makes the thin dividing line run the whole height
+   of the block instead of floating in the middle */
+.quarto-about-trestles .about-contents{
+  align-self: stretch;
+  padding-top: 0;
+}
+
+/* The name. To change the wording, edit the line "## Margherita Calderan"
+   at the top of index.qmd */
+.quarto-about-trestles .about-contents h1,
+.quarto-about-trestles .about-contents h2{
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;         /* gap between the name and the text below */
+  border: none;
 }
 
-/* Link buttons (GitHub, GitLab, ...)
-   (the long selector is needed to override Quarto's own button style) */
-div.quarto-about-trestles .about-entity .about-link{
-  color: var(--accent);
-  border: 1px solid var(--accent-soft);
-  border-radius: 999px;        /* pill shape */
-  padding: 0.3em 0.85em;
-  transition: background-color 0.15s ease, color 0.15s ease;
+/* the paragraph right under the name must not add space of its own */
+.quarto-about-trestles .about-contents h1 + p,
+.quarto-about-trestles .about-contents h2 + p{
+  margin-top: 0;
 }
 
-div.quarto-about-trestles .about-entity .about-link:hover{
-  background-color: var(--accent);
-  border-color: var(--accent);
-  color: #ffffff;
+.quarto-about-trestles .about-contents > *:first-child > *:first-child,
+.quarto-about-trestles .about-contents > *:first-child{
+  margin-top: 0;
 }
 
-/* Text on the right */
 .quarto-about-trestles .about-contents p{
   margin-bottom: 1rem;
+}
+
+.quarto-about-trestles .about-contents p:last-child{
+  margin-bottom: 0;
+}
+
+/* On a phone the two columns become one: photo, then name and text.
+   The photo goes back to its portrait shape (there is nothing to match
+   its height to any more) */
+@media (max-width: 991.98px){
+  div.quarto-about-trestles{
+    align-items: center;
+    gap: 0;
+  }
+
+  .quarto-about-trestles .about-entity{
+    align-self: center;
+  }
+
+  div.quarto-about-trestles .about-entity .about-image{
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+    max-width: 16em;           /* keeps a margin at the sides of the screen */
+  }
+
+  .quarto-about-trestles .about-contents{
+    align-self: auto;
+    margin-top: 1.5rem;
+  }
 }
 
 
@@ -198,24 +298,81 @@ div.quarto-about-trestles .about-entity .about-link:hover{
 
 
 /* ---------- 6. CV page ---------- */
-/* Each CV entry: description on the left, dates on the right */
+/* The CV uses the full width of the window, which on a wide screen leaves
+   almost no margin. This keeps it to a comfortable width and centres it.
+   Make 1200px bigger/smaller to widen or narrow the page. */
+body.cv-page #quarto-content{
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@media (max-width: 767.98px){
+  body.cv-page #quarto-content{
+    padding-inline: 0.75rem;
+  }
+}
+
+/* Section titles in the same purple as the PDF version of the CV
+   (the PDF colour is set in cv.qmd, look for "definecolor{accent}") */
+body.cv-page #quarto-document-content h1,
+body.cv-page #quarto-document-content h2,
+body.cv-page #quarto-document-content h3{
+  color: var(--accent);
+}
+
+/* A thin line under the main sections, like in the PDF */
+body.cv-page #quarto-document-content h2{
+  border-bottom: 1px solid var(--accent-soft);
+  padding-bottom: 0.2rem;
+}
+
+/* A little air between the items of a list */
+body.cv-page #quarto-document-content li{
+  margin-bottom: 0.35rem;
+}
+
+/* Each CV entry: title and description on the left, date on the right */
 .cvevent{
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5em;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1.35em;
 }
 
 .cvevent-left{
-  flex: 1 1 70%;
-  min-width: 200px;
+  flex: 1 1 66%;
+  min-width: 15rem;
 }
 
+/* the institution / level, under the title */
+.cvevent-where{
+  font-style: italic;
+  color: #4a4a4a;
+}
+
+/* the date (or, for skills, the level) */
 .cvevent-right{
-  flex: 0 0 25%;
-  min-width: 120px;
+  flex: 0 0 auto;
   text-align: right;
-  font-weight: 600;
+  font-size: 0.9em;
+  font-weight: 500;
   color: var(--muted);
+  white-space: nowrap;
+}
+
+/* the bullet points under an entry */
+.cvevent-left ul{
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.cvevent-left li{
+  margin-bottom: 0.2rem;
+}
+
+.cvevent-left li::marker{
+  color: var(--accent-soft);
 }

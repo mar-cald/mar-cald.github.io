@@ -7,7 +7,10 @@ color:
     magenta-dark: "#5a063d"  # links when the mouse is over them
     text: "#333333"          # normal text
     white: "#ffffff"
+    offwhite: "#fdfcfb"      # a softer, slightly warm white
 
+  # Page background. Use "white" for a clean white page,
+  # or "offwhite" for a softer, less bright one.
   background: white
   foreground: text
   primary: magenta

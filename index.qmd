@@ -1,39 +1,30 @@
 ---
-title: "Margherita Calderan"
+# pagetitle = the text shown in the browser tab.
+# The name itself is written below, at the top of the text, so that it sits
+# next to the photo instead of underneath it.
+pagetitle: "Margherita Calderan"
 image: img/tulip.jpg
 image-alt: "Margherita Calderan"
 toc: false
 
 about:
   id: hero-heading
-  template: trestles       # photo + name + links on the left, text on the right
+  template: trestles       # photo on the left, name + text on the right
   image-shape: rounded     # rounded | round | rectangle
-  image-width: 15em
-  links:
-    - icon: github
-      text: GitHub
-      href: https://github.com/mar-cald
-      target: _blank
-    - icon: gitlab
-      text: GitLab
-      href: https://gitlab.pavlovia.org/mar.cald
-      target: _blank
-    - icon: file-text
-      text: ResearchGate
-      href: https://www.researchgate.net/profile/Margherita-Calderan-2
-      target: _blank
-    - icon: flower2
-      text: OSF
-      href: https://osf.io/user/5ca9t?tab=2
-      target: _blank
+  image-width: 19em        # size of the photo: bigger = taller left column
+  # The GitHub / GitLab / ResearchGate / OSF symbols now live in the top bar
+  # (see the "right:" list in _quarto.yml), so they are not repeated here.
 
 format:
   html:
     include-after-body: footer.html   # the Power Rangers row
 engine: knitr
+
 ---
 
 ::: {#hero-heading}
+## Margherita Calderan
+
 I am a **postdoctoral researcher** at the Department of General Psychology, University of **Padova**, Italy.
 
 My research interests include computational models of **cognition**, **Bayesian** statistics, and **metascience**.
