@@ -1,12 +1,14 @@
 ---
 title: "Margherita Calderan"
 image: img/tulip.jpg
+image-alt: "Margherita Calderan"
+toc: false
 
 about:
   id: hero-heading
-  template: broadside
-  image-shape: rectangle
-  image-width: 20em
+  template: trestles       # photo + name + links on the left, text on the right
+  image-shape: rounded     # rounded | round | rectangle
+  image-width: 15em
   links:
     - icon: github
       text: GitHub
@@ -24,24 +26,17 @@ about:
       text: OSF
       href: https://osf.io/user/5ca9t?tab=2
       target: _blank
-    
-    
-markdown:
-  extensions: [link_attributes]
-format: 
-  html:     
-    include-in-header:
-       text: |
-         <link rel="shortcut icon" href="img/daisy.png"/>
-    include-after-body: footer.html
-engine: knitr
 
+format:
+  html:
+    include-after-body: footer.html   # the Power Rangers row
+engine: knitr
 ---
 
 ::: {#hero-heading}
-I am a **postdoctoral researcher** at the Department of General Psychology, University of **Padova**, Italy. 
+I am a **postdoctoral researcher** at the Department of General Psychology, University of **Padova**, Italy.
 
-My research interests include computational models of **cognition**, **Bayesian** statistics, and **metascience**. 
+My research interests include computational models of **cognition**, **Bayesian** statistics, and **metascience**.
 
 I am a member of [Psicostat](https://psicostat.dpss.psy.unipd.it/){target="_blank"}, an interdisciplinary research group working at the intersection of **psychology** and **statistics**. In addition to our research activities, we offer [short courses and workshops](https://psicostat.github.io/psicostat-teaching/){target="_blank"} on quantitative methods.
-::: 
+:::

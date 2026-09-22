@@ -1,23 +1,37 @@
-# _brand.yml
+# _brand.yml — the COLOURS and FONTS of the whole website
+# (layout details, spacing and shapes are in styles.css)
+
 color:
   palette:
-    magenta: "#6e0748"
-    magenta-dark: "#5a063d"
-    text: "#333333"
+    magenta: "#6e0748"       # main colour: top bar, links, buttons
+    magenta-dark: "#5a063d"  # links when the mouse is over them
+    text: "#333333"          # normal text
     white: "#ffffff"
 
   background: white
   foreground: text
   primary: magenta
 
+# Fonts: any font from https://fonts.google.com works.
+# To change it, replace "Libre Franklin" in the three places below.
+typography:
+  fonts:
+    - family: Libre Franklin
+      source: google
+      weight: [400, 500, 600, 700]
+      style: [normal, italic]
+  base: Libre Franklin
+  headings:
+    family: Libre Franklin
+    weight: 600
+
 defaults:
   bootstrap:
     defaults:
-      # Use literal colors here (prevents Sass compilation errors)
+      # Top bar (navbar): background colour and text colour
       navbar-bg: "#6e0748"
       navbar-fg: "#ffffff"
       navbar-hl: "#ffffff"
 
       link-color: "#6e0748"
       link-hover-color: "#5a063d"
-      link-decoration: underline

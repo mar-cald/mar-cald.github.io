@@ -19,9 +19,11 @@ website:
         href: contact.qmd
 format:
   html:
-    theme: [Simplex, brand]
-    fontsize: 1.2em
-    linestretch: 1.7
+    # default = clean base theme; brand = colours + fonts from _brand.yml
+    # (theme names must be lowercase)
+    theme: [default, brand]
+    fontsize: 1.1em      # text size: make bigger/smaller here
+    linestretch: 1.6     # space between lines
     css: styles.css
     toc: true
     smooth-scroll: true
