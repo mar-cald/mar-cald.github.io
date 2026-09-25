@@ -2,9 +2,11 @@
   {
     "listing": "/open-materials.html",
     "items": [
+      "/materials/fair.html",
+      "/materials/bayes.html",
+      "/materials/multibayes.html",
       "/materials/modelli-lineari.html",
       "/materials/test-organizzaioni.html",
-      "/materials/multibayes.html",
       "/materials/rt.html",
       "/materials/repro.html",
       "/materials/pam.html"

@@ -1,0 +1,11 @@
+---
+title: "Introduzione alla statistica Bayesiana"
+subtitle: "Dispensa del corso per il Master in Psicologia quantitativa"
+author: "Margherita Calderan"
+date: 2026-07-01   # CV: Master lecture, Jul. 2026
+categories: [teaching]
+---
+
+Questo [documento](https://mar-cald.github.io/psqt/bayes.html){target="_blank"} raccoglie tutto il materiale della lezione di statistica Bayesiana: dai due approcci all'inferenza e la verosimiglianza, all'aggiornamento bayesiano, al campionamento dalla posterior con MCMC, al Bayes Factor e alla scelta delle prior, con applicazioni in R (`rstanarm`, `brms`) ed esercizi svolti.
+
+Parte del materiale didattico è stato adattato dalle lezioni del Prof. [Massimiliano Pastore](https://dpss.psy.unipd.it/~massimiliano.pastore/index.html){target="_blank"}.

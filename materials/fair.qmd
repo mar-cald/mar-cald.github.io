@@ -1,0 +1,11 @@
+---
+title: "Strumenti per una gestione FAIR"
+date: 2026-09-01   # PROXY: added to the site Sep 2026
+categories: [reproducibility]
+---
+
+Guida pratica su **dove e come depositare** i prodotti della ricerca — dati, materiali sperimentali e codice — seguendo i principi **FAIR** e le pratiche di **Open Science**.
+
+Il [sito](https://mar-cald.github.io/fair/){target="_blank"} tratta la scelta del repository (Zenodo, PsychArchives), le licenze, e la documentazione dei dati (README, data dictionary, Psych-DS).
+
+Segnalazioni e proposte: [GitHub](https://github.com/mar-cald/fair/issues){target="_blank"}.

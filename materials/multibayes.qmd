@@ -1,7 +1,7 @@
 ---
 title: "multibayes"
 format: html
-date: last-modified
+date: 2026-06-01   # PROXY: first appeared on the site Jun 2026
 categories: [R pkg]
 ---
 

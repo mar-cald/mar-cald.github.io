@@ -1,7 +1,7 @@
 ---
 title: "Test per le organizzazioni"
 author: "Margherita Calderan & Ottavia M. Epifania"
-date: last-modified
+date: 2026-03-01   # CV: 2nd semester of a.y. 2025/2026
 format:
   html:
     page-layout: full

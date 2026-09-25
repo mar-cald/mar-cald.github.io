@@ -4,7 +4,7 @@
     "href": "cv.html",
     "title": "",
     "section": "",
-    "text": "Download the PDF version.\nLast update: 2026-09-22"
+    "text": "Download the PDF version.\nLast update: 2026-09-25"
   },
   {
     "objectID": "cv.html#current-position",
@@ -196,6 +196,13 @@
     "text": "Questo documento raccoglie tutto il materiale del corso Test per le Organizzazioni.\n\n\n\n\n\n\nCredits\n\n\n\n\nDispensa Testing psicologico by Corrado Caudek\nBrown, Anna. (2023). Psychometrics in Exercises using R and RStudio. Textbook and data resource. Available from https://bookdown.org/annabrown/psychometricsR.\nAltoè, G. (2022). Corso di Testing Psicologico, Scienze psicologiche dello sviluppo, della personalità e delle relazioni interpersonali, A.A. 2022/23\nMarci, M. (2025). Corso di Testing Psicologico, Scienze psicologiche dello sviluppo, della personalità e delle relazioni interpersonali, A.A. 2025/26\n\nAltri riferimenti utili sono:\n\nPetersen, I. T. (2026). Principles of psychological assessment: With applied examples in R. Version 1.0.9. University of Iowa Libraries. https://isaactpetersen.github.io/Principles-Psychological-Assessment. https://doi.org/10.25820/work.007199\nMartinková, P., & Hladká, A. (2023). Computational Aspects of Psychometric Methods: With R (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/9781003054313"
   },
   {
+    "objectID": "materials/fair.html",
+    "href": "materials/fair.html",
+    "title": "Strumenti per una gestione FAIR",
+    "section": "",
+    "text": "Guida pratica su dove e come depositare i prodotti della ricerca — dati, materiali sperimentali e codice — seguendo i principi FAIR e le pratiche di Open Science.\nIl sito tratta la scelta del repository (Zenodo, PsychArchives), le licenze, e la documentazione dei dati (README, data dictionary, Psych-DS).\nSegnalazioni e proposte: GitHub."
+  },
+  {
     "objectID": "materials/repro.html",
     "href": "materials/repro.html",
     "title": "Reproducible Science",
@@ -208,6 +215,13 @@
     "title": "Modeling reaction times",
     "section": "",
     "text": "An overview of RT distributions.\nPratical introduction to evidence accumulation models."
+  },
+  {
+    "objectID": "materials/bayes.html",
+    "href": "materials/bayes.html",
+    "title": "Introduzione alla statistica Bayesiana",
+    "section": "",
+    "text": "Questo documento raccoglie tutto il materiale della lezione di statistica Bayesiana: dai due approcci all’inferenza e la verosimiglianza, all’aggiornamento bayesiano, al campionamento dalla posterior con MCMC, al Bayes Factor e alla scelta delle prior, con applicazioni in R (rstanarm, brms) ed esercizi svolti.\nParte del materiale didattico è stato adattato dalle lezioni del Prof. Massimiliano Pastore."
   },
   {
     "objectID": "materials/multibayes.html",

@@ -2,8 +2,7 @@
 title: "Modelli lineari"
 subtitle: "Dispensa del corso per il Master in Psicologia quantitativa"
 author: "Margherita Calderan"
-date: last-modified
-date-format: "D MMMM YYYY"
+date: 2026-06-01   # CV: Master lecture, Jun. 2026
 number-sections: true
 categories: [teaching]
 

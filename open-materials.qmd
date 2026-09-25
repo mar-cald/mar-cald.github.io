@@ -4,7 +4,9 @@ listing:
   id: materials-listing
   contents: materials
   type: table
-  fields: [title, date, file-modified, categories]
+  # The date is deliberately NOT in `fields`: it is kept in each file only to
+  # order the table (newest material first), not to be shown on the page.
+  fields: [title, categories]
   sort: "date desc"
   sort-ui: [date, title]
   filter-ui: [title, categories]

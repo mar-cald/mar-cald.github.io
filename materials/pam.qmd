@@ -1,6 +1,6 @@
 ---
 title: "Predictive accumulation models"
-date: 2025-09-23
+date: 2024-11-01   # arXiv preprint 2411.13203 (Nov 2024)
 categories: [modeling]
 ---
 

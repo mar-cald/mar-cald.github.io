@@ -1,6 +1,6 @@
 ---
 title: "Modeling reaction times"
-date: 2025-09-23
+date: 2025-06-01   # CV: Tempi di risposta workshop, Jun. 2025
 categories: [modeling]
 ---
 

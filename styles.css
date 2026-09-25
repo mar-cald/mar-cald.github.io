@@ -376,3 +376,17 @@ body.cv-page #quarto-document-content li{
 .cvevent-left li::marker{
   color: var(--accent-soft);
 }
+
+
+/* ---------- 7. Materials pages ---------- */
+/* Each material keeps a "date:" in its .qmd, but only so that the table on
+   the materials page can order them (newest first) - see open-materials.qmd.
+   The date is not meant to be read, so the "Published ..." line is hidden. */
+.quarto-title-meta > div:has(p.date){
+  display: none;
+}
+
+/* when the date was the only thing there, do not leave an empty gap */
+.quarto-title-meta:not(:has(> div:not(:has(p.date)))){
+  display: none;
+}
